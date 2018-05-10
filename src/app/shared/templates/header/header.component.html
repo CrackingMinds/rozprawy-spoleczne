@@ -1,0 +1,17 @@
+<h1>{{ 'Rozprawy społeczne' | uppercase}}</h1>
+<p>
+    {{ 'Czasopismo naukowe Państwowej Szkoły Wyższej im. Papieża Jana Pawła II w Białej Podlaskiej' | uppercase }}
+</p>
+<div class="indexing-info-wrapper">
+    <ng-container *ngFor="let info of indexing">
+        <mat-card *ngIf="(info.name == 'Index Copernicus') || (info.name == 'MNiSW') || (info.name == 'ISSN')"
+                  class="indexing-info">
+            <div class="name-wrapper">
+                <p>{{info.name}}</p>
+            </div>
+            <div class="value-wrapper">
+                <p>{{info.value}}</p>
+            </div>
+        </mat-card>
+    </ng-container>
+</div>

@@ -1,0 +1,133 @@
+
+
+.article-preview-wrapper {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+
+  .buttons-wrapper {
+    display: flex;
+    flex-direction: row;
+
+    .redirect-buttons, .edit-buttons {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .abstract, .full-article, .edit-article, .delete-article {
+      flex: 1;
+      background: $main-green-color;
+      border: none;
+      font-weight: bold;
+      color: #fff;
+      padding: 5px 0 5px $universal-padding;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-decoration: none;
+
+      .mat-icon {
+        margin-right: 5px;
+      }
+
+      &:hover {
+        background-color: $menu-hover-color;
+      }
+    }
+
+    .abstract {
+      //border-right: 2px solid white;
+    }
+
+    .article-abstract {
+      margin-top: $universal-padding-double;
+      font-family: Tahoma, serif;
+
+      h4 {
+        font-weight: bold;
+        font-size: inherit;
+        margin: $universal-padding 0;
+      }
+    }
+  }
+}
+
+.article-short-info {
+  font-size: 13px;
+  border-bottom: 2px solid $main-green-color;
+  margin: 5px 0;
+  padding-bottom: 15px;
+  display: inline-block;
+  flex: 1;
+
+  p {
+    line-height: 15px;
+    font-family: Tahoma, serif;
+    margin: 5px 0;
+    color: #000;
+  }
+
+  .type {
+    color: $main-blue-color;
+    font-weight: bold;
+  }
+
+  .title {
+    color: $main-blue-color;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      font-weight: inherit;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .location {
+    color: $main-grey-color;
+  }
+
+  .doi {
+
+    b {
+      font-weight: bold;
+    }
+  }
+
+  .article-links {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .link-wrapper {
+
+    &:last-child {
+      margin-left: 30px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000;
+      margin-left: 5px;
+      vertical-align: middle;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+  }
+}
+
+.article-preview {
+  border: 2px solid $main-green-color;
+  //border-bottom: none;
+  padding: $universal-padding-half;
+  margin: 0;
+}

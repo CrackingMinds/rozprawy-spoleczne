@@ -1,0 +1,5 @@
+<a href="tel:{{ phone_num.number }}">
+  <span *ngIf="phone_num.countryCode">{{ phone_num.countryCode }} </span>
+  <span>{{ phone_num.number | phoneNum:true}}</span>
+  <span *ngIf="phone_num.ext"> wew. {{ phone_num.ext }}</span>
+</a>

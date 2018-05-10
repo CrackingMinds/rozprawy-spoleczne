@@ -1,0 +1,27 @@
+.editorial-and-scientific-board {
+
+  .editorial-board, .scientific-board {
+
+    .heading {
+      border-bottom: 3px solid $main-green-color;
+      width: auto;
+      display: inline-block;
+      padding-bottom: $universal-padding-half;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      font-size: 1rem;
+      margin-top: 15px;
+    }
+
+    .member {
+      line-height: 2rem;
+
+      .bold {
+        font-weight: bold;
+      }
+    }
+  }
+}

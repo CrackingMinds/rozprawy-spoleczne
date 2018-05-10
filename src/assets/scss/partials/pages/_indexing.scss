@@ -1,0 +1,57 @@
+.indexing {
+
+  .underline {
+    height: 3px;
+    width: 150px;
+    background: $main-green-color;
+  }
+
+  .indexing-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin-top: 20px;
+    padding: 0;
+  }
+
+  .indexing-data-wrapper {
+    margin: 0 20px 0 0;
+  }
+
+  .indexing-data {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid $main-green-color;
+    padding: 0;
+    height: 100%;
+  }
+
+  .name, .value {
+    font-size: 1rem;
+    line-height: 1em;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .name {
+    background-color: $main-green-color;
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Tahoma', serif;
+  }
+
+  .value {
+    font-family: 'Merriweather', serif;
+  }
+
+  .name-only {
+
+    .name {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+}

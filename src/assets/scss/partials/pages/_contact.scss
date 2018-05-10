@@ -1,0 +1,22 @@
+#contact {
+  font-size: 1rem;
+
+  tr {
+    margin-bottom: 15px;
+  }
+
+  .icon {
+    color: $main-green-color;
+    padding-right: 10px;
+    padding-bottom: 15px;
+
+    mat-icon {
+      font-size: 1.3em;
+    }
+  }
+
+  .info {
+    font-family: 'Tahoma', serif;
+    padding-bottom: 20px;
+  }
+}

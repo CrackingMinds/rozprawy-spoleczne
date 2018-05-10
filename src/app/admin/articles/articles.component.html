@@ -1,0 +1,45 @@
+<!--<app-modal></app-modal>-->
+<div *ngIf="dataLoaded" class="editorial-container">
+    <div class="issues">
+        <button mat-button class="issue-btn add-issue"
+            (click)="openIssueCreationDialog()">
+            <mat-icon>add</mat-icon>
+        </button>
+        <div *ngFor="let issue of issues" class="issue-btn"
+             [class.selected]="issue.selected">
+            <div class="clickable-issue" (click)="selectIssue(issue)">
+                <span *ngIf="issue.issue.isCurrent" class="is-current">
+                    <span>B</span>
+                </span>
+                <span *ngIf="!issue.issue.isCurrent" class="is-current-placeholder">
+                </span>
+                <span>
+                    {{issue.issueTitle}}
+                </span>
+            </div>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item
+                    (click)="openChangeNameDialog(issue)">
+                    <span>Zmień nazwę</span>
+                </button>
+                <button mat-menu-item [disabled]="issue.issue.isCurrent"
+                    (click)="openMakeIssueCurrentDialog(issue)">
+                    <span>Zrób bieżącym</span>
+                </button>
+                <button mat-menu-item
+                    (click)="openIssueRemovalDialog(issue)">
+                    <span>Usuń</span>
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+    <div class="articles">
+        <h1 *ngIf="!lastCurrentIssue" class="choose-current-issue">Wybierz bieżący numer</h1>
+        <ng-container *ngIf="lastCurrentIssue">
+            <article-card *ngFor="let article of articles" [article]="article" [isEdit]="true"></article-card>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+.editorial-container {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  border: 2px solid $main-green-color;
+
+  .issues {
+    border-right: 2px solid $main-green-color;
+  }
+
+  .is-current-placeholder, .is-current {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 5px;
+  }
+
+  .is-current {
+    border: 2px solid #000;
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .issue-btn {
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    justify-content: center;
+    padding: 0 5px;
+
+    &.add-issue {
+      background-color: $main-green-color;
+      color: #fff;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      border-radius: 0;
+    }
+
+    &:hover:not(.selected):not(.add-issue), &.selected {
+      background-color: $menu-hover-color;
+      color: #fff;
+
+      .is-current {
+        border-color: #fff;
+      }
+    }
+
+    &.selected {
+      background-color: $main-blue-color;
+    }
+
+    .clickable-issue {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .mat-icon-button {
+      width: auto;
+      height: auto;
+      margin-left: auto;
+    }
+  }
+
+  .articles {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    flex: 1;
+
+    .article-card {
+      width: 400px;
+    }
+  }
+
+  .choose-current-issue {
+    color: red;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+}

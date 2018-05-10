@@ -1,0 +1,44 @@
+#sign-in {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .login-form-container {
+    width: 350px;
+    border: 2px solid $main-blue-color;
+    padding: 20px;
+  }
+
+  .top-bar {
+    background-color: $main-blue-color;
+    text-align: center;
+    margin: -20px -20px 20px -20px;
+
+    .person-pic-placeholder {
+      width: 75px;
+      height: auto;
+    }
+  }
+
+  .form-group {
+    text-align: center;
+  }
+
+  .submit-button-wrapper {
+    text-align: right;
+    margin-bottom: 0;
+
+    .submit-button {
+      color: #fff;
+    }
+  }
+
+  input {
+    font-size: 1rem;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+}

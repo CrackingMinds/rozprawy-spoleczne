@@ -1,0 +1,42 @@
+<!--<mat-menu #appMenu="matMenu">-->
+<!--<button mat-menu-item>Settings</button>-->
+<!--<button mat-menu-item>Help</button>-->
+<!--</mat-menu>-->
+
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav [mode]="'side'" id="menu-container">
+        <menu id="menu"></menu>
+    </mat-sidenav>
+    <mat-sidenav-content class="main-wrapper">
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <div class="row page-header-wrapper">
+                    <button mat-icon-button (click)="sidenav.toggle()" id="menu-toggle">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                    <journal-header class="page-header"></journal-header>
+                </div>
+            </div>
+            <div class="container-fluid page-header-title">
+                <div class="container">
+                    <h2 class="title" *ngIf="pageName">{{ pageName }}</h2>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row active-area">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row page-footer">
+                    <img src="../../../../assets/images/logo_wydawnictwa_blue_168x91.png">
+                    <a class="developed-by" target="_blank" href="{{linkedInProfileLink}}">Developed by Viacheslav Guselnykov</a>
+                </div>
+            </div>
+        </div>
+        <div [class.show]="spinnerServiceObj.getState()" class="spinner-area">
+            <mat-spinner [color]="'primary'"></mat-spinner>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

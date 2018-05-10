@@ -1,0 +1,48 @@
+.archive, .reviewers {
+
+  .year {
+    //background-color: $main-green-color;
+
+    .year-number {
+      //color: #fff;
+      font-size: 1.7rem;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+  }
+}
+
+.reviewers {
+
+  .page-heading {
+    margin: 0 0 2rem 0;
+  }
+
+  .reviewer {
+    font-size: 1rem;
+    line-height: 2em;
+  }
+}
+
+.archive {
+
+  .issue-list {
+    list-style-type: none;
+  }
+
+  .issue {
+    color: $main-blue-color;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    line-height: 2em;
+
+    .issue-title {
+      font-size: 1.2rem;
+      color: $main-blue-color;
+      margin-left: 5px;
+    }
+  }
+}

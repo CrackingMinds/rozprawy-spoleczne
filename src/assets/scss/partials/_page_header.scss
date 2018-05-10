@@ -1,0 +1,100 @@
+.page-header-wrapper {
+  position: relative;
+
+  #menu-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 5px;
+    border-radius: 4px;
+    width: 37px;
+    height: 35px;
+
+    .mat-button-wrapper {
+      line-height: normal;
+    }
+  }
+}
+
+.page-header {
+  background-color: $main-blue-color;
+  color: #fff;
+  font-family: 'Merriweather', serif;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  padding: $universal-padding-half 0 $universal-padding;
+  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+  border: none;
+
+  .page-header {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  h1 {
+    font-weight: inherit;
+    text-align: center;
+    padding: $universal-padding-half 0;
+    margin: 0;
+    font-size: 3rem;
+  }
+
+  p {
+    text-align: center;
+    padding: $universal-padding-half 0;
+    font-size: 0.75rem;
+  }
+
+  .indexing-info-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: $universal-padding-half 0;
+
+    .indexing-info {
+      display: flex;
+      flex-direction: row;
+      margin: 0 $universal-padding;
+      background: transparent;
+      padding: 0;
+
+      &:first-child {
+        margin-left: auto;
+      }
+
+      &:last-child {
+        margin-right: auto;
+      }
+
+      .name-wrapper {
+        background-color: #fff;
+        color: $main-blue-color;
+        display: flex;
+        font-weight: bold;
+      }
+
+      .value-wrapper {
+        background: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+        display: flex;
+      }
+
+      p {
+        padding: 15px 10px;
+        margin: auto;
+        font-size: 0.8rem;
+        font-family: 'Merriweather', sans-serif;
+      }
+    }
+  }
+}

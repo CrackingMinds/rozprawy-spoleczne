@@ -1,0 +1,18 @@
+<div id="modal">
+    <div class="spinner-wrapper" [class.visible]="spinnerServiceObj.getState()">
+        <mat-spinner [color]="'primary'"></mat-spinner>
+    </div>
+    <div class="content-wrapper">
+        <ng-template #dynamicContent></ng-template>
+    </div>
+    <div class="buttons-wrapper" [class.not-visible]="spinnerServiceObj.getState()">
+        <button mat-button (click)="cancel()">Anuluj</button>
+        <button mat-raised-button
+                color="accent"
+                class="btn-primary"
+                [disabled]="!isSubmitBtnActive"
+                (click)="submitForm()">
+            Zatwierdż
+        </button>
+    </div>
+</div>

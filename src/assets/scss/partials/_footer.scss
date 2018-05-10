@@ -1,0 +1,22 @@
+.page-footer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  margin-bottom: $universal-padding;
+
+  img {
+    margin: 0 auto;
+  }
+
+  .developed-by {
+    text-decoration: none;
+    margin: $universal-padding auto 0;
+    color: black;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

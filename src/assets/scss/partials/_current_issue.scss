@@ -1,0 +1,37 @@
+.issue-head {
+  margin: 0 0 $universal-padding;
+}
+
+.issue-title {
+  font-weight: bold;
+  font-size: 25px;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  margin-top: 0;
+}
+
+.articles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.article-card {
+  margin: 10px;
+  width: 500px;
+}
+
+.mat-card {
+
+  &.article-card {
+    padding: 0;
+  }
+}
+
+.individual-article {
+
+  .mat-card.article-card {
+    margin: 0;
+  }
+}

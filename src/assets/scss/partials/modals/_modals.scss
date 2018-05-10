@@ -1,0 +1,17 @@
+.custom-modal {
+
+  .modal-heading {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .buttons-wrapper {
+
+    .btn-primary {
+      color: #fff;
+    }
+  }
+}
+
+@import "modal-base";
+@import "create-issue";

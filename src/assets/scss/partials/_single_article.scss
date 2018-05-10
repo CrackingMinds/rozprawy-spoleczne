@@ -1,0 +1,19 @@
+#full-article-btn {
+  width: 100%;
+  background: $main-green-color;
+  border: none;
+  font-weight: bold;
+  color: #fff;
+  padding: 5px;
+}
+
+.article-abstract {
+  margin-top: $universal-padding-double;
+  font-family: Tahoma, serif;
+
+  h4 {
+    font-weight: bold;
+    font-size: inherit;
+    margin: $universal-padding 0;
+  }
+}

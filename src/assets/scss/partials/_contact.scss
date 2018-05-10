@@ -1,0 +1,18 @@
+.detail {
+  display: flex;
+  flex-direction: row;
+  margin: $universal-padding-half 0;
+
+  img {
+    margin: auto 15px auto 0;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

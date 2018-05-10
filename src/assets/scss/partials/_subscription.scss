@@ -1,0 +1,59 @@
+.subscription-info-wrapper {
+  display: inline-block;
+}
+
+.subscription-info {
+  border: 2px solid $main-green-color;
+  margin: $universal-padding auto $universal-padding 0;
+  font-size: 18px;
+  display: flex;
+  flex-direction: row;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .name-wrapper {
+    background-color: transparent;
+    padding: 0 $universal-padding;
+    display: flex;
+
+    &.full-height {
+      height: 100%;
+    }
+
+    p {
+      text-align: center;
+    }
+  }
+
+  .value-wrapper {
+    background-color: $main-green-color;
+    padding: 0 $universal-padding;
+    margin-left: auto;
+
+    p {
+      text-align: center;
+      margin: auto;
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+
+  .name-wrapper, .value-wrapper {
+
+    p {
+      padding: 5px 0;
+    }
+  }
+}
+
+.additional-info {
+  margin-top: $universal-padding-half;
+}
+
+a {
+  &.email {
+    color: $main-blue-color;
+  }
+}

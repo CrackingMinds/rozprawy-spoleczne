@@ -1,0 +1,38 @@
+//@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "helpers/colors";
+@import "helpers/variables";
+@import "material-custom-theme";
+
+
+html {
+  height: 100%;
+  font-size: 16px;
+
+  body {
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    color: #000;
+    margin: 0;
+    height: inherit;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+@import "partials/base";
+@import "partials/page_header";
+@import "partials/footer";
+@import "partials/menu";
+
+@import "partials/current_issue";
+@import "partials/article-card";
+@import "partials/single_article";
+@import "partials/about";
+@import "partials/abstracting_and_indexing";
+@import "partials/subscription";
+@import "partials/contact";
+@import "partials/editorial-container";
+@import "partials/modals/modals";
+@import "partials/pages/pages";

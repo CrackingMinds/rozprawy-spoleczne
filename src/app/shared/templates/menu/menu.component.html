@@ -1,0 +1,39 @@
+<a id="logo" routerLink="/issues/current">
+    <img src="../../../../assets/images/logo_psw_2010_300.png">
+    <!--<img src="{{ asset('images/logo_psw_2010_300.png') }}">-->
+</a>
+<div class="line-wrapper top">
+    <div class="line"></div>
+</div>
+<ul class="menu-items">
+    <li *ngFor="let menuItem of menuItems" class="menu-item" routerLinkActive="active">
+        <a routerLink="{{menuItem.url}}">
+            <p>{{ menuItem.title }}</p>
+            <mat-icon class="arrow-icon">keyboard_arrow_right</mat-icon>
+        </a>
+    </li>
+</ul>
+<div *ngIf="contactDataLoaded" class="hideable-area">
+    <div class="line-wrapper bottom">
+        <div class="line"></div>
+    </div>
+    <div class="contact-short-info">
+        <div class="large-label">
+            <p>KONTAKT</p>
+        </div>
+        <div class="info">
+            <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>
+            <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
+        </div>
+    </div>
+</div>
+<!--<div class="line"></div>-->
+<!--<div class="contact-info">-->
+<!--<div class="heading-wrapper">-->
+<!--<p class="heading">Kontakt</p>-->
+<!--</div>-->
+<!--<div class="info-wrapper">-->
+<!--<a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>-->
+<!--<a href="tel:{{ contactInfo.phoneNum }}">{{ contactInfo.phoneNum }} wew. {{ contactInfo.phoneExt }}</a>-->
+<!--</div>-->
+<!--</div>-->
