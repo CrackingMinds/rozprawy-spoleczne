@@ -9,6 +9,6 @@ export class PageNameService {
 
   setPageName(name: string) {
     this.pageName.next(name);
-    this.titleService.setTitle(name);
+    this.titleService.setTitle(name + ' | Rozprawy Społeczne');
   }
 }

@@ -12,7 +12,7 @@
                 <li *ngFor="let issue of year.issues" class="issue">
                     <mat-icon>collections_bookmark</mat-icon>
                     <a [routerLink]="['/issues', issue.id]" class="issue-title">
-                        {{issue.name}}
+                        {{ createIssueTitleFromObj(issue, false) }}
                     </a>
                 </li>
             </ul>

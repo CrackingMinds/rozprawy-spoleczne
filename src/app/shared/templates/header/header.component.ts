@@ -11,16 +11,13 @@ import {IIndexing} from "../../../models/indexing";
 export class HeaderComponent implements OnInit {
     indexing: IIndexing[];
 
-    constructor(private indexingService: IndexingService) {
+    constructor(private indexingService: IndexingService,
+                private spinnerService: SpinnerService) {
     }
 
     ngOnInit() {
-        this.getIndexingInfo();
-        // this.spinnerService.initializeSpinner(this.getIndexingInfo());
-
-        // this.indexing.push(this.infoGeneral.indexing.mnisw);
-        // this.indexing.push(this.infoGeneral.indexing.icv);
-        // this.indexing.push(this.infoGeneral.indexing.issn);
+        let asyncAction = this.getIndexingInfo();
+        this.spinnerService.addHeaderLoadPromise(asyncAction);
     }
 
     getIndexingInfo(): Promise<any> {

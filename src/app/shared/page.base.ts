@@ -11,8 +11,7 @@ export class PageBase implements OnInit{
     }
 
     ngOnInit(): void {
-        this._spinnerService.addAsyncAction(this.asyncAction);
-        // this._spinnerService.initializeSpinner(this.asyncAction);
+        this._spinnerService.addContentLoadPromise(this.asyncAction);
     }
 
     changePageName(pageName: string) {

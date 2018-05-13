@@ -1,11 +1,15 @@
 import {Injectable} from '@angular/core';
+import {MainSpinnerService} from "../main-spinner/main.spinner.service";
 
 @Injectable()
 export class SpinnerService {
     private show: boolean = true;
-    private asyncActionPromises: Promise<any>[] = [];
+    private isFirstSpinner: boolean = true;
+    private menuLoaded: boolean = false;
+    private headerLoaded: boolean = false;
+    private contentLoaded: boolean = false;
 
-    constructor() {
+    constructor(private _mainSpinnerService: MainSpinnerService) {
     }
 
     toggleSpinner() {
@@ -24,19 +28,43 @@ export class SpinnerService {
         return this.show
     }
 
-    addAsyncAction(action: any) {
+    addMenuLoadPromise(action: Promise<any>) {
+        let self = this;
+        action
+            .then(function () {
+                self.menuLoaded = true;
+                self.checkLoadedModules();
+            });
+    }
+
+    addHeaderLoadPromise(action: Promise<any>) {
+        let self = this;
+        action
+            .then(function () {
+                self.headerLoaded = true;
+                self.checkLoadedModules();
+            });
+    }
+
+    addContentLoadPromise(action: Promise<any>) {
         if (!this.getState()) {
             this.showSpinner();
         }
-        let previousPromisesCount = this.asyncActionPromises.length;
-        this.asyncActionPromises.push(action);
-        if (previousPromisesCount == 0) {
-            let self = this;
-            Promise.all(this.asyncActionPromises)
-                .then(function () {
-                    self.asyncActionPromises = [];
-                    self.hideSpinner();
-                });
+        let self = this;
+        action
+            .then(function () {
+                self.contentLoaded = true;
+                self.checkLoadedModules();
+            });
+    }
+
+    checkLoadedModules() {
+        if (this.menuLoaded && this.headerLoaded && this.contentLoaded) {
+            if (this.isFirstSpinner) {
+                this.isFirstSpinner = false;
+                this._mainSpinnerService.hide();
+            }
+            this.hideSpinner();
         }
     }
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IContactData} from "../../models/contact-data";
+import {ContactData, IContactData} from "../../models/contact-data";
 import {SpinnerService} from "../../services/spinner/spinner.service";
 import {ContactDataService} from "../contact-data/contact.data.service";
 import {PageBase} from "../../shared/page.base";
@@ -11,7 +11,7 @@ import {PageNameService} from "../../shared/services/page.name.service";
     styles: []
 })
 export class AuthorRequirementsComponent extends PageBase implements OnInit {
-    contactInfo: IContactData;
+    contactInfo: IContactData = new ContactData();
     dataLoaded: boolean = false;
 
     constructor(private contactDataService: ContactDataService,

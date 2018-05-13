@@ -5,6 +5,7 @@ import {SpinnerService} from "../../services/spinner/spinner.service";
 import {IssueService} from "./issue.service";
 import {PageNameService} from "../../shared/services/page.name.service";
 import {PageBase} from "../../shared/page.base";
+import {Utilits} from "../../shared/services/utilits";
 
 @Component({
     selector: 'issue',
@@ -31,10 +32,15 @@ export class IssueComponent extends PageBase implements OnInit {
         let self = this;
         this.asyncAction
             .then(function () {
-                self.changePageName('Bieżący numer');
+                let issueTitle = Utilits.createIssueTitleFromObj(self.issue);
+                if (self.issue.isCurrent) {
+                    self.changePageName('Bieżący numer | ' + issueTitle);
+                }
+                else {
+                    self.changePageName(issueTitle);
+                }
             });
         super.ngOnInit();
-        // this.getIssueData();
     }
 
     protected getIssueData(): Promise<any> {

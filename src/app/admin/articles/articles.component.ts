@@ -12,6 +12,7 @@ import {ModalComponent} from "./modals/modal/modal.component";
 import {MakeIssueCurrentComponent} from "./modals/make-issue-current/make-issue-current.component";
 import {RemoveIssueComponent} from "./modals/remove-issue/remove.issue.component";
 import {ChangeNameComponent} from "./modals/change-name/change-name.component";
+import {Utilits} from "../../shared/services/utilits";
 
 interface FullIssueInfo {
     issue: Issue;
@@ -58,7 +59,7 @@ export class ArticlesComponent extends PageBase implements OnInit {
             self.route.data
                 .subscribe((data) => {
                     self.issueService.getAllIssuesWithArticles()
-                        .subscribe((res) => {
+                        .subscribe((res: any[]) => {
                             res.forEach(function (item) {
                                 let issue = self.setIssueData(item);
                                 if (issue.issue.isCurrent) {
@@ -78,7 +79,7 @@ export class ArticlesComponent extends PageBase implements OnInit {
     private setIssueData(data: any): FullIssueInfo {
         let issue: Issue = data.issue;
         let articles = data.articles;
-        let issueTitle = this.createIssueTitle(issue);
+        let issueTitle = Utilits.createIssueTitleFromObj(issue);
         let selected = false;
         return {
             issue: issue,
@@ -186,7 +187,7 @@ export class ArticlesComponent extends PageBase implements OnInit {
                 }
                 let issueData = res.res;
                 issue.issue = issueData;
-                issue.issueTitle = this.createIssueTitle(issue.issue);
+                issue.issueTitle = Utilits.createIssueTitleFromObj(issue.issue);
                 if (issueData.isCurrent) {
                     this.markIssueAsCurrent(issue);
                 }
@@ -231,32 +232,16 @@ export class ArticlesComponent extends PageBase implements OnInit {
                         return 0;
                     }
                     else {
-                        return self.sortByValue(aIssue.number, bIssue.number);
+                        return Utilits.sortByValue(aIssue.number, bIssue.number);
                     }
                 }
                 else {
-                    return self.sortByValue(aIssue.vol, bIssue.vol);
+                    return Utilits.sortByValue(aIssue.vol, bIssue.vol);
                 }
             }
             else {
-                return self.sortByValue(aIssue.year, bIssue.year);
+                return Utilits.sortByValue(aIssue.year, bIssue.year);
             }
         })
-    }
-
-    private sortByValue(a, b) {
-        if (a < b) {
-            return 1;
-        }
-        else if (a > b) {
-            return -1;
-        }
-        else {
-            return 0;
-        }
-    }
-
-    private createIssueTitle(issue: Issue): string {
-        return new Date(issue.year).getFullYear() + ' - Tom ' + issue.vol + ' Nr ' + issue.number;
     }
 }

@@ -54,11 +54,12 @@ import {ModalService} from "./admin/articles/modals/modal/modal.service";
 import {ModalSpinnerService} from "./admin/articles/modals/modal/modal.spinner.service";
 import { RemoveIssueComponent } from './admin/articles/modals/remove-issue/remove.issue.component';
 import { ChangeNameComponent } from './admin/articles/modals/change-name/change-name.component';
+import {MainSpinnerService} from "./services/main-spinner/main.spinner.service";
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/issues/current',
+        redirectTo: '/about',
         pathMatch: 'full'
     },
     {
@@ -180,6 +181,7 @@ const appRoutes: Routes = [
     providers: [
         ApiService,
         SpinnerService,
+        MainSpinnerService,
         IssueService,
         ArticleService,
         EditorialScientificBoardService,

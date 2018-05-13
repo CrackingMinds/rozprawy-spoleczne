@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {IContactData} from "../../models/contact-data";
+import {ContactData, IContactData} from "../../models/contact-data";
 import {ContactDataService} from "./contact.data.service";
 import {SpinnerService} from "../../services/spinner/spinner.service";
 import {PageBase} from "../../shared/page.base";
@@ -11,8 +11,7 @@ import {PageNameService} from "../../shared/services/page.name.service";
   styles: []
 })
 export class ContactDataComponent extends PageBase implements OnInit {
-  contactInfo: IContactData;
-  dataLoaded: boolean = false;
+  contactInfo: IContactData = new ContactData();
 
   constructor(private contactDataService: ContactDataService,
               private spinnerService: SpinnerService,
@@ -39,7 +38,6 @@ export class ContactDataComponent extends PageBase implements OnInit {
         self.contactDataService.getContactInfo()
             .subscribe((res) => {
               self.contactInfo = res;
-              self.dataLoaded = true;
               resolve();
             })
     });

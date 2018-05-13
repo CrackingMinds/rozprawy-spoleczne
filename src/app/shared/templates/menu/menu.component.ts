@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {IContactData} from "../../../models/contact-data";
 import {SpinnerService} from "../../../services/spinner/spinner.service";
 import {ContactDataService} from "../../../pages/contact-data/contact.data.service";
+import {PageBase} from "../../page.base";
+import {PageNameService} from "../../services/page.name.service";
 
 @Component({
     selector: 'menu',
@@ -57,12 +59,13 @@ export class MenuComponent implements OnInit {
         }
     ];
 
-    constructor(private contactDataService: ContactDataService) {
+    constructor(private contactDataService: ContactDataService,
+                private spinnerService: SpinnerService) {
     }
 
     ngOnInit() {
-        this.getContactData();
-        // this.spinnerService.initializeSpinner(this.getContactData());
+        let asyncAction = this.getContactData();
+        this.spinnerService.addMenuLoadPromise(asyncAction);
     }
 
     getContactData(): Promise<any> {
