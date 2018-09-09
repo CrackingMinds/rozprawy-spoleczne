@@ -1,0 +1,40 @@
+@import "variables";
+
+:host {
+
+  input {
+    display: none;
+  }
+
+  .rs-choose-file-box {
+
+    .rs-upload-error {
+      margin-left: 10px;
+      color: $red;
+    }
+
+    .rs-file-view {
+      display: flex;
+      flex-direction: row;
+      font-size: 16px;
+
+      .rs-file-name {
+        line-height: 1.375em;
+      }
+
+      .rs-file-actions {
+        height: 1.375em;
+        margin-left: 10px;
+
+        .rs-delete-file-btn {
+          font-size: 1.4em;
+          cursor: pointer;
+        }
+
+      }
+
+    }
+
+  }
+
+}

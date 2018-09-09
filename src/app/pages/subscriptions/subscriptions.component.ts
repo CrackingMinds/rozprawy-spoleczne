@@ -36,7 +36,7 @@ export class SubscriptionsComponent extends PageBase implements OnInit {
         let self = this;
         return new Promise(function (resolve, reject) {
             self.subscriptionsService.getSubscriptionsInfo()
-                .subscribe((res) => {
+                .subscribe((res: ISubsriptionsInfo) => {
                     self.subscriptionsInfo = res;
                     self.dataLoaded = true;
                     resolve();

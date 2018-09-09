@@ -1,26 +1,24 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from "@angular/http";
 import {ApiService} from "../services/api.service";
 import {tokenNotExpired} from "angular2-jwt";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AuthService extends ApiService{
   authToken: any;
   user: any;
-  constructor(private http: Http) { super(); }
+  constructor(private http: HttpClient) { super(); }
 
   registerUser(user) {
-    let headers = new Headers();
+    let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
-    return this.http.post(this.backendUrl + '/sign-up', user, { headers: headers})
-        .map(res => res.json());
+    return this.http.post(this.backendUrl + '/sign-up', user, { headers: headers});
   }
 
   authenticateUser(user) {
-      let headers = new Headers();
+      let headers = new HttpHeaders();
       headers.append('Content-Type', 'application/json');
-      return this.http.post(this.backendUrl + '/sign-in', user, { headers: headers})
-          .map(res => res.json());
+      return this.http.post(this.backendUrl + '/sign-in', user, { headers: headers});
   }
 
   storeUserData(token, user) {

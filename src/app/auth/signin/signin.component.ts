@@ -62,7 +62,7 @@ export class SigninComponent extends PageBase implements OnInit {
         }
 
         this.authService.authenticateUser(user)
-            .subscribe(data => {
+            .subscribe((data: any) => {
                 if (data.success) {
                     this.authService.storeUserData(data.token, data.user);
                     this.router.navigate(['/admin/dashboard']);

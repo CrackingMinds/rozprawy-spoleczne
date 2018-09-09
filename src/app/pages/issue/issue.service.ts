@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from "../../services/api.service";
-import {Http, RequestOptions} from "@angular/http";
 import {INewIssueData} from "../../models/interfaces";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 

@@ -36,7 +36,7 @@ export class IndexingComponent extends PageBase implements OnInit {
         let self = this;
         return new Promise(function (resolve, reject) {
             self.indexingService.getIndexingInfo()
-                .subscribe((res) => {
+                .subscribe((res: IndexingData[]) => {
                     self.indexingData = res;
 
                     self.indexingDataToShow = self.indexingData.filter(function (data) {

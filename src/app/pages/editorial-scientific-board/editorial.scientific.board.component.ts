@@ -43,7 +43,7 @@ export class EditorialScientificBoardComponent extends PageBase implements OnIni
         let self = this;
         return new Promise(function (resolve, reject) {
             self.editorialScientificBoardService.getEditorialBoardMembers()
-                .subscribe((res) => {
+                .subscribe((res: EditorialBoardMember[]) => {
                     self.editorialBoard = res;
                     resolve();
                 })
@@ -54,7 +54,7 @@ export class EditorialScientificBoardComponent extends PageBase implements OnIni
         let self = this;
         return new Promise(function (resolve, reject) {
             self.editorialScientificBoardService.getScientificBoardMembers()
-                .subscribe((res) => {
+                .subscribe((res: ScientificBoardMember[]) => {
                     self.scientificBoard = res;
                     resolve();
                 })

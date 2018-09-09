@@ -41,7 +41,7 @@ export class ArticleComponent extends PageBase implements OnInit {
             self.route.paramMap
                 .subscribe(params => {
                     let articleId = params.get('id');
-                    self.articleService.getArticle(articleId).subscribe((res) => {
+                    self.articleService.getArticle(articleId).subscribe((res: Article) => {
                         self.article = res;
                         self.changePageName(self.article.title);
                         resolve();

@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpModule} from "@angular/http";
 
-
 import {AppComponent} from './app.component';
 import {ApiService} from "./services/api.service";
 import {ArticleCardComponent} from './shared/templates/article-card/article-card.component';
@@ -13,10 +12,10 @@ import {
     MatInputModule, MatMenuModule,
     MatSidenavModule
 } from "@angular/material";
+
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MenuComponent} from './shared/templates/menu/menu.component';
 import {HeaderComponent} from './shared/templates/header/header.component';
-import {RouterModule, Routes} from "@angular/router";
 import {SpinnerService} from "./services/spinner/spinner.service";
 import {IssueComponent} from './pages/issue/issue.component';
 import {IssueService} from "./pages/issue/issue.service";
@@ -28,7 +27,6 @@ import {ValidateService} from "./auth/validate.service";
 import {AuthService} from "./auth/auth.service";
 import {SigninComponent} from './auth/signin/signin.component';
 import {AdminDashboardComponent} from './admin-dashboard/admin.dashboard.component';
-import {AuthGuard} from "./guards/auth.guard";
 import { ArticlesComponent } from './admin/articles/articles.component';
 import { CreateIssueComponent } from './admin/articles/modals/create-issue/create-issue.component';
 import { ArchiveComponent } from './pages/archive/archive.component';
@@ -55,73 +53,11 @@ import {ModalSpinnerService} from "./admin/articles/modals/modal/modal.spinner.s
 import { RemoveIssueComponent } from './admin/articles/modals/remove-issue/remove.issue.component';
 import { ChangeNameComponent } from './admin/articles/modals/change-name/change-name.component';
 import {MainSpinnerService} from "./services/main-spinner/main.spinner.service";
+import { PlaygroundComponent } from 'app/pages/playground/playground.component';
 
-const appRoutes: Routes = [
-    {
-        path: '',
-        redirectTo: '/about',
-        pathMatch: 'full'
-    },
-    {
-        path: 'archive',
-        component: ArchiveComponent
-    },
-    {
-        path: 'reviewers',
-        component: ReviewersComponent
-    },
-    {
-        path: 'indexing',
-        component: IndexingComponent
-    },
-    {
-        path: 'subscriptions',
-        component: SubscriptionsComponent
-    },
-    {
-        path: 'contact',
-        component: ContactDataComponent
-    },
-    {
-        path: 'requirements',
-        component: AuthorRequirementsComponent
-    },
-    {
-        path: 'issues/current',
-        component: IssueComponent,
-        data: {currentIssue: true}
-    },
-    {
-        path: 'issues/:id',
-        component: IssueComponent,
-        data: {currentIssue: false}
-    },
-    {
-        path: 'articles/:id',
-        component: ArticleComponent
-    },
-    {
-        path: 'sign-up',
-        component: SignupComponent
-    },
-    {
-        path: 'sign-in',
-        component: SigninComponent
-    },
-    {
-        path: 'admin/dashboard',
-        component: AdminDashboardComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'about',
-        component: AboutComponent
-    },
-    {
-        path: 'editorial-scientific-board',
-        component: EditorialScientificBoardComponent
-    },
-];
+import { FirebaseConfigModule } from 'app/firebase.config.module';
+import { RoutingModule } from 'app/routing.module';
+import { PlaygroundModule } from 'app/pages/playground/playground.module';
 
 @NgModule({
     declarations: [
@@ -169,7 +105,9 @@ const appRoutes: Routes = [
         ReactiveFormsModule,
         BrowserAnimationsModule,
         FormsModule,
-        RouterModule.forRoot(appRoutes),
+        FirebaseConfigModule,
+        PlaygroundModule,
+        RoutingModule.forRoot()
     ],
     entryComponents: [
         ModalComponent,
@@ -193,8 +131,7 @@ const appRoutes: Routes = [
         ModalService,
         ModalSpinnerService,
         ValidateService,
-        AuthService,
-        AuthGuard
+        AuthService
     ],
     bootstrap: [AppComponent]
 })

@@ -36,7 +36,7 @@ export class ContactDataComponent extends PageBase implements OnInit {
     let self = this;
     return new Promise(function (resolve, reject) {
         self.contactDataService.getContactInfo()
-            .subscribe((res) => {
+            .subscribe((res: IContactData) => {
               self.contactInfo = res;
               resolve();
             })

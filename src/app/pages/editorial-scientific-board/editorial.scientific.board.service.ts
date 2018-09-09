@@ -1,21 +1,19 @@
 import {ApiService} from "../../services/api.service";
-import {Http} from "@angular/http";
 import {Injectable} from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class EditorialScientificBoardService extends ApiService {
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
         super();
     }
 
     getEditorialBoardMembers() {
-        return this.http.get(this.backendUrl + '/boards/editorial')
-            .map(res => res.json());
+        return this.http.get(this.backendUrl + '/boards/editorial');
     }
 
     getScientificBoardMembers() {
-        return this.http.get(this.backendUrl + '/boards/scientific')
-            .map(res => res.json());
+        return this.http.get(this.backendUrl + '/boards/scientific');
     }
 }

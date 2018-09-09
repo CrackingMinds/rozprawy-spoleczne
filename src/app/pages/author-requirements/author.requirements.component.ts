@@ -37,7 +37,7 @@ export class AuthorRequirementsComponent extends PageBase implements OnInit {
         let self = this;
         return new Promise(function (resolve, reject) {
             self.contactDataService.getContactInfo()
-                .subscribe((res) => {
+                .subscribe((res: IContactData) => {
                     self.contactInfo = res;
                     self.dataLoaded = true;
                     resolve();

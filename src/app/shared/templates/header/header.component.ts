@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
         let self = this;
         return new Promise(function (resolve, reject) {
             self.indexingService.getIndexingInfo()
-                .subscribe((res) => {
+                .subscribe((res: IIndexing[]) => {
                     self.indexing = res;
                     resolve();
                 });
