@@ -5,7 +5,6 @@ import {HttpModule} from "@angular/http";
 import {AppComponent} from './app.component';
 import {ApiService} from "./services/api.service";
 import {ArticleCardComponent} from './shared/templates/article-card/article-card.component';
-import {PageContentComponent} from './shared/templates/page-content/page-content.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {
     MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDialogRef, MatExpansionModule, MatIconModule,
@@ -14,8 +13,6 @@ import {
 } from "@angular/material";
 
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MenuComponent} from './shared/templates/menu/menu.component';
-import {HeaderComponent} from './shared/templates/header/header.component';
 import {SpinnerService} from "./services/spinner/spinner.service";
 import {IssueComponent} from './pages/issue/issue.component';
 import {IssueService} from "./pages/issue/issue.service";
@@ -30,7 +27,6 @@ import {AdminDashboardComponent} from './admin-dashboard/admin.dashboard.compone
 import { ArticlesComponent } from './admin/articles/articles.component';
 import { CreateIssueComponent } from './admin/articles/modals/create-issue/create-issue.component';
 import { ArchiveComponent } from './pages/archive/archive.component';
-import { AboutComponent } from './pages/about/about.component';
 import { EditorialScientificBoardComponent } from './pages/editorial-scientific-board/editorial.scientific.board.component';
 import {EditorialScientificBoardService} from "./pages/editorial-scientific-board/editorial.scientific.board.service";
 import { ReviewersComponent } from './pages/reviewers/reviewers.component';
@@ -39,11 +35,7 @@ import { IndexingComponent } from './pages/indexing/indexing.component';
 import {IndexingService} from "./pages/indexing/indexing.service";
 import { SubscriptionsComponent } from './pages/subscriptions/subscriptions.component';
 import {SubscriptionsService} from "./pages/subscriptions/subscriptions.service";
-import { ContactDataComponent } from './pages/contact-data/contact.data.component';
 import {ContactDataService} from "./pages/contact-data/contact.data.service";
-import { PhoneNumComponent } from './shared/templates/phone-num/phone.num.component';
-import { PhoneNumPipe } from './shared/pipes/phone-num.pipe';
-import { AuthorRequirementsComponent } from './pages/author-requirements/author.requirements.component';
 import {PageNameService} from "./shared/services/page.name.service";
 import {HttpClientModule} from "@angular/common/http";
 import { ModalComponent } from './admin/articles/modals/modal/modal.component';
@@ -53,36 +45,29 @@ import {ModalSpinnerService} from "./admin/articles/modals/modal/modal.spinner.s
 import { RemoveIssueComponent } from './admin/articles/modals/remove-issue/remove.issue.component';
 import { ChangeNameComponent } from './admin/articles/modals/change-name/change-name.component';
 import {MainSpinnerService} from "./services/main-spinner/main.spinner.service";
-import { PlaygroundComponent } from 'app/pages/playground/playground.component';
 
 import { FirebaseConfigModule } from 'app/firebase.config.module';
 import { RoutingModule } from 'app/routing.module';
 import { PlaygroundModule } from 'app/pages/playground/playground.module';
+import { AboutModule } from 'app/pages/about/about.module';
+import { ContactDataModule } from 'app/pages/contact-data/contact.data.module';
+import { AuthorRequirementsModule } from 'app/pages/author-requirements/author.requirements.module';
+import { IssueModule } from 'app/pages/issue/issue.module';
+import { ArticleModule } from 'app/pages/article/article.module';
+import { ArticlesModule } from 'app/admin/articles/articles.module';
+import { ArchiveModule } from 'app/pages/archive/archive.module';
+import { EditorialScientificBoardModule } from 'app/pages/editorial-scientific-board/editorial.scientific.board.module';
+import { ReviewersModule } from 'app/pages/reviewers/reviewers.module';
+import { IndexingModule } from 'app/pages/indexing/indexing.module';
+import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        ArticleCardComponent,
-        PageContentComponent,
-        MenuComponent,
-        HeaderComponent,
-        IssueComponent,
-        ArticleComponent,
         SignupComponent,
         SigninComponent,
         AdminDashboardComponent,
-        ArticlesComponent,
         CreateIssueComponent,
-        ArchiveComponent,
-        AboutComponent,
-        EditorialScientificBoardComponent,
-        ReviewersComponent,
-        IndexingComponent,
-        SubscriptionsComponent,
-        ContactDataComponent,
-        PhoneNumComponent,
-        PhoneNumPipe,
-        AuthorRequirementsComponent,
         ModalComponent,
         MakeIssueCurrentComponent,
         RemoveIssueComponent,
@@ -107,7 +92,19 @@ import { PlaygroundModule } from 'app/pages/playground/playground.module';
         FormsModule,
         FirebaseConfigModule,
         PlaygroundModule,
-        RoutingModule.forRoot()
+        RoutingModule.forRoot(),
+
+        AboutModule,
+        ContactDataModule.forRoot(),
+        AuthorRequirementsModule,
+        IssueModule.forRoot(),
+        ArticleModule.forRoot(),
+        ArticlesModule,
+        ArchiveModule,
+        EditorialScientificBoardModule.forRoot(),
+        ReviewersModule.forRoot(),
+        IndexingModule.forRoot(),
+        SubscriptionsModule.forRoot()
     ],
     entryComponents: [
         ModalComponent,
@@ -120,14 +117,6 @@ import { PlaygroundModule } from 'app/pages/playground/playground.module';
         ApiService,
         SpinnerService,
         MainSpinnerService,
-        IssueService,
-        ArticleService,
-        EditorialScientificBoardService,
-        ReviewersService,
-        IndexingService,
-        SubscriptionsService,
-        ContactDataService,
-        PageNameService,
         ModalService,
         ModalSpinnerService,
         ValidateService,

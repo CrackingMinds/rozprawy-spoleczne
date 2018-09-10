@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {UpperCasePipe} from "@angular/common";
 import {SpinnerService} from "../../../services/spinner/spinner.service";
 import {IndexingService} from '../../../pages/indexing/indexing.service';
 import {IIndexing} from "../../../models/indexing";
 
 @Component({
-    selector: 'journal-header',
+    selector: 'rs-header',
     templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit {

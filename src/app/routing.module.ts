@@ -84,7 +84,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'playground',
-    component: PlaygroundComponent
+    component: PlaygroundComponent,
   }
 ];
 

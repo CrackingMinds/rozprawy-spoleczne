@@ -1,22 +1,24 @@
-<div *ngIf="dataLoaded" class="subscriptions">
-  <ul class="subscriptions-list">
-    <li *ngFor="let subscriptionItem of subscriptionsInfo.subscriptions" class="subscription">
-      <div class="name">
-        <p>
-          {{ subscriptionItem.name }}
-        </p>
-      </div>
-      <div class="price">
-        <p>
-          <span>{{ subscriptionItem.price }}</span>
-          <span>{{ subscriptionItem.currency }}</span>
-        </p>
-      </div>
-    </li>
-  </ul>
-  <div class="additional-info">
-    <p>
-      Aby uzyskać szczegóły  dotyczące zakupu poszczególnych numerów lub prenumeraty prosimy o kontakt mailowy: <a href="mailto:{{ subscriptionsInfo.contactEmail }}">{{ subscriptionsInfo.contactEmail }}</a>
-    </p>
+<rs-basic-wrapper>
+  <div *ngIf="dataLoaded" class="subscriptions">
+    <ul class="subscriptions-list">
+      <li *ngFor="let subscriptionItem of subscriptionsInfo.subscriptions" class="subscription">
+        <div class="name">
+          <p>
+            {{ subscriptionItem.name }}
+          </p>
+        </div>
+        <div class="price">
+          <p>
+            <span>{{ subscriptionItem.price }}</span>
+            <span>{{ subscriptionItem.currency }}</span>
+          </p>
+        </div>
+      </li>
+    </ul>
+    <div class="additional-info">
+      <p>
+        Aby uzyskać szczegóły  dotyczące zakupu poszczególnych numerów lub prenumeraty prosimy o kontakt mailowy: <a href="mailto:{{ subscriptionsInfo.contactEmail }}">{{ subscriptionsInfo.contactEmail }}</a>
+      </p>
+    </div>
   </div>
-</div>
+</rs-basic-wrapper>

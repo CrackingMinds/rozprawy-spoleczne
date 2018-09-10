@@ -1,45 +1,47 @@
-<div id="contact">
+<rs-basic-wrapper>
+  <div id="contact">
     <table>
-        <tr id="head-editor">
-            <td class="icon">
-                <mat-icon>create</mat-icon>
-            </td>
-            <td class="info">
-                Redaktor naczelny: {{ contactInfo.headEditor }}
-            </td>
-        </tr>
-        <tr id="issn">
-            <td class="icon">
-                <mat-icon>import_contacts</mat-icon>
-            </td>
-            <td class="info">
-                {{ contactInfo.issn }}
-            </td>
-        </tr>
-        <tr id="publisher">
-            <td class="icon">
-                <mat-icon>place</mat-icon>
-            </td>
-            <td class="info">
-                Wydawca: {{ contactInfo.publisher }}
-            </td>
-        </tr>
-        <tr id="email">
-            <td class="icon">
-                <mat-icon>mail</mat-icon>
-            </td>
-            <td class="info">
-                <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>
-            </td>
-        </tr>
-        <tr id="phone-num">
-            <td class="icon">
-                <mat-icon>call</mat-icon>
-            </td>
-            <td class="info">
-                <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
-            </td>
-        </tr>
+      <tr id="head-editor">
+        <td class="icon">
+          <mat-icon>create</mat-icon>
+        </td>
+        <td class="info">
+          Redaktor naczelny: {{ contactInfo.headEditor }}
+        </td>
+      </tr>
+      <tr id="issn">
+        <td class="icon">
+          <mat-icon>import_contacts</mat-icon>
+        </td>
+        <td class="info">
+          {{ contactInfo.issn }}
+        </td>
+      </tr>
+      <tr id="publisher">
+        <td class="icon">
+          <mat-icon>place</mat-icon>
+        </td>
+        <td class="info">
+          Wydawca: {{ contactInfo.publisher }}
+        </td>
+      </tr>
+      <tr id="email">
+        <td class="icon">
+          <mat-icon>mail</mat-icon>
+        </td>
+        <td class="info">
+          <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>
+        </td>
+      </tr>
+      <tr id="phone-num">
+        <td class="icon">
+          <mat-icon>call</mat-icon>
+        </td>
+        <td class="info">
+          <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
+        </td>
+      </tr>
     </table>
 
-</div>
+  </div>
+</rs-basic-wrapper>

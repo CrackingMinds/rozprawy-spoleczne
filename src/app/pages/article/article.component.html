@@ -1,25 +1,28 @@
-<div *ngIf="dataLoaded" class="individual-article">
-  <article-card [article]="article" [isShortInfo]="false"></article-card>
-  <div class="article-abstract">
-    <div *ngIf="article.introduction">
-      <h4>Wprowadzenie:</h4>
-      <p>{{article.introduction}}</p>
-    </div>
-    <div *ngIf="article.materialsMethods">
-      <h4>Materiały i metody:</h4>
-      <p>{{article.materialsMethods}}</p>
-    </div>
-    <div *ngIf="article.results">
-      <h4>Wyniki:</h4>
-      <p>{{article.results}}</p>
-    </div>
-    <div *ngIf="article.conclusions">
-      <h4>Wnioski:</h4>
-      <p>{{article.conclusions}}</p>
-    </div>
-    <div *ngIf="article.keywords">
-      <h4>Słowa kluczowe:</h4>
-      <p>{{article.keywords}}</p>
+<rs-basic-wrapper>
+  <div *ngIf="dataLoaded" class="individual-article">
+    <article-card [article]="article" [isShortInfo]="false"></article-card>
+    <div class="article-abstract">
+      <div *ngIf="article.introduction">
+        <h4>Wprowadzenie:</h4>
+        <p>{{article.introduction}}</p>
+      </div>
+      <div *ngIf="article.materialsMethods">
+        <h4>Materiały i metody:</h4>
+        <p>{{article.materialsMethods}}</p>
+      </div>
+      <div *ngIf="article.results">
+        <h4>Wyniki:</h4>
+        <p>{{article.results}}</p>
+      </div>
+      <div *ngIf="article.conclusions">
+        <h4>Wnioski:</h4>
+        <p>{{article.conclusions}}</p>
+      </div>
+      <div *ngIf="article.keywords">
+        <h4>Słowa kluczowe:</h4>
+        <p>{{article.keywords}}</p>
+      </div>
     </div>
   </div>
-</div>
+</rs-basic-wrapper>
+

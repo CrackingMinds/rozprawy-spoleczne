@@ -1,21 +1,23 @@
-<div class="archive">
+<rs-basic-wrapper>
+  <div class="archive">
     <mat-accordion class="years-list">
-        <mat-expansion-panel *ngFor="let year of archiveData; first as isFirst"
-             class="year"
-             [expanded]="isFirst">
-            <mat-expansion-panel-header>
-                <mat-panel-title class="year-number">
-                    {{year.year}}
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ul class="issue-list">
-                <li *ngFor="let issue of year.issues" class="issue">
-                    <mat-icon>collections_bookmark</mat-icon>
-                    <a [routerLink]="['/issues', issue.id]" class="issue-title">
-                        {{ createIssueTitleFromObj(issue, false) }}
-                    </a>
-                </li>
-            </ul>
-        </mat-expansion-panel>
+      <mat-expansion-panel *ngFor="let year of archiveData; first as isFirst"
+                           class="year"
+                           [expanded]="isFirst">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="year-number">
+            {{year.year}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="issue-list">
+          <li *ngFor="let issue of year.issues" class="issue">
+            <mat-icon>collections_bookmark</mat-icon>
+            <a [routerLink]="['/issues', issue.id]" class="issue-title">
+              {{ createIssueTitleFromObj(issue, false) }}
+            </a>
+          </li>
+        </ul>
+      </mat-expansion-panel>
     </mat-accordion>
-</div>
+  </div>
+</rs-basic-wrapper>
