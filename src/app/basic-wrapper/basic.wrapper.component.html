@@ -16,7 +16,7 @@
           </div>
           <div class="container-fluid page-header-title">
             <div class="container">
-              <h2 class="title" *ngIf="pageName">{{ pageName }}</h2>
+              <h2 class="title">{{ pageName | async }}</h2>
             </div>
           </div>
           <div class="container">

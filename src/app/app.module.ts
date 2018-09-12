@@ -120,7 +120,8 @@ import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.modul
         ModalService,
         ModalSpinnerService,
         ValidateService,
-        AuthService
+        AuthService,
+        PageNameService
     ],
     bootstrap: [AppComponent]
 })

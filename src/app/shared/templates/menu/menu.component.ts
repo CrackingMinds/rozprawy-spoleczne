@@ -1,15 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {IContactData} from "../../../models/contact-data";
-import {SpinnerService} from "../../../services/spinner/spinner.service";
-import {ContactDataService} from "../../../pages/contact-data/contact.data.service";
-import {PageBase} from "../../page.base";
-import {PageNameService} from "../../services/page.name.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
+
+import { IContactData } from 'app/models/contact-data';
+import { ContactDataService } from 'app/pages/contact-data/contact.data.service';
+import { Subscription } from 'rxjs/Subscription';
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
     selector: 'menu',
     templateUrl: './menu.component.html'
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
     contactInfo: IContactData;
     contactDataLoaded: boolean = false;
     menuItems = [
@@ -59,25 +60,25 @@ export class MenuComponent implements OnInit {
         }
     ];
 
+    private subscriptions = new Subscription();
+
     constructor(private contactDataService: ContactDataService,
-                private spinnerService: SpinnerService) {
-    }
+                private basicWrapperService: BasicWrapperService) {}
 
     ngOnInit() {
-        let asyncAction = this.getContactData();
-        this.spinnerService.addMenuLoadPromise(asyncAction);
+        this.subscriptions.add(
+          this.contactDataService.getContactInfo()
+              .pipe(take(1))
+              .subscribe((res: IContactData) => {
+                this.contactInfo = res;
+                this.contactDataLoaded = true;
+                this.basicWrapperService.menuLoaded();
+              })
+        );
     }
 
-    getContactData(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.contactDataService.getContactInfo()
-                .subscribe((res: IContactData) => {
-                    self.contactInfo = res;
-                    self.contactDataLoaded = true;
-                    resolve();
-                })
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 
 }

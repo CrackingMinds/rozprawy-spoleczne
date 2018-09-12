@@ -1,32 +1,37 @@
-import {Component, OnInit} from '@angular/core';
-import {SpinnerService} from "../../../services/spinner/spinner.service";
-import {IndexingService} from '../../../pages/indexing/indexing.service';
-import {IIndexing} from "../../../models/indexing";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
+
+import { IIndexing } from 'app/models/indexing';
+
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
+import { IndexingService } from 'app/pages/indexing/indexing.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'rs-header',
     templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
     indexing: IIndexing[];
 
+    private subscriptions = new Subscription();
+
     constructor(private indexingService: IndexingService,
-                private spinnerService: SpinnerService) {
+                private basicWrapperService: BasicWrapperService) {
     }
 
     ngOnInit() {
-        let asyncAction = this.getIndexingInfo();
-        this.spinnerService.addHeaderLoadPromise(asyncAction);
+      this.subscriptions.add(
+        this.indexingService.getIndexingInfo()
+            .pipe(take(1))
+            .subscribe((res: IIndexing[]) => {
+              this.indexing = res;
+              this.basicWrapperService.headerLoaded();
+            })
+      );
     }
 
-    getIndexingInfo(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.indexingService.getIndexingInfo()
-                .subscribe((res: IIndexing[]) => {
-                    self.indexing = res;
-                    resolve();
-                });
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 }

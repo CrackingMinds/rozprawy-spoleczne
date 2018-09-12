@@ -1,50 +1,44 @@
-import {Component, OnInit} from '@angular/core';
-import {IndexingService} from "./indexing.service";
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {IndexingData} from "../../models/interfaces";
-import {PageBase} from "../../shared/page.base";
-import {PageNameService} from "../../shared/services/page.name.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { IndexingData } from 'app/models/interfaces';
+
+import { IndexingService } from 'app/pages/indexing/indexing.service';
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
+import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
     selector: 'indexing',
     templateUrl: './indexing.component.html'
 })
-export class IndexingComponent extends PageBase implements OnInit {
+export class IndexingComponent implements OnInit, OnDestroy {
     indexingData: IndexingData[];
     indexingDataToShow: IndexingData[];
 
+    private subscriptions = new Subscription();
+
     constructor(private indexingService: IndexingService,
-                private spinnerService: SpinnerService,
-                private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
-    }
+                private basicWrapperService: BasicWrapperService,
+                private pageNameService: PageNameService) {}
 
     ngOnInit() {
-        this.asyncAction = this.getIndexingData();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Bazy indeksacyjne');
-            });
-        super.ngOnInit();
+      this.pageNameService.setPageName('Bazy indeksacyjne');
+
+      this.subscriptions.add(
+          this.indexingService.getIndexingInfo()
+              .subscribe((res: IndexingData[]) => {
+                this.indexingData = res;
+
+                this.indexingDataToShow = this.indexingData.filter(function (data) {
+                  return data.name !== 'ISSN';
+                });
+
+                this.basicWrapperService.contentLoaded();
+              })
+      );
     }
 
-    getIndexingData(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.indexingService.getIndexingInfo()
-                .subscribe((res: IndexingData[]) => {
-                    self.indexingData = res;
-
-                    self.indexingDataToShow = self.indexingData.filter(function (data) {
-                        return data.name !== 'ISSN';
-                    });
-
-                    resolve();
-                });
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 }

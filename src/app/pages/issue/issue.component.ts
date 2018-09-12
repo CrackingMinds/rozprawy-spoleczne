@@ -1,77 +1,77 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Article, Issue} from "../../models/article";
-import {ActivatedRoute} from "@angular/router";
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {IssueService} from "./issue.service";
-import {PageNameService} from "../../shared/services/page.name.service";
-import {PageBase} from "../../shared/page.base";
-import {Utilits} from "../../shared/services/utilits";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import { Subscription } from 'rxjs/Subscription';
+
+import { Article, Issue } from 'app/models/article';
+
+import { IssueService } from 'app/pages/issue/issue.service';
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { Utilits } from 'app/shared/services/utilits';
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
+
 
 @Component({
     selector: 'issue',
     templateUrl: './issue.component.html'
 })
-export class IssueComponent extends PageBase implements OnInit {
+export class IssueComponent implements OnInit, OnDestroy {
     issue: Issue;
     articles: Article[];
     issueTitle: string;
     asyncAction: any;
 
-    constructor(private route: ActivatedRoute,
+  private subscriptions = new Subscription();
+
+
+  constructor(private route: ActivatedRoute,
                 private issueService: IssueService,
-                private spinnerService: SpinnerService,
-                private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
+                private pageNameService: PageNameService,
+              private basicWrapperService: BasicWrapperService) {
     }
 
     ngOnInit() {
-        this.asyncAction = this.getIssueData();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                let issueTitle = Utilits.createIssueTitleFromObj(self.issue);
-                if (self.issue.isCurrent) {
-                    self.changePageName('Bieżący numer | ' + issueTitle);
+      let isCurrentIssue: boolean = false;
+      let issueId: string;
+
+      this.subscriptions.add(
+        this.route.data
+            .subscribe(data => {
+              if (data.hasOwnProperty('currentIssue')) {
+                isCurrentIssue = data.currentIssue;
+
+                if (isCurrentIssue) {
+                  this.subscriptions.add(
+                    this.issueService.getCurrentIssue().subscribe((res) => {
+                      this.setIssueData(res);
+                      let issueTitle = Utilits.createIssueTitleFromObj(this.issue);
+                      this.pageNameService.setPageName('Bieżący numer | ' + issueTitle);
+                      this.basicWrapperService.contentLoaded();
+                    })
+                  );
                 }
                 else {
-                    self.changePageName(issueTitle);
+                  this.subscriptions.add(
+                    this.route.paramMap
+                        .subscribe(params => {
+                          issueId = params.get('id');
+                          this.subscriptions.add(
+                            this.issueService.getIssue(issueId).subscribe((res) => {
+                              this.setIssueData(res);
+                              let issueTitle = Utilits.createIssueTitleFromObj(this.issue);
+                              this.pageNameService.setPageName(issueTitle);
+                              this.basicWrapperService.contentLoaded();
+                            })
+                          );
+                        })
+                  );
                 }
-            });
-        super.ngOnInit();
+              }
+            })
+      );
     }
 
-    protected getIssueData(): Promise<any> {
-        let isCurrentIssue: boolean = false;
-        let issueId: string;
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.route.data
-                .subscribe(data => {
-                    if (data.hasOwnProperty('currentIssue')) {
-                        isCurrentIssue = data.currentIssue;
-
-                        if (isCurrentIssue) {
-                            self.issueService.getCurrentIssue().subscribe((res) => {
-                                self.setIssueData(res);
-                                resolve();
-                            });
-                        }
-                        else {
-                            self.route.paramMap
-                                .subscribe(params => {
-                                    issueId = params.get('id');
-                                    self.issueService.getIssue(issueId).subscribe((res) => {
-                                        self.setIssueData(res);
-                                        resolve();
-                                    });
-                                });
-                        }
-                    }
-                });
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 
     private setIssueData(data: any) {

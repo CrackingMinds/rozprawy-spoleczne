@@ -1,53 +1,46 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {IssueService} from "../issue/issue.service";
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {PageNameService} from "../../shared/services/page.name.service";
-import {PageBase} from "../../shared/page.base";
-import {Utilits} from "../../shared/services/utilits";
-import {Issue} from "../../models/article";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { Issue } from 'app/models/article';
+
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { IssueService } from 'app/pages/issue/issue.service';
+import { Utilits } from 'app/shared/services/utilits';
 
 @Component({
     selector: 'archive',
     templateUrl: './archive.component.html'
 })
-export class ArchiveComponent extends PageBase implements OnInit {
+export class ArchiveComponent implements OnInit, OnDestroy {
     archiveData: any;
 
+    private subscriptions = new Subscription();
+
     constructor(private issueService: IssueService,
-                private spinnerService: SpinnerService,
-                private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
-    }
+                private basicWrapperService: BasicWrapperService,
+                private pageNameService: PageNameService) {}
 
     ngOnInit() {
-        this.asyncAction = this.getArchiveData();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Archiwum');
-            });
-        super.ngOnInit();
+      this.pageNameService.setPageName('Archiwum');
+
+      this.subscriptions.add(
+        this.issueService.getAllIssues()
+            .subscribe(data => {
+              this.archiveData = data;
+              this.archiveData.sort(function (a: any, b: any) {
+                return Utilits.sortByValue(a.year, b.year);
+              });
+              this.archiveData.forEach(function (year) {
+                Utilits.sortIssues(year.issues);
+              });
+              this.basicWrapperService.contentLoaded();
+            })
+      );
     }
 
-    protected getArchiveData(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.issueService.getAllIssues()
-                .subscribe(data => {
-                    self.archiveData = data;
-                    self.archiveData.sort(function (a: any, b: any) {
-                        return Utilits.sortByValue(a.year, b.year);
-                    });
-                    self.archiveData.forEach(function (year) {
-                        Utilits.sortIssues(year.issues);
-                    });
-                    resolve();
-                });
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 
     private createIssueTitleFromObj(issue: Issue, withYear: boolean = true): string {

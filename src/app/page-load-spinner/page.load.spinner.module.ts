@@ -1,7 +1,10 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { PageLoadSpinnerService } from 'app/page-load-spinner/page.load.spinner.service';
 import { PageLoadSpinnerComponent } from 'app/page-load-spinner/page.load.spinner.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const declarations = [
   PageLoadSpinnerComponent
@@ -16,6 +19,7 @@ const providers = [
   exports: declarations,
   providers: providers,
   imports: [
+    CommonModule,
     MatProgressSpinnerModule
   ]
 })

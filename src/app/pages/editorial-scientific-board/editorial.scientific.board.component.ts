@@ -1,63 +1,57 @@
-import {Component, OnInit} from '@angular/core';
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {EditorialScientificBoardService} from "./editorial.scientific.board.service";
-import {EditorialBoardMember, ScientificBoardMember} from "../../models/interfaces";
-import {PageBase} from "../../shared/page.base";
-import {PageNameService} from "../../shared/services/page.name.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { zip } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+
+import { EditorialBoardMember, ScientificBoardMember } from 'app/models/interfaces';
+
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { EditorialScientificBoardService } from 'app/pages/editorial-scientific-board/editorial.scientific.board.service';
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
     selector: 'editorial-scientific-board',
     templateUrl: './editorial.scientific.board.component.html'
 })
-export class EditorialScientificBoardComponent extends PageBase implements OnInit {
+export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
     editorialBoard: EditorialBoardMember[];
     scientificBoard: ScientificBoardMember[];
 
-    constructor(private spinnerService: SpinnerService,
-                private editorialScientificBoardService: EditorialScientificBoardService,
-                private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
+    private subscriptions = new Subscription();
+
+    constructor(private editorialScientificBoardService: EditorialScientificBoardService,
+                private basicWrapperService: BasicWrapperService,
+                private pageNameService: PageNameService) {}
+
+    ngOnInit() {
+        this.pageNameService.setPageName('Rada Redakcyjna i Rada Naukowa');
+
+        let getEditorialBoardMembers = this.editorialScientificBoardService.getEditorialBoardMembers();
+        let getScientificBoardMembers = this.editorialScientificBoardService.getScientificBoardMembers();
+
+        this.subscriptions.add(
+          getEditorialBoardMembers.subscribe((res: EditorialBoardMember[]) => {
+            this.editorialBoard = res;
+          })
+        );
+
+        this.subscriptions.add(
+          getScientificBoardMembers.subscribe((res: ScientificBoardMember[]) => {
+            this.scientificBoard = res;
+          })
+        );
+
+        let allContentLoaded = zip(
+          getEditorialBoardMembers,
+          getScientificBoardMembers
+        ).subscribe(() => {
+          this.basicWrapperService.contentLoaded();
+        });
+        this.subscriptions.add(
+          allContentLoaded
         );
     }
 
-    ngOnInit() {
-        this.asyncAction = this.getMemberLists();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Rada Redakcyjna i Rada Naukowa');
-            });
-        super.ngOnInit();
-    }
-
-    getMemberLists(): Promise<any> {
-        let bothBoardsMembersPromises: Promise<any>[] = [];
-        bothBoardsMembersPromises.push(this.getEditorialBoardMembers());
-        bothBoardsMembersPromises.push(this.getScientificBoardMembers());
-        return Promise.all(bothBoardsMembersPromises);
-    }
-
-    getEditorialBoardMembers(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.editorialScientificBoardService.getEditorialBoardMembers()
-                .subscribe((res: EditorialBoardMember[]) => {
-                    self.editorialBoard = res;
-                    resolve();
-                })
-        });
-    }
-
-    getScientificBoardMembers(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.editorialScientificBoardService.getScientificBoardMembers()
-                .subscribe((res: ScientificBoardMember[]) => {
-                    self.scientificBoard = res;
-                    resolve();
-                })
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 }

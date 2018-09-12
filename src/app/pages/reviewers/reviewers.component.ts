@@ -1,44 +1,37 @@
-import {Component, OnInit} from '@angular/core';
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {ReviewersService} from "./reviewers.service";
-import {PageNameService} from '../../shared/services/page.name.service';
-import {PageBase} from "../../shared/page.base";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { ReviewersService } from 'app/pages/reviewers/reviewers.service';
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
     selector: 'reviewers',
     templateUrl: './reviewers.component.html'
 })
-export class ReviewersComponent extends PageBase implements OnInit {
+export class ReviewersComponent implements OnInit, OnDestroy {
     reviewersData: any;
 
+    private subscriptions = new Subscription();
+
     constructor(private reviewersService: ReviewersService,
-                private spinnerService: SpinnerService,
-                private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
-    }
+                private basicWrapperService: BasicWrapperService,
+                private pageNameService: PageNameService) {}
 
     ngOnInit() {
-        this.asyncAction = this.getReviewersData();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Recenzenci');
-            });
-        super.ngOnInit();
+      this.pageNameService.setPageName('Recenzenci');
+
+      this.subscriptions.add(
+        this.reviewersService.getReviewers()
+            .subscribe(data => {
+              this.reviewersData = data;
+              this.basicWrapperService.contentLoaded();
+            })
+      );
     }
 
-    protected getReviewersData(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.reviewersService.getReviewers()
-                .subscribe(data => {
-                    self.reviewersData = data;
-                    resolve();
-                });
-        });
+    ngOnDestroy() {
+      this.subscriptions.unsubscribe();
     }
 
 }
