@@ -4,7 +4,6 @@ import {HttpModule} from "@angular/http";
 
 import {AppComponent} from './app.component';
 import {ApiService} from "./services/api.service";
-import {ArticleCardComponent} from './shared/templates/article-card/article-card.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {
     MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDialogRef, MatExpansionModule, MatIconModule,
@@ -13,29 +12,9 @@ import {
 } from "@angular/material";
 
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SpinnerService} from "./services/spinner/spinner.service";
-import {IssueComponent} from './pages/issue/issue.component';
-import {IssueService} from "./pages/issue/issue.service";
-import {ArticleComponent} from './pages/article/article.component';
-import {ArticleService} from "./pages/article/article.service";
-import {SignupComponent} from './auth/signup/signup.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ValidateService} from "./auth/validate.service";
-import {AuthService} from "./auth/auth.service";
-import {SigninComponent} from './auth/signin/signin.component';
-import {AdminDashboardComponent} from './admin-dashboard/admin.dashboard.component';
-import { ArticlesComponent } from './admin/articles/articles.component';
 import { CreateIssueComponent } from './admin/articles/modals/create-issue/create-issue.component';
-import { ArchiveComponent } from './pages/archive/archive.component';
-import { EditorialScientificBoardComponent } from './pages/editorial-scientific-board/editorial.scientific.board.component';
-import {EditorialScientificBoardService} from "./pages/editorial-scientific-board/editorial.scientific.board.service";
-import { ReviewersComponent } from './pages/reviewers/reviewers.component';
-import {ReviewersService} from "./pages/reviewers/reviewers.service";
-import { IndexingComponent } from './pages/indexing/indexing.component';
-import {IndexingService} from "./pages/indexing/indexing.service";
-import { SubscriptionsComponent } from './pages/subscriptions/subscriptions.component';
-import {SubscriptionsService} from "./pages/subscriptions/subscriptions.service";
-import {ContactDataService} from "./pages/contact-data/contact.data.service";
 import {PageNameService} from "./shared/services/page.name.service";
 import {HttpClientModule} from "@angular/common/http";
 import { ModalComponent } from './admin/articles/modals/modal/modal.component';
@@ -60,13 +39,14 @@ import { EditorialScientificBoardModule } from 'app/pages/editorial-scientific-b
 import { ReviewersModule } from 'app/pages/reviewers/reviewers.module';
 import { IndexingModule } from 'app/pages/indexing/indexing.module';
 import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.module';
+import { SignupModule } from 'app/auth/signup/signup.module';
+import { SigninModule } from 'app/auth/signin/signin.module';
+import { AuthModule } from 'app/auth/auth.module';
+import { AdminDashboardModule } from 'app/admin-dashboard/admin.dashboard.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        SignupComponent,
-        SigninComponent,
-        AdminDashboardComponent,
         CreateIssueComponent,
         ModalComponent,
         MakeIssueCurrentComponent,
@@ -90,11 +70,12 @@ import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.modul
         ReactiveFormsModule,
         BrowserAnimationsModule,
         FormsModule,
-        FirebaseConfigModule,
         PlaygroundModule,
         RoutingModule.forRoot(),
-
         AboutModule,
+
+        FirebaseConfigModule,
+
         ContactDataModule.forRoot(),
         AuthorRequirementsModule,
         IssueModule.forRoot(),
@@ -104,7 +85,13 @@ import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.modul
         EditorialScientificBoardModule.forRoot(),
         ReviewersModule.forRoot(),
         IndexingModule.forRoot(),
-        SubscriptionsModule.forRoot()
+        SubscriptionsModule.forRoot(),
+
+        AdminDashboardModule.forRoot(),
+
+        AuthModule.forRoot(),
+        SignupModule,
+        SigninModule
     ],
     entryComponents: [
         ModalComponent,
@@ -115,12 +102,10 @@ import { SubscriptionsModule } from 'app/pages/subscriptions/subscriptions.modul
     ],
     providers: [
         ApiService,
-        SpinnerService,
         MainSpinnerService,
         ModalService,
         ModalSpinnerService,
         ValidateService,
-        AuthService,
         PageNameService
     ],
     bootstrap: [AppComponent]

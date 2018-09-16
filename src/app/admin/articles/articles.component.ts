@@ -1,18 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {IssueService} from "../../pages/issue/issue.service";
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {Article, Issue} from "../../models/article";
-import {MatDialog} from "@angular/material";
-import {CreateIssueComponent} from "./modals/create-issue/create-issue.component";
-import {INewIssueData} from "../../models/interfaces";
-import {PageBase} from "../../shared/page.base";
-import {PageNameService} from "../../shared/services/page.name.service";
-import {ModalComponent} from "./modals/modal/modal.component";
-import {MakeIssueCurrentComponent} from "./modals/make-issue-current/make-issue-current.component";
-import {RemoveIssueComponent} from "./modals/remove-issue/remove.issue.component";
-import {ChangeNameComponent} from "./modals/change-name/change-name.component";
-import {Utilits} from "../../shared/services/utilits";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material';
+
+import { Article, Issue } from 'app/models/article';
+
+import { IssueService } from 'app/pages/issue/issue.service';
+import { Utilits } from 'app/shared/services/utilits';
+import { ModalComponent } from 'app/admin/articles/modals/modal/modal.component';
+import { CreateIssueComponent } from 'app/admin/articles/modals/create-issue/create-issue.component';
+import { MakeIssueCurrentComponent } from 'app/admin/articles/modals/make-issue-current/make-issue-current.component';
+import { RemoveIssueComponent } from 'app/admin/articles/modals/remove-issue/remove.issue.component';
+import { ChangeNameComponent } from 'app/admin/articles/modals/change-name/change-name.component';
+import { PageNameService } from 'app/shared/services/page.name.service';
 
 interface FullIssueInfo {
     issue: Issue;
@@ -25,7 +24,7 @@ interface FullIssueInfo {
     selector: 'articles-editorial',
     templateUrl: './articles.component.html'
 })
-export class ArticlesComponent extends PageBase implements OnInit {
+export class ArticlesComponent implements OnInit {
     issues: FullIssueInfo[] = [];
     articles: Article[];
     dataLoaded: boolean = false;
@@ -34,46 +33,29 @@ export class ArticlesComponent extends PageBase implements OnInit {
 
     constructor(private route: ActivatedRoute,
                 private issueService: IssueService,
-                private spinnerService: SpinnerService,
                 private dialog: MatDialog,
                 private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
     }
 
     ngOnInit() {
-        this.asyncAction = this.getIssuesData();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Numery');
-            });
-        super.ngOnInit();
-    }
+      this.pageNameService.setPageName('Numery');
 
-    protected getIssuesData(): Promise<any> {
-        let self = this;
-        return new Promise(function (resolve, reject) {
-            self.route.data
-                .subscribe((data) => {
-                    self.issueService.getAllIssuesWithArticles()
-                        .subscribe((res: any[]) => {
-                            res.forEach(function (item) {
-                                let issue = self.setIssueData(item);
-                                if (issue.issue.isCurrent) {
-                                    self.selectIssue(issue);
-                                    self.lastCurrentIssue = issue;
-                                }
-                                self.issues.push(issue);
-                            });
-                            self.dataLoaded = true;
-                            self.sortIssues();
-                            resolve();
-                        });
+      this.route.data
+          .subscribe((data) => {
+            this.issueService.getAllIssuesWithArticles()
+                .subscribe((res: any[]) => {
+                  res.forEach((item) => {
+                    let issue = this.setIssueData(item);
+                    if (issue.issue.isCurrent) {
+                      this.selectIssue(issue);
+                      this.lastCurrentIssue = issue;
+                    }
+                    this.issues.push(issue);
+                  });
+                  this.dataLoaded = true;
+                  this.sortIssues();
                 });
-        });
+          });
     }
 
     private setIssueData(data: any): FullIssueInfo {
@@ -220,7 +202,6 @@ export class ArticlesComponent extends PageBase implements OnInit {
     }
 
     sortIssues() {
-        let self = this;
         this.issues.sort(function (a: FullIssueInfo, b: FullIssueInfo) {
             let aIssue: Issue = a.issue;
             let bIssue: Issue = b.issue;
@@ -242,6 +223,6 @@ export class ArticlesComponent extends PageBase implements OnInit {
             else {
                 return Utilits.sortByValue(aIssue.year, bIssue.year);
             }
-        })
+        });
     }
 }

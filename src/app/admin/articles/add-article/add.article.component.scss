@@ -1,0 +1,17 @@
+@import "variables";
+
+rs-add-article {
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .rs-form-field {
+    border-bottom: 2px solid $main-green-color;
+    padding: 10px;
+    width: 100%;
+  }
+}

@@ -1,10 +1,11 @@
 import { AngularFireStorageReference } from 'angularfire2/storage';
+import { Observable } from 'rxjs/Observable';
 
 export class ArticleFile {
   private readonly _name: string;
   private readonly _rawFile: File;
   private _ref: AngularFireStorageReference;
-  private _url: string;
+  private _url: Observable<string>;
   private _isUploaded: boolean = false;
 
   get ref(): AngularFireStorageReference {
@@ -19,10 +20,10 @@ export class ArticleFile {
     return this._name;
   }
 
-  get url(): string {
+  get url(): Observable<string> {
     return this._url;
   }
-  set url(value: string) {
+  set url(value: Observable<string>) {
     this._url = value;
   }
 

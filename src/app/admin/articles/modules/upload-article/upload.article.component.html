@@ -1,14 +1,16 @@
 <div class="rs-choose-file-box">
+  <span class="rs-upload-header">Plik artykułu (*.pdf)</span>
   <button *ngIf="!articleFile"
-          mat-raised-button color="accent"
+          mat-raised-button color="primary"
           class="rs-choose-file-btn" (click)="chooseFile()">
     Wybierz plik
   </button>
   <span *ngIf="uploadError" class="rs-upload-error">{{ uploadError }}</span>
   <div class="rs-file-view" *ngIf="articleFile">
-    <span class="rs-file-name">{{ articleFile.name }}</span>
+    <span *ngIf="!articleFile.isUploaded" class="rs-file-name">{{ articleFile.name }}</span>
+    <a *ngIf="articleFile.isUploaded" class="rs-file-name" [href]="articleFile.url | async" target="_blank">{{ articleFile.name }}</a>
     <div class="rs-file-actions">
-      <mat-icon *ngIf="articleFile.isUploaded && !fileDeleteInProgress" class="rs-delete-file-btn" (click)="deleteFile()">delete</mat-icon>
+      <mat-icon *ngIf="articleFile.isUploaded && !fileDeleteInProgress" color="accent" class="rs-delete-file-btn" (click)="deleteFile()">delete</mat-icon>
       <mat-progress-spinner *ngIf="fileDeleteInProgress" class="rs-progress-spinner"
                             mode="indeterminate"
                             color="accent"

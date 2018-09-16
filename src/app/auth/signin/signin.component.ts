@@ -1,76 +1,47 @@
-import {Component, OnInit} from '@angular/core';
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {ValidateService} from "../validate.service";
-import {AuthService} from "../auth.service";
-import {Router} from "@angular/router";
-import {PageBase} from "../../shared/page.base";
-import {PageNameService} from "../../shared/services/page.name.service";
+import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+
+import { AngularFireAuth } from 'angularfire2/auth';
+
+import { fallIn, moveIn } from 'app/auth/auth.animations';
+import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
     selector: 'sign-in',
-    templateUrl: './signin.component.html'
+    templateUrl: './signin.component.html',
+    animations: [moveIn(), fallIn()],
+    host: {'[@moveIn]': ''}
 })
-export class SigninComponent extends PageBase implements OnInit {
-    email: string;
-    password: string;
+export class SigninComponent implements OnInit {
+    state: string = '';
+    error: any;
 
-    constructor(private spinnerService: SpinnerService,
-                private validateService: ValidateService,
-                private authService: AuthService,
+    constructor(private angularFireAuth: AngularFireAuth,
                 private router: Router,
                 private pageNameService: PageNameService) {
-        super(
-            spinnerService,
-            pageNameService
-        );
+
+      this.angularFireAuth.authState.subscribe(auth => {
+        if(auth) {
+          this.router.navigateByUrl('/admin/dashboard');
+        }
+      });
     }
 
     ngOnInit() {
-        this.asyncAction = this.asyncPlaceholder();
-        let self = this;
-        this.asyncAction
-            .then(function () {
-                self.changePageName('Logowanie');
-            });
-        super.ngOnInit();
+      this.pageNameService.setPageName('Logowanie');
     }
 
-    asyncPlaceholder(): Promise<any> {
-        return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                resolve();
-            }, 2000);
-        });
-    }
-
-    onSignInSubmit() {
-        const user = {
-            email: this.email,
-            password: this.password
-        };
-
-        // Required Fields
-        if (!this.validateService.validateLogin(user)) {
-            console.log("Please fill in all fields");
-            return false;
-        }
-
-        // Validate Email
-        if (!this.validateService.validateEmail(user.email)) {
-            console.log("Please use a valid email");
-            return false;
-        }
-
-        this.authService.authenticateUser(user)
-            .subscribe((data: any) => {
-                if (data.success) {
-                    this.authService.storeUserData(data.token, data.user);
-                    this.router.navigate(['/admin/dashboard']);
-                }
-                else {
-                    console.log(data.message);
-                    // this.router.navigate(['/sign-in']);
-                }
-            });
+    onSubmit(formData) {
+      if (formData.valid) {
+        this.angularFireAuth.auth.signInWithEmailAndPassword(formData.value.email, formData.value.password).then(
+          (success) => {
+            this.router.navigateByUrl('/admin/dashboard');
+          }
+        ).catch(
+          (err) => {
+            this.error = err;
+          }
+        )
+      }
     }
 }

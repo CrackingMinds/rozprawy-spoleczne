@@ -1,0 +1,78 @@
+<form>
+  <div class="rs-form-field">
+    <rs-select-article-type [(ngModel)]="article.articleType" name="article-type"></rs-select-article-type>
+  </div>
+
+  <div class="rs-form-field">
+    <mat-form-field color="accent">
+      <input matInput placeholder="Nazwa">
+    </mat-form-field>
+  </div>
+
+
+  <div class="rs-form-field">
+    <rs-add-authors [(ngModel)]="article.authors" name="article-authors"></rs-add-authors>
+  </div>
+
+  <div class="rs-form-field">
+    <mat-form-field color="accent">
+      <input matInput placeholder="Strony w artykule">
+    </mat-form-field>
+  </div>
+
+  <div class="rs-form-field">
+    <mat-form-field color="accent">
+      <input matInput type="url" placeholder="DOI">
+    </mat-form-field>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-toggle-area name="Wprowadzenie">
+      <mat-form-field>
+        <textarea matInput placeholder="Wprowadzenie"></textarea>
+      </mat-form-field>
+    </rs-toggle-area>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-toggle-area name="Materiały i metody">
+      <mat-form-field>
+        <textarea matInput placeholder="Materiały i metody"></textarea>
+      </mat-form-field>
+    </rs-toggle-area>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-toggle-area name="Wyniki">
+      <mat-form-field>
+        <textarea matInput placeholder="Wyniki"></textarea>
+      </mat-form-field>
+    </rs-toggle-area>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-toggle-area name="Wnioski">
+      <mat-form-field>
+        <textarea matInput placeholder="Wnioski"></textarea>
+      </mat-form-field>
+    </rs-toggle-area>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-toggle-area name="Słowa kluczowe">
+      <mat-form-field>
+        <textarea matInput placeholder="Słowa kluczowe"></textarea>
+      </mat-form-field>
+    </rs-toggle-area>
+  </div>
+
+  <div class="rs-form-field">
+    <rs-upload-article></rs-upload-article>
+  </div>
+
+  <div class="rs-form-buttons">
+    <button mat-button color="accent" (click)="cancel()">Anuluj</button>
+    <button mat-raised-button color="accent" (click)="save()">Zapisz</button>
+  </div>
+</form>
+

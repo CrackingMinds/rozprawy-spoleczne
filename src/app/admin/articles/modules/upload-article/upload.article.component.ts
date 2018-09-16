@@ -4,16 +4,16 @@ import { Observable } from 'rxjs/Observable';
 
 import { AngularFireUploadTask } from 'angularfire2/storage';
 import { ArticleFile } from 'app/models/article.file';
-import { ArticleUploadService } from 'app/article-upload/article.upload.service';
+import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
 
 const bucketPath = 'firebase-test/Issues/';
 
 @Component({
-  selector: 'rs-file-upload',
-  templateUrl: './article.upload.component.html',
-  styleUrls: ['./article.upload.component.scss']
+  selector: 'rs-upload-article',
+  templateUrl: './upload.article.component.html',
+  styleUrls: ['./upload.article.component.scss']
 })
-export class ArticleUploadComponent {
+export class UploadArticleComponent {
   uploadTask: AngularFireUploadTask;
   uploadProgress: Observable<number>;
 
@@ -26,10 +26,11 @@ export class ArticleUploadComponent {
   @ViewChild('fileInput')
   fileInput: ElementRef;
 
-  constructor(private articleUploadService: ArticleUploadService) {}
+  constructor(private articleUploadService: UploadArticleService) {}
 
-  chooseFile(): void {
+  chooseFile(): boolean {
     this.fileInput.nativeElement.dispatchEvent(new MouseEvent('click'));
+    return false;
   }
 
   uploadFile(event): void {
@@ -55,6 +56,7 @@ export class ArticleUploadComponent {
     this.articleUploadService.removeFromServer(this.articleFile).subscribe(() => {
       this.articleFile = null;
       this.fileDeleteInProgress = false;
+      this.fileInput.nativeElement.value = '';
     });
   }
 

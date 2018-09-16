@@ -1,59 +1,78 @@
-import {Component, OnInit} from '@angular/core';
-import {SpinnerService} from "../../services/spinner/spinner.service";
-import {ValidateService} from "../validate.service";
-import {AuthService} from "../auth.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import UserCredential = firebase.auth.UserCredential;
+
+import { Users } from 'app/models/Users';
+
+import { PageNameService } from 'app/shared/services/page.name.service';
+
+import { fallIn, moveIn } from 'app/auth/auth.animations';
+
+const usersCollectionName: string = 'users';
 
 @Component({
     selector: 'sign-up',
-    templateUrl: './signup.component.html'
+    templateUrl: './signup.component.html',
+    styleUrls: ['./signup.component.scss'],
+    animations: [moveIn(), fallIn()],
+    host: {'[@moveIn]': ''}
 })
 export class SignupComponent implements OnInit {
-    name: string;
-    email: string;
-    password: string;
 
-    constructor(private spinnerService: SpinnerService,
-                private validateService: ValidateService,
-                private authService: AuthService,
-                private router: Router) {
-    }
+  state: string = '';
+  error: any;
 
-    ngOnInit() {
-        this.spinnerService.toggleSpinner();
-    }
+  usersCol: AngularFirestoreCollection<Users>;
 
-    onSignUpSubmit() {
-        const user = {
-            name: this.name,
-            email: this.email,
-            password: this.password
-        };
+  constructor(private angularFireAuth: AngularFireAuth,
+              private angularFirestore: AngularFirestore,
+              private router: Router,
+              private pageNameService: PageNameService) {
 
-        // Required Fields
-        if (!this.validateService.validateRegister(user)) {
-            console.log("Please fill in all fields");
-            return false;
+    this.angularFireAuth.authState.subscribe(auth => {
+      if(auth) {
+        this.router.navigateByUrl('/admin/dashboard');
+      }
+    });
+
+  }
+
+  ngOnInit() {
+    this.pageNameService.setPageName('Rejestracja');
+    this.usersCol = this.angularFirestore.collection(usersCollectionName);
+  }
+
+  onSubmit(formData) {
+    if (formData.valid) {
+      this.angularFireAuth.auth.createUserWithEmailAndPassword(formData.value.email, formData.value.password).then(
+        (userCredentials: UserCredential) => {
+          let user: Users = {
+            userId: userCredentials.user.uid,
+            firstName: formData.value.firstName
+          };
+          this.saveUserDataToDb(user).then(
+            () => {
+              this.router.navigateByUrl('/admin/dashboard');
+            }
+          ).catch(
+            (err) => {
+              this.error = err;
+            }
+          );
         }
-
-        // Validate Email
-        if (!this.validateService.validateEmail(user.email)) {
-            console.log("Please use a valid email");
-            return false;
+      ).catch(
+        (err) => {
+          this.error = err;
         }
-
-        // Register user
-        this.authService.registerUser(user)
-            .subscribe((data: any) => {
-                if (data.success) {
-                    console.log("You are now registered and can log in");
-                    this.router.navigate(['/login']);
-                }
-                else {
-                    console.log("Something went wrong");
-                    this.router.navigate(['/signup']);
-                }
-            });
+      )
     }
+  }
+
+  private saveUserDataToDb(userData: Users): Promise<any> {
+    return this.angularFirestore.collection(usersCollectionName).add(userData);
+  }
 
 }

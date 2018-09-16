@@ -4,7 +4,7 @@ import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage'
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class ArticleUploadService {
+export class UploadArticleService {
 
   constructor(private angularFireStorage: AngularFireStorage) {}
 
@@ -14,6 +14,7 @@ export class ArticleUploadService {
     let task = file.ref.put(file.rawFile);
     task.then(() => {
       file.isUploaded = true;
+      file.url = file.ref.getDownloadURL();
     });
     return task;
   }

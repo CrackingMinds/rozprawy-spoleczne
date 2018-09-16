@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { MatButtonModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 
-import { ArticleUploadComponent } from 'app/article-upload/article.upload.component';
-import { ArticleUploadService } from 'app/article-upload/article.upload.service';
+import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
+import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
 
 const declarations = [
-  ArticleUploadComponent
+  UploadArticleComponent
 ];
 
 const providers = [
-  ArticleUploadService
+  UploadArticleService
 ];
 
 @NgModule({
@@ -26,11 +26,11 @@ const providers = [
   providers: providers,
   exports: declarations
 })
-export class ArticleUploadModule {
+export class UploadArticleModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ArticleUploadModule,
+      ngModule: UploadArticleModule,
       providers: providers
     };
   }

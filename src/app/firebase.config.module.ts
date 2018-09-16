@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDpzaK27gxywB2GmUqbARaTr8JVvtFikk8",
@@ -17,7 +18,8 @@ export const firebaseConfig = {
   imports: [
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireStorageModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ]
 })
 export class FirebaseConfigModule {

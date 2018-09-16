@@ -7,6 +7,14 @@
   }
 
   .rs-choose-file-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .rs-upload-header {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
 
     .rs-upload-error {
       margin-left: 10px;

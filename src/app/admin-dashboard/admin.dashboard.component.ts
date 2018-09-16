@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {SpinnerService} from "../services/spinner/spinner.service";
 
 @Component({
   selector: 'admin-dashboard',
@@ -7,7 +6,7 @@ import {SpinnerService} from "../services/spinner/spinner.service";
 })
 export class AdminDashboardComponent implements OnInit {
 
-  constructor(private spinnerService: SpinnerService) { }
+  constructor() { }
 
   ngOnInit() {
   }

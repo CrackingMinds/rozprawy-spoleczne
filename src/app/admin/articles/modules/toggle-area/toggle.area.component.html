@@ -1,0 +1,10 @@
+<mat-slide-toggle
+  color="accent"
+  [checked]="false"
+  (change)="onToggleChange($event)">
+  {{ name }}
+</mat-slide-toggle>
+
+<ng-container *ngIf="contentShown">
+  <ng-content></ng-content>
+</ng-container>

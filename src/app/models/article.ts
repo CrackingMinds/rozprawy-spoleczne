@@ -1,9 +1,12 @@
+import { ArticleType } from 'app/models/article.type';
+import { Author } from 'app/models/author';
+
 export class Article {
     id: string;
     issue: Issue;
     articleType: ArticleType;
     title: string;
-    authors: string;
+    authors: Author[] = [];
     locationInIssue: string;
     doiLink: string;
     introduction: string;
@@ -12,11 +15,6 @@ export class Article {
     conclusions: string;
     keywords: string;
     pdfLink: string;
-}
-
-export class ArticleType {
-    id: string;
-    namePl: string;
 }
 
 export interface Issue {
