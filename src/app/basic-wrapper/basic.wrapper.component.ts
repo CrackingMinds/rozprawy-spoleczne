@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'rs-basic-wrapper',
-  templateUrl: './basic.wrapper.component.html'
+  templateUrl: './basic.wrapper.component.html',
+  styleUrls: ['./basic.wrapper.component.scss']
 })
 export class BasicWrapperComponent implements OnInit {
   linkedInProfileLink = 'https://www.linkedin.com/in/viacheslav-guselnykov-13b25b15a/';
