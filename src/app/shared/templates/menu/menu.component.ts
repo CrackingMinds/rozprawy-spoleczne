@@ -57,6 +57,11 @@ export class MenuComponent implements OnInit, OnDestroy {
             title: 'Zasady publikacji prac',
             url: '/requirements',
             param: ''
+        },
+        {
+            title: 'Standardy etyczne',
+            url: '/ethics-statement',
+            param: ''
         }
     ];
 

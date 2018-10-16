@@ -16,6 +16,7 @@ import { ContactDataComponent } from 'app/pages/contact-data/contact.data.compon
 import { AdminDashboardComponent } from 'app/admin-dashboard/admin.dashboard.component';
 import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
 import { PlaygroundComponent } from 'app/pages/playground/playground.component';
+import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.standards.component';
 
 const appRoutes: Routes = [
   {
@@ -46,6 +47,10 @@ const appRoutes: Routes = [
   {
     path: 'requirements',
     component: AuthorRequirementsComponent
+  },
+  {
+    path: 'ethics-statement',
+    component: EthicalStandardsComponent
   },
   {
     path: 'issues/current',

@@ -1,0 +1,32 @@
+@import "variables";
+
+:host {
+  font-size: 1rem;
+  line-height: 1.7rem;
+
+  a {
+    color: $main-blue-color;
+  }
+
+  h5 {
+    font-size: inherit;
+  }
+
+  .rs-bold {
+    font-weight: bold;
+  }
+
+  .rs-normal {
+    font-weight: normal;
+  }
+
+  .rs-attachment {
+    display: flex;
+    flex-direction: row;
+
+    .icon {
+      color: $main-blue-color;
+      margin-right: 5px;
+    }
+  }
+}
