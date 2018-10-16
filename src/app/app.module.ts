@@ -43,6 +43,7 @@ import { SignupModule } from 'app/auth/signup/signup.module';
 import { SigninModule } from 'app/auth/signin/signin.module';
 import { AuthModule } from 'app/auth/auth.module';
 import { AdminDashboardModule } from 'app/admin-dashboard/admin.dashboard.module';
+import { EthicalStandardsModule } from 'app/pages/ethical-standards/ethical.standards.module';
 
 @NgModule({
     declarations: [
@@ -86,6 +87,7 @@ import { AdminDashboardModule } from 'app/admin-dashboard/admin.dashboard.module
         ReviewersModule.forRoot(),
         IndexingModule.forRoot(),
         SubscriptionsModule.forRoot(),
+        EthicalStandardsModule,
 
         AdminDashboardModule.forRoot(),
 
