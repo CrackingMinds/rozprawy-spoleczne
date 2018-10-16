@@ -1,4 +1,4 @@
 export class ArticleType {
   id: string;
-  name: string;
+  namePl: string;
 }

@@ -36,7 +36,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, OnInit 
         let data = a.payload.doc.data() as F_ArticleType;
         return {
           id: a.payload.doc.id,
-          name: data.name
+          namePl: data.namePl
         };
       }))
     );
@@ -55,7 +55,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, OnInit 
   writeValue(obj: any): void {
   }
 
-  private onSelectionChange(change: MatSelectChange): void {
+  onSelectionChange(change: MatSelectChange): void {
     if (this.onChangeCallback) {
       this.onChangeCallback(change.value as ArticleType);
     }

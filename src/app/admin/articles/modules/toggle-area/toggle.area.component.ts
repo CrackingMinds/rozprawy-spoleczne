@@ -12,7 +12,7 @@ export class ToggleAreaComponent implements OnInit {
   @Input()
   name: string;
 
-  private contentShown: boolean = false;
+  contentShown: boolean = false;
 
   constructor() {}
 

@@ -15,7 +15,7 @@ import { Author } from 'app/models/author';
 })
 export class AddAuthorsComponent implements ControlValueAccessor, OnInit {
 
-  private authors: Author[] = [];
+  authors: Author[] = [];
 
   ngOnInit() {
     this.addEmptyAuthor();
