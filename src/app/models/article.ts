@@ -1,5 +1,6 @@
 import { ArticleType } from 'app/models/article.type';
 import { Author } from 'app/models/author';
+import { ArticleFile } from 'app/models/article.file';
 
 export class Article {
     id: string;
@@ -14,7 +15,7 @@ export class Article {
     results: string;
     conclusions: string;
     keywords: string;
-    pdfLink: string;
+    pdf: ArticleFile;
 }
 
 export interface Issue {

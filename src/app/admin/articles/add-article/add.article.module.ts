@@ -1,4 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
@@ -22,6 +23,7 @@ const providers = [
   exports: declarations,
   providers: providers,
   imports: [
+    CommonModule,
     FormsModule,
 
     MatFormFieldModule,

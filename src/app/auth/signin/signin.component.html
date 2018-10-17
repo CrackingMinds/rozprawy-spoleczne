@@ -1,16 +1,16 @@
-<!--<rs-auth>-->
-  <!--<div class="form-container">-->
+<rs-auth>
+  <div class="form-container">
 
-    <!--<h2>Logowanie</h2>-->
+    <h2>Logowanie</h2>
 
-    <!--<span class="error" *ngIf="error" [@fallIn]="state">{{ error }}</span>-->
+    <span class="error" *ngIf="error" [@fallIn]="state">{{ error }}</span>
 
-    <!--<form #formData="ngForm" (ngSubmit)="onSubmit(formData)">-->
+    <form #formData="ngForm" (ngSubmit)="onSubmit(formData)">
 
-      <!--<input type="text" placeholder="Email" (ngModel)="email" name="email" class="email">-->
-      <!--<input type="password" placeholder="Hasło" (ngModel)="password" name="password" class="password">-->
+      <input type="text" placeholder="Email" (ngModel)="email" name="email" class="email">
+      <input type="password" placeholder="Hasło" (ngModel)="password" name="password" class="password">
 
-      <!--<button type="submit" [disabled]="!formData.valid" class="basic-btn">Zaloguj się</button>-->
-    <!--</form>-->
-  <!--</div>-->
-<!--</rs-auth>-->
+      <button type="submit" [disabled]="!formData.valid" class="basic-btn">Zaloguj się</button>
+    </form>
+  </div>
+</rs-auth>

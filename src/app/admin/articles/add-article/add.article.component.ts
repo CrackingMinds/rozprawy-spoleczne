@@ -1,6 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 
 import { Article } from 'app/models/article';
+
+import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
+import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
 
 @Component({
   selector: 'rs-add-article',
@@ -10,16 +13,25 @@ import { Article } from 'app/models/article';
 })
 export class AddArticleComponent {
 
+  @ViewChild(UploadArticleComponent)
+  uploadArticleComponent: UploadArticleComponent;
+
   article: Article = new Article();
 
   constructor() {}
 
   save(): boolean {
-    console.log(this.article);
+
+    this.uploadArticleComponent.uploadFile().subscribe(() => {
+      console.log('DONE');
+      console.log(this.article);
+    });
+
     return false;
   }
 
-  cancel(): void {
+  cancel(): boolean {
 
+    return false;
   }
 }

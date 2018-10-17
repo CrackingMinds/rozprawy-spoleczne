@@ -4,14 +4,14 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 
 import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
-import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
 
 const declarations = [
   UploadArticleComponent
 ];
 
 const providers = [
-  UploadArticleService
+  // For the purpose of cancelling operations during which file was uploaded (and deleting that file) - don't provide UploadService here!! Instead provide
+  // it in the component in which file was uploaded
 ];
 
 @NgModule({

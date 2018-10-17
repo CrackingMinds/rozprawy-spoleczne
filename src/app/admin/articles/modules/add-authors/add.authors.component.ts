@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Author } from 'app/models/author';
@@ -13,13 +13,9 @@ import { Author } from 'app/models/author';
     multi: true
   }]
 })
-export class AddAuthorsComponent implements ControlValueAccessor, OnInit {
+export class AddAuthorsComponent implements ControlValueAccessor {
 
   authors: Author[] = [];
-
-  ngOnInit() {
-    this.addEmptyAuthor();
-  }
 
   addAnotherAuthor(): boolean {
     this.addEmptyAuthor();

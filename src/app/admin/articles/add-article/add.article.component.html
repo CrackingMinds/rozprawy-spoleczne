@@ -9,7 +9,6 @@
     </mat-form-field>
   </div>
 
-
   <div class="rs-form-field">
     <rs-add-authors [(ngModel)]="article.authors" name="article-authors"></rs-add-authors>
   </div>
@@ -67,7 +66,7 @@
   </div>
 
   <div class="rs-form-field">
-    <rs-upload-article></rs-upload-article>
+    <rs-upload-article [(ngModel)]="article.pdf" name="article-pdf"></rs-upload-article>
   </div>
 
   <div class="rs-form-buttons">
