@@ -18,7 +18,7 @@ export class UploadArticleService {
   constructor(private angularFireStorage: AngularFireStorage) {}
 
   uploadToServer(file: ArticleUploadFile): Observable<F_ArticleFile> {
-    let filePath = bucketPath + file.name;
+    let filePath = this.generateStoragePath(file.name);
     file.ref = this.angularFireStorage.ref(filePath);
 
     let task = file.ref.put(file.rawFile);
@@ -27,19 +27,19 @@ export class UploadArticleService {
 
     task.then(() => {
 
-      file.ref.getDownloadURL()
-          .pipe(
-            takeUntil(this.destroy$)
-          )
-          .subscribe((url: string) => {
-
-        articleFile$.next(
-          new F_ArticleFile()
-            .withDownloadUrl(url)
-            .withStoragePath(filePath)
-        );
-        articleFile$.complete();
-      });
+      // file.ref.getDownloadURL()
+      //     .pipe(
+      //       takeUntil(this.destroy$)
+      //     )
+      //     .subscribe((url: string) => {
+	  //
+      //   articleFile$.next(
+      //     new F_ArticleFile()
+      //       .withDownloadUrl(url)
+      //       .withStoragePath(filePath)
+      //   );
+      //   articleFile$.complete();
+      // });
     });
 
     return articleFile$.asObservable();
@@ -52,6 +52,10 @@ export class UploadArticleService {
   //     return deleteTask;
   //   }
   // }
+
+  generateStoragePath(fileName: string): string {
+    return bucketPath + fileName;
+  }
 
   destroy(): void {
     this.destroy$.next();

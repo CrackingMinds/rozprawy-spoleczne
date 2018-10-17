@@ -1,15 +1,15 @@
 export class F_ArticleFile {
-  private downloadUrl: string;
+  private name: string;
   private storagePath: string;
+  private downloadUrl: string;
 
-  withDownloadUrl(url: string): F_ArticleFile {
-    this.downloadUrl = url;
-    return this;
+  constructor(name, storagePath) {
+    this.name = name;
+    this.storagePath = storagePath;
   }
 
-  withStoragePath(path: string): F_ArticleFile {
-    this.storagePath = path;
-    return this;
+  setDownloadUrl(url: string) {
+    this.downloadUrl = url;
   }
 
 }

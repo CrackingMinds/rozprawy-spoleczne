@@ -1,4 +1,4 @@
-<form>
+<form #form="ngForm">
   <div class="rs-form-field">
     <rs-select-article-type [(ngModel)]="article.articleType" name="article-type"></rs-select-article-type>
   </div>
@@ -66,12 +66,15 @@
   </div>
 
   <div class="rs-form-field">
-    <rs-upload-article [(ngModel)]="article.pdf" name="article-pdf"></rs-upload-article>
+    <rs-upload-article [(ngModel)]="article.pdf" name="article-pdf" #articleFile="ngModel"></rs-upload-article>
+    <p *ngIf="articleFile.invalid && (showErrors || articleFile.dirty)">
+      Nie wybrano żadnego pliku
+    </p>
   </div>
 
   <div class="rs-form-buttons">
     <button mat-button color="accent" (click)="cancel()">Anuluj</button>
-    <button mat-raised-button color="accent" (click)="save()">Zapisz</button>
+    <button mat-raised-button color="accent" (click)="save(form)">Zapisz</button>
   </div>
 </form>
 

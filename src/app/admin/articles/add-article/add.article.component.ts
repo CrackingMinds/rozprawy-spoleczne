@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { Article } from 'app/models/article';
 
-import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
 import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
 
 @Component({
@@ -16,17 +16,22 @@ export class AddArticleComponent {
   @ViewChild(UploadArticleComponent)
   uploadArticleComponent: UploadArticleComponent;
 
+  showErrors: boolean = false;
+
   article: Article = new Article();
 
   constructor() {}
 
-  save(): boolean {
+  save(form: NgForm): boolean {
 
-    this.uploadArticleComponent.uploadFile().subscribe(() => {
-      console.log('DONE');
-      console.log(this.article);
-    });
-
+    if (form.valid) {
+      // this.uploadArticleComponent.uploadFile().subscribe(() => {
+      //   console.log('DONE');
+      //   console.log(this.article);
+      // });
+    } else {
+      this.showErrors = true;
+    }
     return false;
   }
 

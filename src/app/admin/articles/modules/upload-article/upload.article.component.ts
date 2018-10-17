@@ -1,12 +1,9 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, AbstractControl, ValidationErrors } from '@angular/forms';
 
 import { Subject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
 
-import { ArticleUploadFile } from 'app/models/article.upload.file';
 import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
-import { ArticleFile } from 'app/models/article.file';
 import { F_ArticleFile } from 'app/models/firestore/article.file';
 
 @Component({
@@ -19,13 +16,18 @@ import { F_ArticleFile } from 'app/models/firestore/article.file';
       useExisting: UploadArticleComponent,
       multi: true
     },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: UploadArticleComponent,
+      multi: true
+    },
     UploadArticleService
   ]
 })
-export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class UploadArticleComponent implements ControlValueAccessor, Validator, OnDestroy {
   uploadError: string;
 
-  fileToUpload: ArticleUploadFile;
+  file: F_ArticleFile;
 
   @ViewChild('fileInput')
   fileInput: ElementRef;
@@ -35,10 +37,6 @@ export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnD
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private articleUploadService: UploadArticleService) {}
-
-  ngOnInit() {
-
-  }
 
   ngOnDestroy() {
     this.articleUploadService.destroy();
@@ -53,24 +51,21 @@ export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnD
   }
 
   onFileChosen(event): void {
-    let rawFile = this.getFileFromEvent(event);
-    this.fileToUpload = new ArticleUploadFile(rawFile);
-  }
-
-  uploadFile(): Observable<F_ArticleFile> {
-    let uploadTask: Observable<F_ArticleFile> = this.articleUploadService.uploadToServer(this.fileToUpload);
-
-    uploadTask.subscribe((file: F_ArticleFile) => {
-      if (this.onChangeCallback) {
-        this.onChangeCallback(file);
-      }
-    });
-
-    return uploadTask;
+    let rawFile = event.target.files[0];
+    this.file = new F_ArticleFile(
+      rawFile.name,
+      this.articleUploadService.generateStoragePath(rawFile.name)
+    );
+    if (this.onChangeCallback) {
+      this.onChangeCallback(this.file);
+    }
   }
 
   deleteFile(): void {
-    this.fileToUpload = null;
+    if (this.onChangeCallback) {
+      this.onChangeCallback(null);
+    }
+    this.file = null;
     this.fileInput.nativeElement.value = '';
   }
 
@@ -84,11 +79,21 @@ export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnD
   setDisabledState(isDisabled: boolean): void {
   }
 
-  writeValue(value: ArticleFile): void {
-    // this.articleUploadFile = value;
+  writeValue(value: F_ArticleFile): void {
+    this.file = value;
   }
 
-  private getFileFromEvent(event): File {
-    return event.target.files[0];
+  registerOnValidatorChange(fn: () => void): void {
   }
+
+  validate(c: AbstractControl): ValidationErrors | null {
+    if (c.value) {
+      return null;
+    } else {
+      return {
+        fileNotChosen: true
+      };
+    }
+  }
+
 }
