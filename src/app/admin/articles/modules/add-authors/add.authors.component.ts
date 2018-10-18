@@ -1,56 +1,42 @@
-import { Component } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { Author } from 'app/models/author';
+import { Component, Input, OnInit } from '@angular/core';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'rs-add-authors',
   templateUrl: './add.authors.component.html',
-  styleUrls: ['./add.authors.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: AddAuthorsComponent,
-    multi: true
-  }]
+  styleUrls: ['./add.authors.component.scss']
 })
-export class AddAuthorsComponent implements ControlValueAccessor {
+export class AddAuthorsComponent implements OnInit {
 
-  authors: Author[] = [];
+  @Input()
+  parentForm: FormGroup;
 
-  addAnotherAuthor(): boolean {
-    this.addEmptyAuthor();
-    return false;
+  authorsArray = this.formBuilder.array([]);
+
+  get authors() {
+    return this.authorsArray.controls;
   }
 
-  removeAuthor(author: Author): boolean {
-    const index = this.authors.indexOf(author);
-    if (index > -1) {
-      this.authors.splice(index, 1);
-    }
-    return false;
+  constructor(private formBuilder: FormBuilder) {
+
   }
 
-  registerOnChange(fn: any): void {
+  ngOnInit() {
+    this.addAuthor();
+    this.parentForm.addControl('authors', this.authorsArray);
   }
 
-  registerOnTouched(fn: any): void {
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-  }
-
-  writeValue(value: Author[]): void {
-    this.authors = value;
-  }
-
-  private addEmptyAuthor(): void {
-    this.authors.push(
-      {
-        id: '',
-        firstName: '',
-        middleName: '',
-        lastName: ''
-      }
+  addAuthor(): void {
+    this.authorsArray.push(
+      this.formBuilder.group({
+        firstName: [undefined, Validators.required],
+        lastName: [undefined, Validators.required],
+        middleName: undefined
+      })
     );
+  }
+
+  removeAuthor(index: number): void {
+    this.authorsArray.removeAt(index);
   }
 }

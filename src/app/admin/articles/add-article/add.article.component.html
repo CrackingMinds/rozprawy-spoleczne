@@ -1,34 +1,64 @@
-<form #form="ngForm">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="rs-form-field">
-    <rs-select-article-type [(ngModel)]="article.articleType" name="article-type"></rs-select-article-type>
+    <rs-select-article-type
+      [parentForm]="form">
+    </rs-select-article-type>
   </div>
 
   <div class="rs-form-field">
     <mat-form-field color="accent">
-      <input matInput placeholder="Nazwa">
+      <input matInput
+             placeholder="Nazwa"
+             formControlName="name">
+      <mat-error *ngIf="form.get('name').hasError('required')">
+        Nazwa nie może być pusta
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="rs-form-field">
-    <rs-add-authors [(ngModel)]="article.authors" name="article-authors"></rs-add-authors>
+    <rs-add-authors
+      name="article-authors"
+      [parentForm]="form">
+    </rs-add-authors>
   </div>
 
   <div class="rs-form-field">
     <mat-form-field color="accent">
-      <input matInput placeholder="Strony w artykule">
+      <input matInput
+             placeholder="Strony w artykule"
+             formControlName="pages">
+      <mat-error *ngIf="form.get('pages').hasError('required')">
+        Podaj strony na których występuje
+      </mat-error>
+      <mat-error *ngIf="form.get('pages').hasError('pattern')">
+        Podaj poprawny zakres stron (np. 1, albo 1-3)
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="rs-form-field">
     <mat-form-field color="accent">
-      <input matInput type="url" placeholder="DOI">
+      <input matInput
+             type="url"
+             placeholder="DOI"
+             formControlName="doi">
+      <mat-error *ngIf="form.get('doi').hasError('required')">
+        Podaj numer DOI
+      </mat-error>
+      <mat-error *ngIf="form.get('doi').hasError('pattern')">
+        Podaj poprawny link doi (np. https://doi.org/[wartosc]/rs.[rok wydania].[numer artykułu])
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="rs-form-field">
     <rs-toggle-area name="Wprowadzenie">
       <mat-form-field>
-        <textarea matInput placeholder="Wprowadzenie"></textarea>
+        <textarea matInput
+                  placeholder="Wprowadzenie"
+                  formControlName="introduction">
+        </textarea>
       </mat-form-field>
     </rs-toggle-area>
   </div>
@@ -36,7 +66,10 @@
   <div class="rs-form-field">
     <rs-toggle-area name="Materiały i metody">
       <mat-form-field>
-        <textarea matInput placeholder="Materiały i metody"></textarea>
+        <textarea matInput
+                  placeholder="Materiały i metody"
+                  formControlName="materialsAndMethods">
+        </textarea>
       </mat-form-field>
     </rs-toggle-area>
   </div>
@@ -44,7 +77,10 @@
   <div class="rs-form-field">
     <rs-toggle-area name="Wyniki">
       <mat-form-field>
-        <textarea matInput placeholder="Wyniki"></textarea>
+        <textarea matInput
+                  placeholder="Wyniki"
+                  formControlName="results">
+        </textarea>
       </mat-form-field>
     </rs-toggle-area>
   </div>
@@ -52,7 +88,10 @@
   <div class="rs-form-field">
     <rs-toggle-area name="Wnioski">
       <mat-form-field>
-        <textarea matInput placeholder="Wnioski"></textarea>
+        <textarea matInput
+                  placeholder="Wnioski"
+                  formControlName="conclusions">
+        </textarea>
       </mat-form-field>
     </rs-toggle-area>
   </div>
@@ -60,21 +99,37 @@
   <div class="rs-form-field">
     <rs-toggle-area name="Słowa kluczowe">
       <mat-form-field>
-        <textarea matInput placeholder="Słowa kluczowe"></textarea>
+        <textarea matInput
+                  placeholder="Słowa kluczowe"
+                  formControlName="keywords"></textarea>
+        <mat-error *ngIf="form.get('keywords').hasError('required')">
+          Podaj słowa kluczowe
+        </mat-error>
       </mat-form-field>
     </rs-toggle-area>
   </div>
 
   <div class="rs-form-field">
-    <rs-upload-article [(ngModel)]="article.pdf" name="article-pdf" #articleFile="ngModel"></rs-upload-article>
-    <p *ngIf="articleFile.invalid && (showErrors || articleFile.dirty)">
-      Nie wybrano żadnego pliku
-    </p>
+    <rs-upload-article
+      name="article-pdf"
+      formControlName="pdf">
+    </rs-upload-article>
   </div>
 
   <div class="rs-form-buttons">
-    <button mat-button color="accent" (click)="cancel()">Anuluj</button>
-    <button mat-raised-button color="accent" (click)="save(form)">Zapisz</button>
+    <button mat-button color="accent"
+            type="button"
+            (click)="cancel()">
+      Anuluj
+    </button>
+    <button mat-raised-button color="accent"
+            type="submit"
+            [disabled]="form.invalid">
+      Zapisz
+    </button>
   </div>
 </form>
+
+<pre>{{ form.value | json }}</pre>
+<pre>isFormValid: {{ form.valid }}</pre>
 

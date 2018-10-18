@@ -1,17 +1,17 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
-import { AddArticleComponent } from 'app/admin/articles/add-article/add.article.component';
+import { AddArticleFormComponent } from 'app/admin/articles/add-article/add.article.component';
 import { SelectArticleTypeModule } from 'app/admin/articles/modules/select-article-type/select.article.type.module';
 import { AddAuthorsModule } from 'app/admin/articles/modules/add-authors/add.authors.module';
 import { ToggleAreaModule } from 'app/admin/articles/modules/toggle-area/toggle.area.module';
 import { UploadArticleModule } from 'app/admin/articles/modules/upload-article/upload.article.module';
 
 const declarations = [
-  AddArticleComponent
+  AddArticleFormComponent
 ];
 
 const providers = [
@@ -25,6 +25,7 @@ const providers = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
 
     MatFormFieldModule,
     MatInputModule,

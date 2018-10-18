@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
 
@@ -21,6 +21,7 @@ const providers = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
 
     MatFormFieldModule,
     MatInputModule,

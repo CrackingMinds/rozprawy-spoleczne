@@ -1,7 +1,10 @@
 <mat-form-field color="accent">
-  <mat-select placeholder="Typ artykułu" (selectionChange)="onSelectionChange($event)">
+  <mat-select placeholder="Typ artykułu" [formControl]="articleTypeControl">
     <mat-option *ngFor="let articleType of articleTypes | async" [value]="articleType">
       {{ articleType.namePl }}
     </mat-option>
   </mat-select>
+  <mat-error *ngIf="articleTypeControl.hasError('required')">
+    Wybierz typ artykułu
+  </mat-error>
 </mat-form-field>
