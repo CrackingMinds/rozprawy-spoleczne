@@ -1,19 +1,17 @@
 export class ArticleFile {
 
-  private readonly _filePath: string;
-  private readonly _url: string;
+  private _rawFile: File;
 
-  constructor(filePath: string, url: string) {
-    this._filePath = filePath;
-    this._url = url;
+  get name(): string {
+    return this._rawFile.name;
   }
 
-  get url(): string {
-    return this._url;
+  get rawFile(): File {
+    return this._rawFile;
   }
 
-  get filePath(): string {
-    return this._filePath;
+  constructor(rawFile: File) {
+    this._rawFile = rawFile;
   }
 
 }

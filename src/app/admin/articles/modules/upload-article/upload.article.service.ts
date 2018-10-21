@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { AngularFireStorage } from 'angularfire2/storage';
 
 import { ArticleUploadFile } from 'app/models/article.upload.file';
 import { F_ArticleFile } from 'app/models/firestore/article.file';
+import { FileUploadTask } from 'app/models/FileUploadTask';
+import { ArticleFile } from 'app/models/article.file';
+import { Subject, from } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 const bucketPath = 'firebase-test/Issues/';
 
@@ -17,48 +19,42 @@ export class UploadArticleService {
 
   constructor(private angularFireStorage: AngularFireStorage) {}
 
-  uploadToServer(file: ArticleUploadFile): Observable<F_ArticleFile> {
+  uploadToServer(file: ArticleFile): FileUploadTask {
     let filePath = this.generateStoragePath(file.name);
-    file.ref = this.angularFireStorage.ref(filePath);
+    let ref = this.angularFireStorage.ref(filePath);
+    let task = ref.put(file.rawFile);
 
-    let task = file.ref.put(file.rawFile);
+    let downloadUrl$ = new Subject<string>();
 
-    let articleFile$ = new Subject<F_ArticleFile>();
+    task.snapshotChanges()
+        .pipe(
+          finalize(() => {
 
-    task.then(() => {
+            ref.getDownloadURL()
+               .pipe(
+                 takeUntil(this.destroy$)
+               )
+               .subscribe((url: string) => {
+                 downloadUrl$.next(url);
+               });
+          })
+        )
+        .subscribe();
 
-      // file.ref.getDownloadURL()
-      //     .pipe(
-      //       takeUntil(this.destroy$)
-      //     )
-      //     .subscribe((url: string) => {
-	  //
-      //   articleFile$.next(
-      //     new F_ArticleFile()
-      //       .withDownloadUrl(url)
-      //       .withStoragePath(filePath)
-      //   );
-      //   articleFile$.complete();
-      // });
-    });
-
-    return articleFile$.asObservable();
+    return new FileUploadTask(downloadUrl$.asObservable(), task.percentageChanges(), filePath);
   }
 
-  // removeFileFromServer(): Observable<any> {
-  //   if (this.haveFileToDelete()) {
-  //     let deleteTask = this.lastUploadedFile.ref.delete();
-  //     this.lastUploadedFile = null;
-  //     return deleteTask;
-  //   }
-  // }
-
-  generateStoragePath(fileName: string): string {
-    return bucketPath + fileName;
+  removeFromServer(file: F_ArticleFile): Observable<void> {
+    let ref = this.angularFireStorage.ref(file.storagePath);
+    return ref.delete();
   }
 
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private generateStoragePath(fileName: string): string {
+    return bucketPath + fileName;
   }
 }
