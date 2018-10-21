@@ -75,19 +75,32 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
       });
   }
 
-  deleteFile(): void {
-    this.deleting = true;
-    this.articleUploadService.removeFromServer(this.file)
-        .pipe()
-        .subscribe(() => {
-          this.deleting = false;
-          this.fileChosen = false;
-          this.fileInput.nativeElement.value = '';
-          this.file = null;
-          if (this.onChangeCallback) {
-            this.onChangeCallback(null);
-          }
-        });
+  deleteFile(): Observable<void> {
+
+    let fileDeleted$ = new Subject<void>();
+
+    if (!this.file) {
+      fileDeleted$.next();
+    } else {
+      this.deleting = true;
+      this.articleUploadService.removeFromServer(this.file)
+          .pipe(
+            takeUntil(this.destroy$)
+          )
+          .subscribe(() => {
+            this.deleting = false;
+            this.fileChosen = false;
+            this.fileInput.nativeElement.value = '';
+            this.file = null;
+            if (this.onChangeCallback) {
+              this.onChangeCallback(null);
+            }
+
+            fileDeleted$.next();
+          });
+    }
+
+    return fileDeleted$.asObservable();
   }
 
   registerOnChange(fn: any): void {

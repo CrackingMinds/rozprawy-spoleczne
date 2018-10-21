@@ -1,9 +1,11 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { Article } from 'app/models/article';
 
 import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'rs-add-article',
@@ -11,7 +13,7 @@ import { UploadArticleComponent } from 'app/admin/articles/modules/upload-articl
   styleUrls: ['./add.article.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AddArticleFormComponent {
+export class AddArticleFormComponent implements OnDestroy {
 
   @ViewChild(UploadArticleComponent)
   uploadArticleComponent: UploadArticleComponent;
@@ -38,7 +40,14 @@ export class AddArticleFormComponent {
 
   article: Article = new Article();
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(private formBuilder: FormBuilder) {}
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   save(): boolean {
 
@@ -50,11 +59,26 @@ export class AddArticleFormComponent {
     // } else {
     //   this.showErrors = true;
     // }
+
+    // this.close();
+
     return false;
   }
 
   cancel(): boolean {
 
+    this.uploadArticleComponent.deleteFile()
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.close();
+      });
+
     return false;
+  }
+
+  private close(): void {
+    debugger
   }
 }
