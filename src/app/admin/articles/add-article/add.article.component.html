@@ -1,8 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="save()">
   <div class="rs-form-field">
-    <rs-select-article-type
-      [parentForm]="form">
-    </rs-select-article-type>
+    <mat-form-field color="accent">
+      <rs-select-article-type placeholder="Typ artykułu" formControlName="articleType" required></rs-select-article-type>
+      <mat-error *ngIf="form.get('articleType').hasError('required')">
+        Wybierz typ artykułu
+      </mat-error>
+    </mat-form-field>
   </div>
 
   <div class="rs-form-field">

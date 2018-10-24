@@ -2,12 +2,12 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { UploadArticleService } from 'app/admin/articles/modules/upload-article/upload.article.service';
-import { F_ArticleFile } from 'app/models/firestore/article.file';
+import { F_ArticleFile, IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'rs-upload-article',
@@ -35,7 +35,7 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
   file: F_ArticleFile;
 
-  private onChangeCallback: (file: F_ArticleFile) => any;
+  private onChangeCallback: (file: IF_ArticleFile) => any;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -57,7 +57,7 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
     let file = new ArticleFile(event.target.files[0]);
     this.fileName = file.name;
 
-    let uploadTask = this.articleUploadService.uploadToServer(file);
+    let uploadTask: FileUploadTask = this.articleUploadService.uploadToServer(file);
 
     this.uploadProgress = uploadTask.uploadProgress;
 
@@ -70,7 +70,7 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
       .subscribe((url: string) => {
         this.file = new F_ArticleFile(file.name, uploadTask.storagePath, url);
         if (this.onChangeCallback) {
-          this.onChangeCallback(this.file);
+          this.onChangeCallback(this.file.value);
         }
       });
   }

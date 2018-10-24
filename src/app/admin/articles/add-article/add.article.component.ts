@@ -1,11 +1,16 @@
 import { Component, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { AngularFirestore } from 'angularfire2/firestore';
+
 import { Article } from 'app/models/article';
 
 import { UploadArticleComponent } from 'app/admin/articles/modules/upload-article/upload.article.component';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+
+const articlesCollectionName: string = 'articles';
 
 @Component({
   selector: 'rs-add-article',
@@ -22,6 +27,7 @@ export class AddArticleFormComponent implements OnDestroy {
 
   form = this.formBuilder.group(
     {
+      articleType: [undefined, Validators.required],
       name: [undefined, Validators.required],
       pages: [undefined, [Validators.required, Validators.pattern(/^\d+(-\d+)?$/)]],
       doi: [undefined, [Validators.required, Validators.pattern(
@@ -42,14 +48,15 @@ export class AddArticleFormComponent implements OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder,
+              private angularFirestore: AngularFirestore) {}
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  save(): boolean {
+  save(): void {
 
     // if (form.valid) {
     //   // this.uploadArticleComponent.uploadFile().subscribe(() => {
@@ -62,7 +69,12 @@ export class AddArticleFormComponent implements OnDestroy {
 
     // this.close();
 
-    return false;
+    if (this.form.valid) {
+      this.angularFirestore.collection(articlesCollectionName).add(this.form.value).then(() => {
+        debugger;
+        // this.close();
+      });
+    }
   }
 
   cancel(): boolean {
@@ -79,6 +91,6 @@ export class AddArticleFormComponent implements OnDestroy {
   }
 
   private close(): void {
-    debugger
+    debugger;
   }
 }

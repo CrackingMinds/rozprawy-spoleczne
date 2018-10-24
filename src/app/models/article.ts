@@ -1,11 +1,11 @@
-import { ArticleType } from 'app/models/article.type';
+import { IArticleType } from 'app/models/article.type';
 import { Author } from 'app/models/author';
 import { ArticleFile } from 'app/models/article.file';
 
 export class Article {
     id: string;
     issue: Issue;
-    articleType: ArticleType;
+    articleType: IArticleType;
     title: string;
     authors: Author[] = [];
     locationInIssue: string;

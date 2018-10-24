@@ -1,37 +1,95 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Optional, Self, HostBinding, Input, OnDestroy } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+
+import { MatSelectChange, MatFormFieldControl } from '@angular/material';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 
-import { ArticleType } from 'app/models/article.type';
-import { F_ArticleType } from 'app/models/firestore/article.type';
+import { IArticleType } from 'app/models/article.type';
+import { F_IArticleType } from 'app/models/firestore/article.type.f';
 
 @Component({
   selector: 'rs-select-article-type',
-  templateUrl: './select.article.type.component.html'
+  templateUrl: './select.article.type.component.html',
+  providers: [
+    {
+      provide: MatFormFieldControl,
+      useExisting: SelectArticleTypeComponent
+    }
+  ]
 })
-export class SelectArticleTypeComponent implements OnInit {
+export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
 
   @Input()
-  parentForm: FormGroup;
+  get placeholder(): string { return this._placeholder; }
+  set placeholder(value: string) {
+    this._placeholder = value;
+    this._stateChange$.next();
+  }
 
-  articleTypeControl = new FormControl(undefined, [
-    Validators.required
-  ]);
+  @Input()
+  get required() { return this._required; }
+  set required(req) {
+    this._required = coerceBooleanProperty(req);
+    this._stateChange$.next();
+  }
 
-  articleTypes: Observable<ArticleType[]>;
+  @Input()
+  get disabled() { return this._disabled; }
+  set disabled(dis) {
+    this._disabled = coerceBooleanProperty(dis);
+    this._stateChange$.next();
+  }
 
-  private articleTypesCollection: AngularFirestoreCollection<ArticleType>;
+  static nextId = 0;
 
-  constructor(private angularFirestore: AngularFirestore) {}
+  @HostBinding()
+  id = `rs-select-article-type-${SelectArticleTypeComponent.nextId++}`;
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat() { return this.focused || !this.empty; }
+
+  get empty(): boolean { return !this.selectedType; }
+
+  articleTypes: Observable<IArticleType[]>;
+
+  stateChanges: Observable<void>;
+
+  value: string;
+
+  errorState: boolean;
+
+  focused: boolean;
+
+  private _stateChange$ = new Subject<void>();
+  private _required: boolean;
+  private _disabled: boolean;
+  private _placeholder: string;
+
+  private touched: boolean;
+
+  private onChange: (articleType: string) => any;
+  private onTouched: () => any;
+
+  private selectedType: IArticleType;
+
+  constructor(private angularFirestore: AngularFirestore,
+              @Optional() @Self() public ngControl: NgControl) {
+
+    if (this.ngControl != null) { this.ngControl.valueAccessor = this; }
+
+  }
 
   ngOnInit() {
-    this.articleTypesCollection = this.angularFirestore.collection<ArticleType>('article-types');
-    this.articleTypes = this.articleTypesCollection.snapshotChanges().pipe(
+    let articleTypesCollection = this.angularFirestore.collection<F_IArticleType>('article-types');
+    this.articleTypes = articleTypesCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        let data = a.payload.doc.data() as F_ArticleType;
+        let data = a.payload.doc.data() as F_IArticleType;
         return {
           id: a.payload.doc.id,
           namePl: data.namePl
@@ -39,6 +97,58 @@ export class SelectArticleTypeComponent implements OnInit {
       }))
     );
 
-    this.parentForm.addControl('articleType', this.articleTypeControl);
+    this.stateChanges = this._stateChange$.asObservable();
+  }
+
+  ngOnDestroy() {
+    this._stateChange$.complete();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+  }
+
+  writeValue(articleTypeId: string): void {
+  }
+
+  onContainerClick(event: MouseEvent): void {
+  }
+
+  setDescribedByIds(ids: string[]) {
+  }
+
+  protected onFocus(): void {
+    this.focused = true;
+    this._stateChange$.next();
+  }
+
+  protected onBlur(): void {
+    this.focused = false;
+    this._stateChange$.next();
+  }
+
+  protected onOpenedChange(): void {
+
+    if (!this.touched) {
+      this.touched = true;
+      this.onTouched();
+    }
+
+    this.errorState = !this.ngControl.valid;
+    this._stateChange$.next();
+  }
+
+  protected onSelectionChange(change: MatSelectChange): void {
+    this.selectedType = change.value as IArticleType;
+    if (this.onChange) {
+      this.onChange(this.selectedType.id);
+    }
   }
 }

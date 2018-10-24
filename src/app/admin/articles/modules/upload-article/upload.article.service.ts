@@ -3,8 +3,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { AngularFireStorage } from 'angularfire2/storage';
 
-import { ArticleUploadFile } from 'app/models/article.upload.file';
-import { F_ArticleFile } from 'app/models/firestore/article.file';
+import { F_ArticleFile } from 'app/models/firestore/article.file.f';
 import { FileUploadTask } from 'app/models/FileUploadTask';
 import { ArticleFile } from 'app/models/article.file';
 import { Subject, from } from 'rxjs';
