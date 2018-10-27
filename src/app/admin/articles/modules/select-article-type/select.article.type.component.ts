@@ -73,7 +73,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   private touched: boolean;
 
-  private onChange: (articleType: string) => any;
+  private onChange: (articleType: IArticleType) => any;
   private onTouched: () => any;
 
   private selectedType: IArticleType;
@@ -86,10 +86,10 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   }
 
   ngOnInit() {
-    let articleTypesCollection = this.angularFirestore.collection<F_IArticleType>('article-types');
+    let articleTypesCollection = this.angularFirestore.collection<IArticleType>('article-types');
     this.articleTypes = articleTypesCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        let data = a.payload.doc.data() as F_IArticleType;
+        let data = a.payload.doc.data() as IArticleType;
         return {
           id: a.payload.doc.id,
           namePl: data.namePl
@@ -148,7 +148,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   protected onSelectionChange(change: MatSelectChange): void {
     this.selectedType = change.value as IArticleType;
     if (this.onChange) {
-      this.onChange(this.selectedType.id);
+      this.onChange(this.selectedType);
     }
   }
 }
