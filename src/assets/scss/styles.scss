@@ -18,6 +18,10 @@ html {
     p {
       margin: 0;
     }
+
+    .mat-dialog-container {
+      position: relative;
+    }
   }
 }
 
@@ -32,6 +36,5 @@ html {
 @import "partials/abstracting_and_indexing";
 @import "partials/subscription";
 @import "partials/contact";
-@import "partials/editorial-container";
 @import "partials/modals/modals";
 @import "partials/pages/pages";

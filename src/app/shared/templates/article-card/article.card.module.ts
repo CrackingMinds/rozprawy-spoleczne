@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatCardModule, MatIconModule } from '@angular/material';
 
-import { ArticleCardComponent } from 'app/shared/templates/article-card/article-card.component';
+import { ArticleCardComponent } from 'app/shared/templates/article-card/article.card.component';
 
 const declarations = [
   ArticleCardComponent

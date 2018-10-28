@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { AdminDashboardComponent } from 'app/admin-dashboard/admin.dashboard.component';
-import { AddArticleModule } from 'app/admin/articles/add-article/add.article.module';
+import { LibraryModule } from 'app/admin/library/library.module';
 
 const declarations = [
   AdminDashboardComponent
@@ -16,7 +16,7 @@ const providers = [
   exports: declarations,
   providers: providers,
   imports: [
-    AddArticleModule.forRoot()
+    LibraryModule.forRoot()
   ]
 })
 export class AdminDashboardModule {

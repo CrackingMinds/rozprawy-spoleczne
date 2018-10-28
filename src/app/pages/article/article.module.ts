@@ -1,7 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ArticleService } from 'app/pages/article/article.service';
 import { ArticleComponent } from 'app/pages/article/article.component';
 import { ArticleCardModule } from 'app/shared/templates/article-card/article.card.module';
 import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
@@ -11,7 +10,7 @@ const declarations = [
 ];
 
 const providers = [
-  ArticleService
+
 ];
 
 @NgModule({

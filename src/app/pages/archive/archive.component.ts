@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Issue } from 'app/models/article';
+import { Issue } from 'app/models/issue';
 
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -24,19 +24,19 @@ export class ArchiveComponent implements OnInit, OnDestroy {
     ngOnInit() {
       this.pageNameService.setPageName('Archiwum');
 
-      this.subscriptions.add(
-        this.issueService.getAllIssues()
-            .subscribe(data => {
-              this.archiveData = data;
-              this.archiveData.sort(function (a: any, b: any) {
-                return Utilits.sortByValue(a.year, b.year);
-              });
-              this.archiveData.forEach(function (year) {
-                Utilits.sortIssues(year.issues);
-              });
-              this.basicWrapperService.contentLoaded();
-            })
-      );
+      // this.subscriptions.add(
+      //   this.issueService.getAllIssues()
+      //       .subscribe(data => {
+      //         this.archiveData = data;
+      //         this.archiveData.sort(function (a: any, b: any) {
+      //           return Utilits.sortByValue(a.year, b.year);
+      //         });
+      //         this.archiveData.forEach(function (year) {
+      //           Utilits.sortIssues(year.issues);
+      //         });
+      //         this.basicWrapperService.contentLoaded();
+      //       })
+      // );
     }
 
     ngOnDestroy() {

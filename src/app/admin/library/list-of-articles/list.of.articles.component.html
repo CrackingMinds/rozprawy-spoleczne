@@ -1,0 +1,7 @@
+<button type="button" class="rs-add-article"
+        (click)="openArticleCreationDialog()">
+  <mat-icon>add</mat-icon>
+</button>
+<ng-container *ngFor="let article of articles">
+  <rs-article-card [article]="article" [issue]="issue"></rs-article-card>
+</ng-container>

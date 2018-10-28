@@ -1,9 +1,0 @@
-<div id="delete-issue-modal">
-  <p *ngIf="cantDeleteIssue">
-    Nie można usunąć numeru ({{ parentInput.issue.issueTitle }}).
-    <br>Najpierw należy usunąć wszystkie jego artykuły.
-  </p>
-  <p *ngIf="!cantDeleteIssue">
-    Czy napewno chcesz usunąć ten numer ({{ parentInput.issue.issueTitle }})?
-  </p>
-</div>

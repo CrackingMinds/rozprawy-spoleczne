@@ -1,0 +1,6 @@
+<rs-list-of-issues
+  [issues]="issues"
+  (issueSelect)="onIssueSelect($event)">
+</rs-list-of-issues>
+
+<rs-list-of-articles [issue]="selectedIssue" [articles]="articles"></rs-list-of-articles>

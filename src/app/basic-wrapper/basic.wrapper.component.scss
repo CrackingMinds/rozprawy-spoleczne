@@ -15,7 +15,7 @@
 
   .page-header-title {
     text-align: center;
-    background-color: $menu-hover-color;
+    background-color: $hover-color;
     margin-top: 50px;
     margin-bottom: 50px;
 
@@ -45,7 +45,7 @@
   }
 
   .page-title-wrapper {
-    background-color: $menu-hover-color;
+    background-color: $hover-color;
     margin-top: $universal-padding-value * 2px;
     margin-bottom: $universal-padding-half;
 

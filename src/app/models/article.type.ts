@@ -1,4 +1,6 @@
+import { FArticleType } from 'app/models/firestore/f.article.type';
+
 export class IArticleType {
   id: string;
-  namePl: string;
+  data: FArticleType;
 }

@@ -1,45 +1,64 @@
-import {Injectable} from '@angular/core';
-import {ApiService} from "../../services/api.service";
-import {INewIssueData} from "../../models/interfaces";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { AngularFirestore } from 'angularfire2/firestore';
+
+import { IIssue } from 'app/models/issue';
+import { FIssue } from 'app/models/firestore/f.issue';
 
 @Injectable()
-export class IssueService extends ApiService {
-    private httpOptions = {
-        headers: new HttpHeaders({
-            'Content-Type':  'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('id_token')
-        })
-    };
-    constructor(private http: HttpClient) {
-        super();
+export class IssueService {
+
+  private static collectionName: string = 'issues';
+
+  constructor(private angularFirestore: AngularFirestore) {
+  }
+
+  getIssues(): Observable<IIssue[]> {
+    let issuesCollection = this.angularFirestore.collection<FIssue>(IssueService.collectionName);
+    return issuesCollection.snapshotChanges()
+                           .pipe(
+                             map(actions => actions.map(a => {
+                               let data = a.payload.doc.data() as FIssue;
+                               return {
+                                 id: a.payload.doc.id,
+                                 data: data
+                               };
+                             }))
+                           );
     }
 
-    getIssue(id) {
-        return this.http.get(this.backendUrl + '/issues/' + id);
-    }
+  postIssue(issue: FIssue): Promise<void> {
+    return new Promise<void>(resolve => {
+      this.angularFirestore.collection(IssueService.collectionName).add(issue).then(() => {
+        resolve();
+      });
+    });
+  }
 
-    getCurrentIssue() {
-        return this.http.get(this.backendUrl + '/issues/current');
-    }
+  getIssue(id) {
+    // return this.http.get(this.backendUrl + '/issues/' + id);
+  }
 
-    getAllIssues() {
-        return this.http.get(this.backendUrl + '/issues');
-    }
+  getCurrentIssue() {
+    // return this.http.get(this.backendUrl + '/issues/current');
+  }
 
-    getAllIssuesWithArticles() {
-        return this.http.get(this.backendUrl + '/issues/articles');
-    }
+  getAllIssues() {
+    // return this.http.get(this.backendUrl + '/issues');
+  }
 
-    postIssue(issueData: INewIssueData) {
-        return this.http.post(this.backendUrl + '/issues', issueData, this.httpOptions);
-    }
+  getAllIssuesWithArticles() {
+    // return this.http.get(this.backendUrl + '/issues/articles');
+  }
 
-    putIssueData(issueId: string, updatedIssueData: any) {
-        return this.http.put(this.backendUrl + '/issues/' + issueId, updatedIssueData, this.httpOptions);
-    }
+  putIssueData(issueId: string, updatedIssueData: any) {
+    // return this.http.put(this.backendUrl + '/issues/' + issueId, updatedIssueData, this.httpOptions);
+  }
 
-    deleteIssue(issueId: string) {
-        return this.http.delete(this.backendUrl + '/issues/' + issueId, this.httpOptions);
-    }
+  deleteIssue(issueId: string) {
+    // return this.http.delete(this.backendUrl + '/issues/' + issueId, this.httpOptions);
+  }
 }

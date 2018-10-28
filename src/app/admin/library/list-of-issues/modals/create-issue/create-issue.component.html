@@ -1,0 +1,34 @@
+<div id="create-edit-issue" class="custom-modal">
+    <h3 class="modal-heading">{{ modalTitle }}</h3>
+    <form [formGroup]="form" class="create-issue-form">
+        <div class="issue-data">
+            <mat-form-field color="accent">
+                <input matInput type="text"
+                       placeholder="Rok"
+                       formControlName="year">
+                <mat-error *ngIf="form.get('year').hasError('required') || form.get('year').hasError('pattern')">
+                    Wpisz rok np.: {{currentYear}}
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field color="accent">
+                <input matInput
+                       type="number"
+                       placeholder="Tom"
+                       formControlName="vol">
+                <mat-error *ngIf="form.get('vol').hasError('required') || form.get('vol').hasError('pattern')">
+                    Wpisz nr tomu od 1 do 99
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field color="accent">
+                <input matInput
+                       type="number"
+                       placeholder="Numer"
+                       formControlName="number">
+                <mat-error *ngIf="form.get('number').hasError('required') || form.get('number').hasError('pattern')">
+                    Wpisz numer wydania od 1 do 99
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <mat-checkbox formControlName="isCurrent">Bieżący numer</mat-checkbox>
+    </form>
+</div>
