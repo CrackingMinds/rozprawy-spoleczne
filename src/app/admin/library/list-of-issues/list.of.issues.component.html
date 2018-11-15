@@ -3,16 +3,16 @@
   <mat-icon>add</mat-icon>
 </button>
 <div class="rs-issues-list">
-  <ng-container *ngFor="let issue of issues">
+  <ng-container *ngFor="let issue of (issues$ | async)">
     <div class="rs-issue"
          [class.rs-selected]="issue === selectedIssue"
          (click)="selectIssue(issue)">
       <span *ngIf="issue.isCurrent" class="is-current">
-          <span>B</span>
+          <span>[B]</span>
       </span>
       <span *ngIf="!issue.isCurrent" class="is-current-placeholder"></span>
       <span>
-          {{issue.toString()}}
+          {{issue | issueString}}
       </span>
     </div>
   </ng-container>

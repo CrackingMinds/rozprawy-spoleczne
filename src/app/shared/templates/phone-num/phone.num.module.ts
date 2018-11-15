@@ -2,18 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PhoneNumComponent } from 'app/shared/templates/phone-num/phone.num.component';
-import { PhoneNumPipe } from 'app/shared/pipes/phone-num.pipe';
+import { CustomPipesModule } from 'app/shared/pipes/custom.pipes.module';
 
 const declarations = [
-  PhoneNumComponent,
-  PhoneNumPipe
+  PhoneNumComponent
 ];
 
 @NgModule({
   declarations: declarations,
   exports: declarations,
   imports: [
-    CommonModule
+    CommonModule,
+
+    CustomPipesModule
   ]
 })
 export class PhoneNumModule {

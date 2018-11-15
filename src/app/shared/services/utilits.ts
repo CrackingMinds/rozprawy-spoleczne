@@ -1,8 +1,8 @@
-import { Issue } from 'app/models/issue';
+import { IIssue } from 'app/models/issue';
 
 export class Utilits {
 
-    static sortIssues(issues: Issue[]): void {
+    static sortIssues(issues: IIssue[]): void {
         // issues.sort(function (a: Issue, b: Issue) {
         //     if (a.year === b.year) {
 		//
@@ -37,7 +37,7 @@ export class Utilits {
         }
     }
 
-    static createIssueTitleFromObj(issue: Issue, withYear: boolean = true): string {
+    static createIssueTitleFromObj(issue: IIssue, withYear: boolean = true): string {
         return null;
     }
 }

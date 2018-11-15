@@ -6,7 +6,13 @@ import { map } from 'rxjs/operators';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { IIssue } from 'app/models/issue';
-import { FIssue } from 'app/models/firestore/f.issue';
+
+interface IFirestoreIssue {
+  year: string;
+  vol: number;
+  number: number;
+  isCurrent: boolean;
+}
 
 @Injectable()
 export class IssueService {
@@ -17,20 +23,20 @@ export class IssueService {
   }
 
   getIssues(): Observable<IIssue[]> {
-    let issuesCollection = this.angularFirestore.collection<FIssue>(IssueService.collectionName);
+    let issuesCollection = this.angularFirestore.collection<IFirestoreIssue>(IssueService.collectionName);
     return issuesCollection.snapshotChanges()
-                           .pipe(
-                             map(actions => actions.map(a => {
-                               let data = a.payload.doc.data() as FIssue;
-                               return {
-                                 id: a.payload.doc.id,
-                                 data: data
-                               };
-                             }))
-                           );
-    }
+      .pipe(
+        map(actions => actions.map(a => {
+          let data = a.payload.doc.data() as IFirestoreIssue;
+          return {
+            id: a.payload.doc.id,
+            ...data
+          };
+        }))
+      );
+  }
 
-  postIssue(issue: FIssue): Promise<void> {
+  postIssue(issue: IFirestoreIssue): Promise<void> {
     return new Promise<void>(resolve => {
       this.angularFirestore.collection(IssueService.collectionName).add(issue).then(() => {
         resolve();

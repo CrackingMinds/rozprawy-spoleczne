@@ -1,6 +1,12 @@
+import { environment } from 'environments/environment';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
@@ -49,6 +55,10 @@ import { ArticleService } from 'app/admin/library/add-article/article.service';
 import { ArticleTypesService } from 'app/services/article.types.service';
 import { IssueService } from 'app/pages/issue/issue.service';
 
+const devOnlyModules = [
+  StoreDevtoolsModule.instrument()
+];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,6 +69,10 @@ import { IssueService } from 'app/pages/issue/issue.service';
     BrowserModule,
     HttpModule,
     HttpClientModule,
+
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+
     MatProgressSpinnerModule,
     MatCardModule,
     MatMenuModule,
@@ -94,7 +108,9 @@ import { IssueService } from 'app/pages/issue/issue.service';
 
     AuthModule.forRoot(),
     SignupModule,
-    SigninModule
+    SigninModule,
+
+    environment.production ? [] : [...devOnlyModules]
   ],
   entryComponents: [
     ModalComponent,

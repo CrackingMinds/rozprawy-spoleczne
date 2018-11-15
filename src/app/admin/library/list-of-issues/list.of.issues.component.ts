@@ -1,58 +1,66 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
+
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
 
-import { Issue } from 'app/models/issue';
-
-import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.component';
-import { CreateIssueComponent } from 'app/admin/library/list-of-issues/modals/create-issue/create-issue.component';
-import { ModalData } from 'app/admin/library/list-of-issues/modals/modal/modal.data';
+import { IIssue } from 'app/models/issue';
 
 @Component({
   selector: 'rs-list-of-issues',
   templateUrl: './list.of.issues.component.html',
   styleUrls: ['./list.of.issues.component.scss']
 })
-export class ListOfIssuesComponent {
+export class ListOfIssuesComponent implements OnInit, OnDestroy {
 
-  @Input()
-  issues: Issue[];
+  @Input('issues')
+  issues$: Observable<IIssue[]>;
 
   @Output()
-  issueSelect: EventEmitter<Issue> = new EventEmitter<Issue>();
+  issueSelect: EventEmitter<IIssue> = new EventEmitter<IIssue>();
 
-  selectedIssue: Issue;
+  selectedIssue: IIssue;
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private dialog: MatDialog) {
   }
 
-  ngOnChanges() {
-    if (this.issues && !this.selectedIssue) {
-      this.selectIssue(this.issues[0]);
-    }
+  ngOnInit() {
+    this.issues$
+        .pipe(
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((issues: IIssue[]) => {
+          if (!this.selectedIssue) {
+            this.selectIssue(issues[0]);
+          }
+        });
   }
 
-  ngOnInit() {
-
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   openIssueCreationDialog(): void {
 
-    let modalData: ModalData = {
-      title: 'Dodanie nowego numeru',
-      content: CreateIssueComponent,
-      buttons: {
-        submit: {
-          text: 'Dodaj'
-        }
-      },
-      otherParams: undefined
-    };
-
-    this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
+    // let modalData: ModalData = {
+    //   title: 'Dodanie nowego numeru',
+    //   content: CreateIssueComponent,
+    //   buttons: {
+    //     submit: {
+    //       text: 'Dodaj'
+    //     }
+    //   },
+    //   otherParams: undefined
+    // };
+    //
+    // this.dialog.open(ModalComponent, {
+    //   disableClose: true,
+    //   data: modalData
+    // });
   }
 
   openMakeIssueCurrentDialog(issue: any): void {
@@ -146,7 +154,7 @@ export class ListOfIssuesComponent {
     // }
   }
 
-  selectIssue(issue: Issue): void {
+  selectIssue(issue: IIssue): void {
     if (issue === this.selectedIssue) {
       return;
     }

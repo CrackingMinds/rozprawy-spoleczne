@@ -5,6 +5,6 @@
   (focus)="onFocus()"
   (blur)="onBlur()">
   <mat-option *ngFor="let articleType of articleTypes | async" [value]="articleType">
-    {{ articleType.data.namePl }}
+    {{ articleType.namePl }}
   </mat-option>
 </mat-select>

@@ -1,12 +1,16 @@
 import { Component, Input } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
 import { MatDialog } from '@angular/material';
 
-import { Article } from 'app/models/article';
+import { IArticle } from 'app/models/article';
+import { IIssue } from 'app/models/issue';
+
 import { ModalData } from 'app/admin/library/list-of-issues/modals/modal/modal.data';
-import { AddArticleFormComponent } from 'app/admin/library/add-article/add.article.component';
 import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.component';
-import { Issue } from 'app/models/issue';
+
+import { AddArticleFormComponent } from 'app/admin/library/add-article/add.article.component';
 import { AddArticleFormParams } from 'app/admin/library/add-article/add.article.form.params';
 
 @Component({
@@ -16,15 +20,12 @@ import { AddArticleFormParams } from 'app/admin/library/add-article/add.article.
 export class ListOfArticlesComponent {
 
   @Input()
-  issue: Issue;
+  issue: IIssue;
 
-  @Input()
-  articles: Article[];
+  @Input('articles')
+  articles$: Observable<IArticle[]>;
 
   constructor(private dialog: MatDialog) {
-  }
-
-  ngOnChanges() {
   }
 
   openArticleCreationDialog(): void {
@@ -46,6 +47,6 @@ export class ListOfArticlesComponent {
     this.dialog.open(ModalComponent, {
       disableClose: true,
       data: modalData
-    })
+    });
   }
 }

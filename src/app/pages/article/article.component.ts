@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from 'rxjs/Subscription';
 
-import { Article } from 'app/models/article';
+import { IArticle } from 'app/models/article';
 
 import { ArticleService } from 'app/pages/article/article.service';
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
@@ -13,7 +13,7 @@ import { PageNameService } from 'app/shared/services/page.name.service';
     templateUrl: './article.component.html'
 })
 export class ArticleComponent implements OnInit, OnDestroy {
-    article: Article;
+    article: IArticle;
     dataLoaded: boolean = false;
 
     private subscriptions = new Subscription();
@@ -29,7 +29,7 @@ export class ArticleComponent implements OnInit, OnDestroy {
             .subscribe(params => {
               let articleId = params.get('id');
               this.subscriptions.add(
-                this.articleService.getArticle(articleId).subscribe((res: Article) => {
+                this.articleService.getArticle(articleId).subscribe((res: IArticle) => {
                   this.article = res;
                   this.dataLoaded = true;
                   this.pageNameService.setPageName(this.article.title);

@@ -5,10 +5,42 @@ import { map, switchMap } from 'rxjs/operators';
 
 import { AngularFirestore, DocumentReference } from 'angularfire2/firestore';
 
-import { Article, IArticle } from 'app/models/article';
-import { FArticle } from 'app/models/firestore/f.article';
+import { IArticle } from 'app/models/article';
 import { IArticleType } from 'app/models/article.type';
 import { ArticleTypesService } from 'app/services/article.types.service';
+import { Author } from 'app/models/author';
+import { ArticleFile } from 'app/models/article.file';
+
+interface IFirestoreArticle {
+  articleTypeId: string;
+  title: string;
+  authors: Author[];
+  pages: string;
+  doi: string;
+  introduction: string;
+  materialsAndMethods: string;
+  results: string;
+  conclusions: string;
+  keywords: string;
+  pdf: ArticleFile;
+  issueId: string;
+}
+
+interface IFirestoreArticleWithId {
+  id: string;
+  articleTypeId: string;
+  title: string;
+  authors: Author[];
+  pages: string;
+  doi: string;
+  introduction: string;
+  materialsAndMethods: string;
+  results: string;
+  conclusions: string;
+  keywords: string;
+  pdf: ArticleFile;
+  issueId: string;
+}
 
 @Injectable()
 export class ArticleService {
@@ -19,12 +51,12 @@ export class ArticleService {
               private articleTypesService: ArticleTypesService) {
   }
 
-  getArticlesInIssue(issueId: string): Observable<Article[]> {
+  getArticlesInIssue(issueId: string): Observable<IArticle[]> {
 
-    let article$ = this.getArticlesFromFirestore(issueId);
+    let article$: Observable<IFirestoreArticleWithId[]> = this.getArticlesFromFirestore(issueId);
     return article$
       .pipe(
-        switchMap((articles: IArticle[]) => {
+        switchMap((articles: IFirestoreArticleWithId[]) => {
           if (articles.length === 0) {
             return of([]);
           }
@@ -33,7 +65,7 @@ export class ArticleService {
       );
   }
 
-  postArticle(article: FArticle): Promise<void> {
+  postArticle(article: IFirestoreArticle): Promise<void> {
     return new Promise<void>(resolve => {
       this.angularFirestore.collection(ArticleService.collectionName).add(article).then((doc: DocumentReference) => {
         resolve();
@@ -41,41 +73,45 @@ export class ArticleService {
     });
   }
 
-  private getArticlesFromFirestore(issueId: string): Observable<IArticle[]> {
-    let issueArticlesCollection = this.angularFirestore.collection<FArticle>(ArticleService.collectionName, ref => ref.where('issueId', '==', issueId));
+  private getArticlesFromFirestore(issueId: string): Observable<IFirestoreArticleWithId[]> {
+    let issueArticlesCollection = this.angularFirestore.collection<IFirestoreArticle>(ArticleService.collectionName, ref => ref.where('issueId', '==', issueId));
     return issueArticlesCollection.snapshotChanges()
                                   .pipe(
                                     map(actions => actions.map(
                                       a => {
-                                        let data = a.payload.doc.data() as FArticle;
+                                        let data = a.payload.doc.data() as IFirestoreArticle;
                                         return {
                                           id: a.payload.doc.id,
-                                          data: data
+                                          ...data
                                         };
                                       }
                                     ))
                                   );
   }
 
-  private getArticleTypeForEachArticle(articles: IArticle[]): Observable<Article[]> {
+  private getArticleTypeForEachArticle(articles: IFirestoreArticleWithId[]): Observable<IArticle[]> {
 
-    let arr: Observable<Article>[] = articles.map((article: IArticle) => {
+    let arr: Observable<IArticle>[] = articles.map((article: IFirestoreArticleWithId) => {
       return this.getArticleWithArticleType(article);
     });
 
-    let zipped: Observable<Article[]> = zip(
+    let zipped: Observable<IArticle[]> = zip(
       ...arr
     );
 
     return zipped;
   }
 
-  private getArticleWithArticleType(article: IArticle): Observable<Article> {
-    return this.articleTypesService.getArticleType(article.data.articleTypeId)
+  private getArticleWithArticleType(article: IFirestoreArticleWithId): Observable<IArticle> {
+    return this.articleTypesService.getArticleType(article.articleTypeId)
                .pipe(
                  map((articleType: IArticleType) => {
-                   return new Article(article.data)
-                     .withArticleType(articleType);
+                   // @TODO: think about this again
+                   delete article.articleTypeId;
+                   return {
+                     ...article,
+                     articleType: articleType
+                   };
                  })
                );
   }

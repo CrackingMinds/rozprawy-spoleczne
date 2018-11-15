@@ -1,6 +1,13 @@
 <rs-list-of-issues
-  [issues]="issues"
+  [issues]="issues$"
   (issueSelect)="onIssueSelect($event)">
 </rs-list-of-issues>
 
-<rs-list-of-articles [issue]="selectedIssue" [articles]="articles"></rs-list-of-articles>
+<div class="rs-list-of-articles-container">
+  <mat-progress-spinner *ngIf="articlesLoading$ | async" class="rs-progress-spinner"
+                        mode="indeterminate"
+                        color="accent"
+                        [diameter]="100">
+  </mat-progress-spinner>
+  <rs-list-of-articles [issue]="selectedIssue" [articles]="articles$"></rs-list-of-articles>
+</div>

@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from 'rxjs/Subscription';
 
-import { Issue } from 'app/models/issue';
-import { Article } from 'app/models/article';
+import { IIssue } from 'app/models/issue';
+import { IArticle } from 'app/models/article';
 
 import { IssueService } from 'app/pages/issue/issue.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -16,8 +16,8 @@ import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
     templateUrl: './issue.component.html'
 })
 export class IssueComponent implements OnInit, OnDestroy {
-    issue: Issue;
-    articles: Article[];
+    issue: IIssue;
+    articles: IArticle[];
     issueTitle: string;
     asyncAction: any;
 

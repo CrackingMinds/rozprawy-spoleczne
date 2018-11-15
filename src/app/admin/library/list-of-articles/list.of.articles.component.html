@@ -2,6 +2,6 @@
         (click)="openArticleCreationDialog()">
   <mat-icon>add</mat-icon>
 </button>
-<ng-container *ngFor="let article of articles">
+<ng-container *ngFor="let article of (articles$ | async)">
   <rs-article-card [article]="article" [issue]="issue"></rs-article-card>
 </ng-container>

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Issue } from 'app/models/issue';
+import { IIssue } from 'app/models/issue';
 
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -43,7 +43,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
       this.subscriptions.unsubscribe();
     }
 
-    private createIssueTitleFromObj(issue: Issue, withYear: boolean = true): string {
+    private createIssueTitleFromObj(issue: IIssue, withYear: boolean = true): string {
         return Utilits.createIssueTitleFromObj(issue, withYear);
     }
 }

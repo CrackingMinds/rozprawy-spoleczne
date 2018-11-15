@@ -1,96 +1,96 @@
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Article } from 'app/models/article';
-import { IIssue, Issue } from 'app/models/issue';
+import { Store } from '@ngrx/store';
 
-import { IssueService } from 'app/pages/issue/issue.service';
+import {
+  getLibraryIssues,
+  getLibraryArticles,
+  getLibraryArticlesLoading,
+  LibraryState,
+} from 'app/admin/library/store/reducers/library.reducer';
+import { LoadIssues } from 'app/store/actions/issues.actions';
+import { LoadArticles } from 'app/store/actions/articles.actions';
+
+import { IArticle } from 'app/models/article';
+import { IIssue } from 'app/models/issue';
+
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { Utilits } from 'app/shared/services/utilits';
-import { FIssue } from 'app/models/firestore/f.issue';
-import { ArticleService } from 'app/admin/library/add-article/article.service';
 
 @Component({
   selector: 'rs-library-editorial',
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss']
 })
-export class LibraryComponent implements OnChanges, OnInit, OnDestroy {
-  issues: Issue[];
-  articles: Article[];
+export class LibraryComponent implements OnInit, OnDestroy {
+  issues$: Observable<IIssue[]>;
+  articles$: Observable<IArticle[]>;
 
-  selectedIssue: Issue;
+  articlesLoading$: Observable<boolean>;
 
-  private destroy$: Subject<void> = new Subject<void>();
+  selectedIssue: IIssue;
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
-              private issueService: IssueService,
-              private articleService: ArticleService,
-              private pageNameService: PageNameService) {
+              private pageNameService: PageNameService,
+              private store: Store<LibraryState>) {
   }
 
   ngOnInit() {
     this.pageNameService.setPageName('Numery');
 
-    this.issueService.getIssues()
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe((issues: IIssue[]) => {
-          this.issues = issues.map((issue: IIssue) => {
-            return new Issue(issue);
-          });
-          this.sortIssues();
-        });
-  }
+    this.issues$ = this.store.select(getLibraryIssues)
+                       .pipe(
+                         map((issues: IIssue[]) => {
+                           return this.sortIssues(issues);
+                         })
+                       );
+    this.articles$ = this.store.select(getLibraryArticles);
 
-  ngOnChanges(changes: SimpleChanges) {
+    this.articlesLoading$ = this.store.select(getLibraryArticlesLoading);
 
+    this.store.dispatch(new LoadIssues());
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
-  sortIssues() {
-    this.issues.sort((a: Issue, b: Issue) => {
-      let aIssue: FIssue = a.data;
-      let bIssue: FIssue = b.data;
-      if (aIssue.year === bIssue.year) {
+  onIssueSelect(issue: IIssue): void {
+    this.selectedIssue = issue;
+    this.store.dispatch(new LoadArticles(issue.id));
+  }
 
-        if (aIssue.vol === bIssue.vol) {
+  private sortIssues(issues: IIssue[]): IIssue[] {
+    let updatedIssues: IIssue[] = [...issues];
+    updatedIssues.sort((a: IIssue, b: IIssue) => {
+      if (a.year === b.year) {
 
-          if (aIssue.number === bIssue.number) {
+        if (a.vol === b.vol) {
+
+          if (a.number === b.number) {
             return 0;
           }
           else {
-            return Utilits.sortByValue(aIssue.number, bIssue.number);
+            return Utilits.sortByValue(a.number, b.number);
           }
         }
         else {
-          return Utilits.sortByValue(aIssue.vol, bIssue.vol);
+          return Utilits.sortByValue(a.vol, b.vol);
         }
       }
       else {
-        return Utilits.sortByValue(aIssue.year, bIssue.year);
+        return Utilits.sortByValue(a.year, b.year);
       }
     });
-  }
 
-  onIssueSelect(issue: Issue): void {
-    this.selectedIssue = issue;
-
-    this.articleService.getArticlesInIssue(issue.id)
-        .pipe(
-          takeUntil(this.destroy$)
-        )
-        .subscribe((articles: Article[]) => {
-          this.articles = articles;
-        });
+    return updatedIssues;
   }
 
 }

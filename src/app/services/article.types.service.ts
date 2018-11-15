@@ -3,9 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IArticleType } from 'app/models/article.type';
-import { FArticleType } from 'app/models/firestore/f.article.type';
 import { AngularFirestore } from 'angularfire2/firestore';
+
+import { IArticleType } from 'app/models/article.type';
+
+interface IFirestoreArticleType {
+  namePl: string;
+}
 
 @Injectable()
 export class ArticleTypesService {
@@ -15,26 +19,26 @@ export class ArticleTypesService {
   constructor(private angularFirestore: AngularFirestore) {}
 
   getArticleType(id: string): Observable<IArticleType> {
-    let articleTypesCollection = this.angularFirestore.collection<FArticleType>(ArticleTypesService.collectionName);
+    let articleTypesCollection = this.angularFirestore.collection<IFirestoreArticleType>(ArticleTypesService.collectionName);
     return articleTypesCollection.doc(id).valueChanges()
                                  .pipe(
-                                   map((articleType: FArticleType) => {
+                                   map((articleType: IFirestoreArticleType) => {
                                      return {
                                        id: id,
-                                       data: articleType
+                                       ...articleType
                                      };
                                    })
                                  );
   }
 
   getArticleTypes(): Observable<IArticleType[]> {
-    let articleTypesCollection = this.angularFirestore.collection<FArticleType>(ArticleTypesService.collectionName);
+    let articleTypesCollection = this.angularFirestore.collection<IFirestoreArticleType>(ArticleTypesService.collectionName);
     return articleTypesCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        let data = a.payload.doc.data() as FArticleType;
+        let data = a.payload.doc.data() as IFirestoreArticleType;
         return {
           id: a.payload.doc.id,
-          data: data
+          ...data
         };
       }))
     );
