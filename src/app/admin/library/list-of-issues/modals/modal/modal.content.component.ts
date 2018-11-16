@@ -1,10 +1,14 @@
-import { ModalParams } from 'app/admin/library/list-of-issues/modals/modal/modal.params';
+import { IIssue, IRawIssue } from 'app/models/issue';
+import { IArticle } from 'app/models/article';
+
+export type ModalParams = undefined | IIssue;
+export type ModalReturnData = void | boolean | IIssue | IRawIssue | IArticle;
 
 export interface ModalContentComponent {
 
   canSubmit: boolean;
   params: ModalParams;
 
-  submit(): Promise<void>;
-  cancel(): Promise<void>;
+  submit(): ModalReturnData;
+  cancel(): ModalReturnData;
 }

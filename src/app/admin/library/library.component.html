@@ -1,6 +1,9 @@
 <rs-list-of-issues
   [issues]="issues$"
-  (issueSelect)="onIssueSelect($event)">
+  (issueSelect)="onIssueSelect($event)"
+  (issueCreate)="onIssueCreate($event)"
+  (issueEdit)="onIssueEdit($event)"
+  (issueRemove)="onIssueRemove($event)">
 </rs-list-of-issues>
 
 <div class="rs-list-of-articles-container">

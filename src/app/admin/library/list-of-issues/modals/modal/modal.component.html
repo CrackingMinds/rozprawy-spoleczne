@@ -5,8 +5,11 @@
                         [diameter]="100">
   </mat-progress-spinner>
 </div>
-<h2 class="rs-modal-title" mat-dialog-title>{{ modalData.title }}</h2>
+<h2 *ngIf="modalData.title" class="rs-modal-title" mat-dialog-title>{{ modalData.title }}</h2>
 <mat-dialog-content>
+  <h4 *ngIf="modalMessage">
+    {{ modalMessage }}
+  </h4>
   <ng-container #dynamicContentContainer></ng-container>
 </mat-dialog-content>
 <mat-dialog-actions class="rs-modal-buttons">

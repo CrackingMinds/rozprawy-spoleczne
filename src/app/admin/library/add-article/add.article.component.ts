@@ -4,9 +4,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { UploadArticleComponent } from 'app/admin/library/modules/upload-article/upload.article.component';
-import { ModalContentComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
-import { ArticleService } from 'app/admin/library/add-article/article.service';
-import { AddArticleFormParams } from 'app/admin/library/add-article/add.article.form.params';
+import { ModalContentComponent, ModalReturnData } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
+import { IIssue } from 'app/models/issue';
 
 @Component({
   selector: 'rs-add-article',
@@ -42,29 +41,30 @@ export class AddArticleFormComponent implements ModalContentComponent, OnDestroy
     return this.form.valid;
   }
 
-  params: AddArticleFormParams;
+  params: IIssue;
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private formBuilder: FormBuilder,
-              private articleService: ArticleService) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  cancel(): Promise<void> {
-    return this.uploadArticleComponent.deleteFile();
+  cancel(): void {
+    // @TODO: change this
+    this.uploadArticleComponent.deleteFile();
+    return;
   }
 
-  submit(): Promise<void> {
+  submit(): ModalReturnData {
     if (!this.form.valid) {
       return null;
     }
 
-    this.form.value.issueId = this.params.issueId;
-    return this.articleService.postArticle(this.form.value);
+    this.form.value.issueId = this.params.id;
+    return this.form.value;
   }
 
 }

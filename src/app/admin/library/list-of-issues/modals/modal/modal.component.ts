@@ -8,13 +8,14 @@ import {
   ComponentFactoryResolver,
   ApplicationRef,
   Injector,
-  OnDestroy
+  OnDestroy,
+  Type
 } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { ModalData } from 'app/admin/library/list-of-issues/modals/modal/modal.data';
-import { ModalContentComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
+import { ModalContentComponent, ModalReturnData } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
 
 @Component({
     selector: 'rs-modal',
@@ -28,9 +29,14 @@ export class ModalComponent implements OnInit, OnDestroy {
 
     nestedComponentRef: ComponentRef<ModalContentComponent>;
 
+    modalMessage: string;
+
     spinnerVisible: boolean = false;
 
     get canSubmit(): boolean {
+      if (this.hasStringContent()) {
+        return true;
+      }
       return this.nestedComponentRef.instance.canSubmit;
     }
 
@@ -42,8 +48,13 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+      if (this.hasStringContent()) {
+        this.modalMessage = this.modalData.content as string;
+        return;
+      }
+
       let componentFactory = this.componentFactoryResolver
-                                 .resolveComponentFactory(this.modalData.content);
+                                 .resolveComponentFactory(this.modalData.content as Type<ModalContentComponent>);
       this.nestedComponentRef = componentFactory.create(this.injector);
       this.nestedComponentRef.instance.params = this.modalData.otherParams;
       this.dynamicComponentContainer.insert(this.nestedComponentRef.hostView);
@@ -57,20 +68,27 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
 
     submit() {
-      this.spinnerVisible = true;
-      this.nestedComponentRef.instance.submit().then(() => {
-        this.closeDialog();
-      });
+      let returnedData: ModalReturnData;
+      if (this.hasStringContent()) {
+        returnedData = true;
+      } else {
+        returnedData = this.nestedComponentRef.instance.submit();
+      }
+      this.closeDialog(returnedData);
     }
 
     cancel() {
-      this.spinnerVisible = true;
-      this.nestedComponentRef.instance.cancel().then(() => {
-          this.closeDialog();
-        });
+      if (!this.hasStringContent()) {
+        this.nestedComponentRef.instance.cancel();
+      }
+      this.closeDialog();
     }
 
-    private closeDialog() {
-        this.dialogRef.close();
+    private closeDialog(data?: ModalReturnData) {
+        this.dialogRef.close(data);
+    }
+
+    private hasStringContent(): boolean {
+      return typeof this.modalData.content === 'string';
     }
 }

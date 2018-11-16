@@ -11,7 +11,6 @@ import { ModalData } from 'app/admin/library/list-of-issues/modals/modal/modal.d
 import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.component';
 
 import { AddArticleFormComponent } from 'app/admin/library/add-article/add.article.component';
-import { AddArticleFormParams } from 'app/admin/library/add-article/add.article.form.params';
 
 @Component({
   selector: 'rs-list-of-articles',
@@ -30,18 +29,15 @@ export class ListOfArticlesComponent {
 
   openArticleCreationDialog(): void {
 
-    let params = new AddArticleFormParams();
-    params.issueId = this.issue.id;
-
     let modalData: ModalData = {
-      title: `Dodanie nowego artykułu do numeru: ${this.issue.toString()}`,
+      title: `Dodanie nowego artykułu do numeru: ${this.issue.toString()}`, // @TODO: issue.toString() doesn't exist any more
       content: AddArticleFormComponent,
       buttons: {
         submit: {
           text: 'Dodaj'
         }
       },
-      otherParams: params
+      otherParams: this.issue
     };
 
     this.dialog.open(ModalComponent, {

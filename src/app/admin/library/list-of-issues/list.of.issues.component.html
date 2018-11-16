@@ -1,37 +1,37 @@
 <button type="button" class="rs-add-issue"
-        (click)="openIssueCreationDialog()">
+        (click)="openDialog(dialogType.CREATE_ISSUE)">
   <mat-icon>add</mat-icon>
 </button>
 <div class="rs-issues-list">
   <ng-container *ngFor="let issue of (issues$ | async)">
-    <div class="rs-issue"
-         [class.rs-selected]="issue === selectedIssue"
-         (click)="selectIssue(issue)">
+    <div class="rs-issue-container" [class.rs-selected]="issue === selectedIssue">
+      <button [matMenuTriggerFor]="menu" class="rs-edit-issue-btn">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="openDialog(dialogType.EDIT_ISSUE, issue)">
+          <span>Edytuj numer</span>
+        </button>
+        <button mat-menu-item [disabled]="issue.isCurrent"
+                (click)="openDialog(dialogType.MAKE_ISSUE_CURRENT, issue)">
+          <span>Zrób bieżącym</span>
+        </button>
+        <button [disabled]="issue.hasArticles" mat-menu-item
+                (click)="openDialog(dialogType.REMOVE_ISSUE, issue)">
+          <span>Usuń</span>
+        </button>
+      </mat-menu>
+      <div class="rs-issue"
+           (click)="selectIssue(issue)">
       <span *ngIf="issue.isCurrent" class="is-current">
-          <span>[B]</span>
+          <span>B</span>
       </span>
-      <span *ngIf="!issue.isCurrent" class="is-current-placeholder"></span>
-      <span>
+        <span *ngIf="!issue.isCurrent" class="is-current-placeholder"></span>
+        <span>
           {{issue | issueString}}
       </span>
+      </div>
     </div>
   </ng-container>
 </div>
-
-<!--<button mat-icon-button [matMenuTriggerFor]="menu">-->
-<!--<mat-icon>more_vert</mat-icon>-->
-<!--</button>-->
-<!--<mat-menu #menu="matMenu">-->
-<!--<button mat-menu-item-->
-<!--(click)="openChangeNameDialog(issue)">-->
-<!--<span>Zmień nazwę</span>-->
-<!--</button>-->
-<!--<button mat-menu-item [disabled]="issue.isCurrent"-->
-<!--(click)="openMakeIssueCurrentDialog(issue)">-->
-<!--<span>Zrób bieżącym</span>-->
-<!--</button>-->
-<!--<button mat-menu-item-->
-<!--(click)="openIssueRemovalDialog(issue)">-->
-<!--<span>Usuń</span>-->
-<!--</button>-->
-<!--</mat-menu>-->

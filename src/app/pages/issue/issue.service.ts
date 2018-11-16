@@ -1,47 +1,23 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { AngularFirestore } from 'angularfire2/firestore';
+import { IIssue, IRawIssue } from 'app/models/issue';
 
-import { IIssue } from 'app/models/issue';
-
-interface IFirestoreIssue {
-  year: string;
-  vol: number;
-  number: number;
-  isCurrent: boolean;
-}
+import { FirestoreIssueService } from 'app/services/firestore/issue.service';
 
 @Injectable()
 export class IssueService {
 
-  private static collectionName: string = 'issues';
-
-  constructor(private angularFirestore: AngularFirestore) {
+  constructor(private firestoreIssueService: FirestoreIssueService) {
   }
 
   getIssues(): Observable<IIssue[]> {
-    let issuesCollection = this.angularFirestore.collection<IFirestoreIssue>(IssueService.collectionName);
-    return issuesCollection.snapshotChanges()
-      .pipe(
-        map(actions => actions.map(a => {
-          let data = a.payload.doc.data() as IFirestoreIssue;
-          return {
-            id: a.payload.doc.id,
-            ...data
-          };
-        }))
-      );
+    return this.firestoreIssueService.getIssues();
   }
 
-  postIssue(issue: IFirestoreIssue): Promise<void> {
-    return new Promise<void>(resolve => {
-      this.angularFirestore.collection(IssueService.collectionName).add(issue).then(() => {
-        resolve();
-      });
-    });
+  postIssue(issue: IRawIssue): Observable<void> {
+    return this.firestoreIssueService.postIssue(issue);
   }
 
   getIssue(id) {

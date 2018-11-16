@@ -26,10 +26,8 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidateService } from './auth/validate.service';
-import { CreateIssueComponent } from './admin/library/list-of-issues/modals/create-issue/create-issue.component';
 import { PageNameService } from './shared/services/page.name.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ModalComponent } from './admin/library/list-of-issues/modals/modal/modal.component';
 import { MainSpinnerService } from './services/main-spinner/main.spinner.service';
 
 import { FirebaseConfigModule } from 'app/firebase.config.module';
@@ -55,15 +53,19 @@ import { ArticleService } from 'app/admin/library/add-article/article.service';
 import { ArticleTypesService } from 'app/services/article.types.service';
 import { IssueService } from 'app/pages/issue/issue.service';
 
+import { ModalModule } from 'app/admin/library/list-of-issues/modals/modal/modal.module';
+
+import { FirestoreArticleService } from 'app/services/firestore/article.service';
+import { FirestoreIssueService } from 'app/services/firestore/issue.service';
+import { FirestoreArticleTypeService } from 'app/services/firestore/article.types.service';
+
 const devOnlyModules = [
   StoreDevtoolsModule.instrument()
 ];
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CreateIssueComponent,
-    ModalComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -90,6 +92,8 @@ const devOnlyModules = [
     RoutingModule.forRoot(),
     AboutModule,
 
+    ModalModule,
+
     FirebaseConfigModule,
 
     ContactDataModule.forRoot(),
@@ -112,12 +116,12 @@ const devOnlyModules = [
 
     environment.production ? [] : [...devOnlyModules]
   ],
-  entryComponents: [
-    ModalComponent,
-    CreateIssueComponent
-  ],
   providers: [
     ApiService,
+
+    FirestoreIssueService,
+    FirestoreArticleService,
+    FirestoreArticleTypeService,
 
     ArticleService,
     ArticleTypesService,
