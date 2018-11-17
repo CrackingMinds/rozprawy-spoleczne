@@ -10,11 +10,9 @@ export const CREATE_ISSUE = '[Issues] Create Issue';
 export const CREATE_ISSUE_FAIL = '[Issues] Create Issue Fail';
 
 export const UPDATE_ISSUE = '[Issues] Update Issue';
-export const UPDATE_ISSUE_SUCCESS = '[Issues] Update Issue Success';
 export const UPDATE_ISSUE_FAIL = '[Issues] Update Issue Fail';
 
 export const REMOVE_ISSUE = '[Issues] Remove Issue';
-export const REMOVE_ISSUE_SUCCESS = '[Issues] Remove Issue Success';
 export const REMOVE_ISSUE_FAIL = '[Issues] Remove Issue Fail';
 
 export class LoadIssues implements Action {
@@ -47,11 +45,6 @@ export class UpdateIssue implements Action {
   constructor(public payload: IIssue) {}
 }
 
-export class UpdateIssueSuccess implements Action {
-  readonly type: string = UPDATE_ISSUE_SUCCESS;
-  constructor(public payload: IIssue) {}
-}
-
 export class UpdateIssueFail implements Action {
   readonly type: string = UPDATE_ISSUE_FAIL;
   constructor(public payload: any) {}
@@ -59,11 +52,6 @@ export class UpdateIssueFail implements Action {
 
 export class RemoveIssue implements Action {
   readonly type: string = REMOVE_ISSUE;
-  constructor(public payload: IIssue) {}
-}
-
-export class RemoveIssueSuccess implements Action {
-  readonly type: string = REMOVE_ISSUE_SUCCESS;
   constructor(public payload: IIssue) {}
 }
 
@@ -81,9 +69,7 @@ export type IssuesAction =
   CreateIssueFail |
 
   UpdateIssue |
-  UpdateIssueSuccess |
   UpdateIssueFail |
 
   RemoveIssue |
-  RemoveIssueSuccess |
   RemoveIssueFail;

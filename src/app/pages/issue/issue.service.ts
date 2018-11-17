@@ -5,9 +5,10 @@ import { Observable } from 'rxjs';
 import { IIssue, IRawIssue } from 'app/models/issue';
 
 import { FirestoreIssueService } from 'app/services/firestore/issue.service';
+import { IssueCrudService } from 'app/services/issue.crud.service';
 
 @Injectable()
-export class IssueService {
+export class IssueService implements IssueCrudService {
 
   constructor(private firestoreIssueService: FirestoreIssueService) {
   }
@@ -24,24 +25,8 @@ export class IssueService {
     return this.firestoreIssueService.deleteIssue(issue);
   }
 
-  getIssue(id) {
-    // return this.http.get(this.backendUrl + '/issues/' + id);
-  }
-
-  getCurrentIssue() {
-    // return this.http.get(this.backendUrl + '/issues/current');
-  }
-
-  getAllIssues() {
-    // return this.http.get(this.backendUrl + '/issues');
-  }
-
-  getAllIssuesWithArticles() {
-    // return this.http.get(this.backendUrl + '/issues/articles');
-  }
-
-  putIssueData(issueId: string, updatedIssueData: any) {
-    // return this.http.put(this.backendUrl + '/issues/' + issueId, updatedIssueData, this.httpOptions);
+  updateIssue(issue: IIssue): Observable<void> {
+    return this.firestoreIssueService.updateIssue(issue);
   }
 
 }

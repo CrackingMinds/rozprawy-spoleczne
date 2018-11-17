@@ -5,7 +5,9 @@ import {
   IssuesAction,
   LOAD_ISSUES,
   LOAD_ISSUES_FAIL,
-  LOAD_ISSUES_SUCCESS
+  LOAD_ISSUES_SUCCESS,
+  REMOVE_ISSUE_FAIL,
+  UPDATE_ISSUE_FAIL
 } from 'app/store/actions/issues.actions';
 
 type IssueEntities = { [id: string]: IIssue };
@@ -59,6 +61,22 @@ export function issuesReducer(state = initialState, action: IssuesAction): Issue
     }
 
     case CREATE_ISSUE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false
+      }
+    }
+
+    case REMOVE_ISSUE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false
+      }
+    }
+
+    case UPDATE_ISSUE_FAIL: {
       return {
         ...state,
         loading: false,

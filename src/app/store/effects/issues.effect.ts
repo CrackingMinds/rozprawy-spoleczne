@@ -5,7 +5,17 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Effect, Actions } from '@ngrx/effects';
 
-import { CREATE_ISSUE, CreateIssue, LOAD_ISSUES, LoadIssuesFail, LoadIssuesSuccess, REMOVE_ISSUE, RemoveIssue } from 'app/store/actions/issues.actions';
+import {
+  CREATE_ISSUE,
+  CreateIssue,
+  LOAD_ISSUES,
+  LoadIssuesFail,
+  LoadIssuesSuccess,
+  REMOVE_ISSUE,
+  RemoveIssue,
+  UPDATE_ISSUE,
+  UpdateIssue
+} from 'app/store/actions/issues.actions';
 
 import { IssueService } from 'app/pages/issue/issue.service';
 import { IIssue } from 'app/models/issue';
@@ -44,5 +54,14 @@ export class IssuesEffect {
         // @TODO: implement error handler
         return this.issueService.deleteIssue(action.payload);
       })
-    )
+    );
+
+  @Effect({dispatch: false})
+  updateIssue$ = this.actions$.ofType(UPDATE_ISSUE)
+    .pipe(
+      switchMap((action: UpdateIssue) => {
+        // @TODO: implement error handler
+        return this.issueService.updateIssue(action.payload);
+      })
+    );
 }

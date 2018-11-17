@@ -1,17 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
-import {
-  getLibraryIssues,
-  getLibraryArticles,
-  getLibraryArticlesLoading,
-  LibraryState,
-} from 'app/admin/library/store/reducers/library.reducer';
+import { getLibraryArticles, getLibraryArticlesLoading, getLibraryIssues, LibraryState } from 'app/admin/library/store/reducers/library.reducer';
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/store/actions/issues.actions';
 import { LoadArticles } from 'app/store/actions/articles.actions';
 
@@ -32,6 +27,8 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   articlesLoading$: Observable<boolean>;
 
+  issueMarkedAsCurrent: IIssue;
+
   selectedIssue: IIssue;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -50,6 +47,13 @@ export class LibraryComponent implements OnInit, OnDestroy {
                            return this.sortIssues(issues);
                          })
                        );
+    this.issues$
+        .pipe(
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((issues: IIssue[]) => {
+          this.issueMarkedAsCurrent = issues.filter((issue: IIssue) => issue.isCurrent)[0];
+        });
     this.articles$ = this.store.select(getLibraryArticles);
 
     this.articlesLoading$ = this.store.select(getLibraryArticlesLoading);
@@ -72,6 +76,12 @@ export class LibraryComponent implements OnInit, OnDestroy {
   }
 
   onIssueEdit(issue: IIssue): void {
+    if (issue !== this.issueMarkedAsCurrent && issue.isCurrent) {
+      this.store.dispatch(new UpdateIssue({
+        ...this.issueMarkedAsCurrent,
+        isCurrent: false
+      }));
+    }
     this.store.dispatch(new UpdateIssue(issue));
   }
 

@@ -8,11 +8,12 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { IIssue, IRawIssue } from 'app/models/issue';
 
 import { FirestoreArticleService } from 'app/services/firestore/article.service';
+import { IssueCrudService } from 'app/services/issue.crud.service';
 
 type IFirestoreIssue = IRawIssue;
 
 @Injectable()
-export class FirestoreIssueService {
+export class FirestoreIssueService implements IssueCrudService {
 
   private static collectionName: string = 'issues';
 
@@ -56,6 +57,20 @@ export class FirestoreIssueService {
     return Observable.create((observer: Observer<void>) => {
       const issueDocToBeDeleted: AngularFirestoreDocument<IIssue> = this.angularFirestore.doc(`${FirestoreIssueService.collectionName}/${issue.id}`);
       issueDocToBeDeleted.delete()
+                         .then(() => {
+                           observer.next(null);
+                           observer.complete();
+                         })
+                         .catch((reason) => observer.error(reason));
+    });
+
+  }
+
+  updateIssue(issue: IIssue): Observable<void> {
+
+    return Observable.create((observer: Observer<void>) => {
+      const issueDocToBeUpdated: AngularFirestoreDocument<IIssue> = this.angularFirestore.doc(`${FirestoreIssueService.collectionName}/${issue.id}`);
+      issueDocToBeUpdated.update(issue)
                          .then(() => {
                            observer.next(null);
                            observer.complete();
