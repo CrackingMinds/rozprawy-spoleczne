@@ -225,12 +225,4 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              });
   }
 
-  private markIssueAsCurrent(issue: any) {
-    // if (this.lastCurrentIssue) {
-    //   this.lastCurrentIssue.issue.isCurrent = false;
-    // }
-    // issue.issue.isCurrent = true;
-    // this.lastCurrentIssue = issue;
-  }
-
 }

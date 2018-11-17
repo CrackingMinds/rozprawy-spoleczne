@@ -20,6 +20,10 @@ export class IssueService {
     return this.firestoreIssueService.postIssue(issue);
   }
 
+  deleteIssue(issue: IIssue): Observable<void> {
+    return this.firestoreIssueService.deleteIssue(issue);
+  }
+
   getIssue(id) {
     // return this.http.get(this.backendUrl + '/issues/' + id);
   }
@@ -40,7 +44,4 @@ export class IssueService {
     // return this.http.put(this.backendUrl + '/issues/' + issueId, updatedIssueData, this.httpOptions);
   }
 
-  deleteIssue(issueId: string) {
-    // return this.http.delete(this.backendUrl + '/issues/' + issueId, this.httpOptions);
-  }
 }

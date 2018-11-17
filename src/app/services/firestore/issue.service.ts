@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, zip } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 import { IIssue, IRawIssue } from 'app/models/issue';
 
@@ -41,11 +41,26 @@ export class FirestoreIssueService {
   postIssue(issue: IRawIssue): Observable<void> {
 
     return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection(FirestoreIssueService.collectionName).add(issue).then(() => {
+      this.angularFirestore.collection(FirestoreIssueService.collectionName).add(issue)
+          .then(() => {
             observer.next(null);
             observer.complete();
           })
           .catch((reason) => observer.error(reason));
+    });
+
+  }
+
+  deleteIssue(issue: IIssue): Observable<void> {
+
+    return Observable.create((observer: Observer<void>) => {
+      const issueDocToBeDeleted: AngularFirestoreDocument<IIssue> = this.angularFirestore.doc(`${FirestoreIssueService.collectionName}/${issue.id}`);
+      issueDocToBeDeleted.delete()
+                         .then(() => {
+                           observer.next(null);
+                           observer.complete();
+                         })
+                         .catch((reason) => observer.error(reason));
     });
 
   }
