@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatCardModule } from '@angular/material';
 
 import { ListOfArticlesComponent } from 'app/admin/library/list-of-articles/list.of.articles.component';
 import { AddArticleModule } from 'app/admin/library/add-article/add.article.module';
@@ -16,6 +16,7 @@ const declarations = [
     CommonModule,
 
     MatIconModule,
+    MatCardModule,
 
     AddArticleModule,
     ArticleCardModule

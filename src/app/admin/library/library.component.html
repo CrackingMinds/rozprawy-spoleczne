@@ -1,16 +1,28 @@
-<rs-list-of-issues
-  [issues]="issues$"
-  (issueSelect)="onIssueSelect($event)"
-  (issueCreate)="onIssueCreate($event)"
-  (issueEdit)="onIssueEdit($event)"
-  (issueRemove)="onIssueRemove($event)">
-</rs-list-of-issues>
-
-<div class="rs-list-of-articles-container">
-  <mat-progress-spinner *ngIf="articlesLoading$ | async" class="rs-progress-spinner"
+<div *ngIf="contentLoading$ | async" class="rs-spinner-wrapper rs-content-spinner">
+  <mat-progress-spinner class="rs-progress-spinner"
                         mode="indeterminate"
                         color="accent"
                         [diameter]="100">
   </mat-progress-spinner>
+</div>
+
+<div class="rs-list-of-issues-container">
+  <rs-list-of-issues
+    [issues]="issues$"
+    (issueSelect)="onIssueSelect($event)"
+    (issueCreate)="onIssueCreate($event)"
+    (issueEdit)="onIssueEdit($event)"
+    (issueRemove)="onIssueRemove($event)">
+  </rs-list-of-issues>
+</div>
+
+<div class="rs-list-of-articles-container">
+  <div *ngIf="articlesLoading$ | async" class="rs-spinner-wrapper">
+    <mat-progress-spinner class="rs-progress-spinner"
+                          mode="indeterminate"
+                          color="accent"
+                          [diameter]="100">
+    </mat-progress-spinner>
+  </div>
   <rs-list-of-articles [issue]="selectedIssue" [articles]="articles$"></rs-list-of-articles>
 </div>

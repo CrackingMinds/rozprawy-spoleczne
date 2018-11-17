@@ -21,7 +21,7 @@ export interface IssueState {
 export const initialState: IssueState = {
   entities: {},
   loaded: false,
-  loading: false
+  loading: true
 };
 
 export function issuesReducer(state = initialState, action: IssuesAction): IssueState {

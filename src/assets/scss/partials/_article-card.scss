@@ -56,7 +56,6 @@
 
 .article-short-info {
   font-size: 13px;
-  border-bottom: 2px solid $main-green-color;
   margin: 5px 0;
   padding-bottom: 15px;
   display: inline-block;
@@ -126,8 +125,14 @@
 }
 
 .article-preview {
-  border: 2px solid $main-green-color;
-  //border-bottom: none;
   padding: $universal-padding-half;
   margin: 0;
+}
+
+mat-card.rs-article-card {
+  border: 2px solid $main-green-color;
+  padding: 0;
+  margin: 10px;
+  width: 500px;
+  min-height: 145px;
 }

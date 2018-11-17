@@ -54,7 +54,8 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
           takeUntil(this.unsubscribe$)
         )
         .subscribe((issues: IIssue[]) => {
-          this.selectIssue(issues[0]);
+          const issueMarkedAsSelected: IIssue = issues.filter((issue: IIssue) => issue.isCurrent)[0];
+          this.selectIssue(issueMarkedAsSelected);
         });
   }
 

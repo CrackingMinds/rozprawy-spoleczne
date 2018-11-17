@@ -17,18 +17,6 @@
   justify-content: center;
 }
 
-.article-card {
-  margin: 10px;
-  width: 500px;
-}
-
-.mat-card {
-
-  &.article-card {
-    padding: 0;
-  }
-}
-
 .individual-article {
 
   .mat-card.article-card {

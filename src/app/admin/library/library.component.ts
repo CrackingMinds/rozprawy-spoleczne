@@ -1,12 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, zip } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
-import { getLibraryArticles, getLibraryArticlesLoading, getLibraryIssues, LibraryState } from 'app/admin/library/store/reducers/library.reducer';
+import {
+  getLibraryArticles,
+  getLibraryArticlesLoading,
+  getLibraryIssues,
+  getLibraryIssuesLoading,
+  LibraryState
+} from 'app/admin/library/store/reducers/library.reducer';
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/store/actions/issues.actions';
 import { LoadArticles } from 'app/store/actions/articles.actions';
 
@@ -25,7 +31,9 @@ export class LibraryComponent implements OnInit, OnDestroy {
   issues$: Observable<IIssue[]>;
   articles$: Observable<IArticle[]>;
 
+  issuesLoading$: Observable<boolean>;
   articlesLoading$: Observable<boolean>;
+  contentLoading$: Observable<boolean>;
 
   issueMarkedAsCurrent: IIssue;
 
@@ -56,7 +64,18 @@ export class LibraryComponent implements OnInit, OnDestroy {
         });
     this.articles$ = this.store.select(getLibraryArticles);
 
+    this.issuesLoading$ = this.store.select(getLibraryIssuesLoading);
     this.articlesLoading$ = this.store.select(getLibraryArticlesLoading);
+    this.contentLoading$ = zip(
+      this.issuesLoading$,
+      this.articlesLoading$
+    ).pipe(
+      map((contentLoading: boolean[]) => {
+        const issuesLoading = contentLoading[0];
+        const articlesLoading = contentLoading[1];
+        return issuesLoading && articlesLoading;
+      })
+    );
 
     this.store.dispatch(new LoadIssues());
   }
@@ -72,15 +91,15 @@ export class LibraryComponent implements OnInit, OnDestroy {
   }
 
   onIssueCreate(issue: IIssue): void {
+    if (issue.isCurrent) {
+      this.unmarkLastCurrentNumber();
+    }
     this.store.dispatch(new CreateIssue(issue));
   }
 
   onIssueEdit(issue: IIssue): void {
     if (issue !== this.issueMarkedAsCurrent && issue.isCurrent) {
-      this.store.dispatch(new UpdateIssue({
-        ...this.issueMarkedAsCurrent,
-        isCurrent: false
-      }));
+      this.unmarkLastCurrentNumber();
     }
     this.store.dispatch(new UpdateIssue(issue));
   }
@@ -113,6 +132,13 @@ export class LibraryComponent implements OnInit, OnDestroy {
     });
 
     return updatedIssues;
+  }
+
+  private unmarkLastCurrentNumber(): void {
+    this.store.dispatch(new UpdateIssue({
+      ...this.issueMarkedAsCurrent,
+      isCurrent: false
+    }));
   }
 
 }

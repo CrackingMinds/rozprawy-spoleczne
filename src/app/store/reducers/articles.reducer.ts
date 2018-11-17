@@ -13,7 +13,7 @@ export interface ArticleState {
 export const initialState: ArticleState = {
   entities: {},
   loaded: false,
-  loading: false
+  loading: true
 };
 
 export function articlesReducer(state = initialState, action: ArticlesAction): ArticleState {

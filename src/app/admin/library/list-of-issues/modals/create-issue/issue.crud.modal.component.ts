@@ -55,11 +55,11 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
         ]],
         vol: [initialIssue.vol, [
           Validators.required,
-          Validators.pattern(/^[1-9]{1,2}$/)
+          Validators.pattern(/^[1-9][\d]?$/)
         ]],
         number: [initialIssue.number, [
           Validators.required,
-          Validators.pattern(/^[1-9]{1,2}$/)
+          Validators.pattern(/^[1-9][\d]?$/)
         ]],
         isCurrent: [initialIssue.isCurrent]
       }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { of } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, catchError, delay } from 'rxjs/operators';
 
 import { Effect, Actions } from '@ngrx/effects';
 
@@ -23,6 +23,7 @@ export class ArticlesEffect {
       switchMap((action: LoadArticles) => {
         return this.articleService.getArticlesInIssue(action.payload)
           .pipe(
+            delay(300), // needed to equalize spinner durations
             map((articles: IArticle[]) => new LoadArticlesSuccess(articles)),
             catchError(error => of(new LoadArticlesFail(error)))
           );

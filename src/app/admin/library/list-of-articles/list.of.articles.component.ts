@@ -14,7 +14,8 @@ import { AddArticleFormComponent } from 'app/admin/library/add-article/add.artic
 
 @Component({
   selector: 'rs-list-of-articles',
-  templateUrl: './list.of.articles.component.html'
+  templateUrl: './list.of.articles.component.html',
+  styleUrls: ['./list.of.articles.component.scss']
 })
 export class ListOfArticlesComponent {
 

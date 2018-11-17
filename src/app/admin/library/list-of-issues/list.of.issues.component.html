@@ -4,7 +4,7 @@
 </button>
 <div class="rs-issues-list">
   <ng-container *ngFor="let issue of (issues$ | async)">
-    <div class="rs-issue-container" [class.rs-selected]="issue === selectedIssue">
+    <div class="rs-issue-container" [class.rs-current]="issue.isCurrent" [class.rs-selected]="issue === selectedIssue">
       <button [matMenuTriggerFor]="menu" class="rs-edit-issue-btn">
         <mat-icon>more_vert</mat-icon>
       </button>
@@ -24,12 +24,11 @@
       </mat-menu>
       <div class="rs-issue"
            (click)="selectIssue(issue)">
-      <span *ngIf="issue.isCurrent" class="is-current">
-          <span>B</span>
+      <span *ngIf="issue.isCurrent" class="rs-current-issue-label">
+          <span>(Bieżący)</span>
       </span>
-        <span *ngIf="!issue.isCurrent" class="is-current-placeholder"></span>
-        <span>
-          {{issue | issueString}}
+      <span>
+        {{issue | issueString}}
       </span>
       </div>
     </div>
