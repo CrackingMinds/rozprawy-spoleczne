@@ -14,9 +14,9 @@ import {
   LibraryState
 } from 'app/admin/library/store/reducers/library.reducer';
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/store/actions/issues.actions';
-import { LoadArticles } from 'app/store/actions/articles.actions';
+import { CreateArticle, LoadArticles } from 'app/store/actions/articles.actions';
 
-import { IArticle } from 'app/models/article';
+import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 import { IIssue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -106,6 +106,10 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   onIssueRemove(issue: IIssue): void {
     this.store.dispatch(new RemoveIssue(issue));
+  }
+
+  onCreateArticle(newArticle: RawArticleWithTypeId) {
+    this.store.dispatch(new CreateArticle(newArticle));
   }
 
   private sortIssues(issues: IIssue[]): IIssue[] {

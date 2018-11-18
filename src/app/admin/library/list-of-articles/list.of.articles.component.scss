@@ -3,6 +3,7 @@
 :host {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   padding: 10px;
 
   .rs-add-article-btn {

@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { MatDialog } from '@angular/material';
 
-import { IArticle } from 'app/models/article';
+import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 import { IIssue } from 'app/models/issue';
 
 import { ModalData } from 'app/admin/library/list-of-issues/modals/modal/modal.data';
@@ -12,12 +12,15 @@ import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/mo
 
 import { AddArticleFormComponent } from 'app/admin/library/add-article/add.article.component';
 
+import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
   selector: 'rs-list-of-articles',
   templateUrl: './list.of.articles.component.html',
   styleUrls: ['./list.of.articles.component.scss']
 })
-export class ListOfArticlesComponent {
+export class ListOfArticlesComponent implements OnDestroy {
 
   @Input()
   issue: IIssue;
@@ -25,13 +28,24 @@ export class ListOfArticlesComponent {
   @Input('articles')
   articles$: Observable<IArticle[]>;
 
-  constructor(private dialog: MatDialog) {
+  @Output()
+  createArticle: EventEmitter<RawArticleWithTypeId> = new EventEmitter<RawArticleWithTypeId>();
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
+
+  constructor(private issueStringPipe: IssueStringPipe,
+              private dialog: MatDialog) {
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   openArticleCreationDialog(): void {
 
     let modalData: ModalData = {
-      title: `Dodanie nowego artykułu do numeru: ${this.issue.toString()}`, // @TODO: issue.toString() doesn't exist any more
+      title: `Dodanie nowego artykułu do numeru: ${this.issueStringPipe.transform(this.issue)}`,
       content: AddArticleFormComponent,
       buttons: {
         submit: {
@@ -41,9 +55,20 @@ export class ListOfArticlesComponent {
       otherParams: this.issue
     };
 
-    this.dialog.open(ModalComponent, {
+    const dialogRef = this.dialog.open(ModalComponent, {
       disableClose: true,
       data: modalData
     });
+    dialogRef.afterClosed()
+             .pipe(
+               takeUntil(this.unsubscribe$)
+             )
+      .subscribe((newArticle: RawArticleWithTypeId) => {
+        if (!newArticle) {
+          return;
+        }
+        this.createArticle.emit(newArticle);
+      });
+
   }
 }

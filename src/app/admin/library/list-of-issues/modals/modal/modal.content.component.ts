@@ -1,8 +1,8 @@
 import { IIssue, IRawIssue } from 'app/models/issue';
-import { IArticle } from 'app/models/article';
+import { RawArticleWithTypeId } from 'app/models/article';
 
 export type ModalParams = undefined | IIssue;
-export type ModalReturnData = void | boolean | IIssue | IRawIssue | IArticle;
+export type ModalReturnData = void | boolean | IIssue | IRawIssue | RawArticleWithTypeId;
 
 export interface ModalContentComponent {
 

@@ -1,6 +1,7 @@
 import { IIssue } from 'app/models/issue';
 
 import {
+  CREATE_ISSUE,
   CREATE_ISSUE_FAIL,
   IssuesAction,
   LOAD_ISSUES,
@@ -57,6 +58,13 @@ export function issuesReducer(state = initialState, action: IssuesAction): Issue
         ...state,
         loading: false,
         loaded: false
+      }
+    }
+
+    case CREATE_ISSUE: {
+      return {
+        ...state,
+        loading: true
       }
     }
 

@@ -24,5 +24,8 @@
                           [diameter]="100">
     </mat-progress-spinner>
   </div>
-  <rs-list-of-articles [issue]="selectedIssue" [articles]="articles$"></rs-list-of-articles>
+  <rs-list-of-articles
+    [issue]="selectedIssue"
+    [articles]="articles$"
+    (createArticle)="onCreateArticle($event)"></rs-list-of-articles>
 </div>

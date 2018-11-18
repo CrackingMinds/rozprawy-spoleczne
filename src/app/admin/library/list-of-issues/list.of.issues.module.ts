@@ -21,7 +21,7 @@ const declarations = [
     FormsModule,
     ReactiveFormsModule,
 
-    CustomPipesModule,
+    CustomPipesModule.forRoot(),
 
     MatIconModule,
     MatMenuModule,

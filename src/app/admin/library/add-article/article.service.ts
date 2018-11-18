@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { IArticle } from 'app/models/article';
+import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 
 import { FirestoreArticleService } from 'app/services/firestore/article.service';
+import { ArticleCrudService } from 'app/services/article.crud.service';
 
 @Injectable()
-export class ArticleService {
+export class ArticleService implements ArticleCrudService {
 
   constructor(private firestoreArticleService: FirestoreArticleService) {
   }
@@ -16,12 +17,8 @@ export class ArticleService {
     return this.firestoreArticleService.getArticlesInIssue(issueId);
   }
 
-  // postArticle(article: IFirestoreArticle): Promise<void> {
-  //   return new Promise<void>(resolve => {
-  //     this.angularFirestore.collection(ArticleService.collectionName).add(article).then((doc: DocumentReference) => {
-  //       resolve();
-  //     });
-  //   });
-  // }
+  postArticle(article: RawArticleWithTypeId): Observable<void> {
+    return this.firestoreArticleService.postArticle(article);
+  }
 
 }

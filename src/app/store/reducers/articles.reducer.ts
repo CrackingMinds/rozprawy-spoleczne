@@ -1,6 +1,13 @@
 import { IArticle } from 'app/models/article';
 
-import { ArticlesAction, LOAD_ARTICLES, LOAD_ARTICLES_FAIL, LOAD_ARTICLES_SUCCESS } from 'app/store/actions/articles.actions';
+import {
+  ArticlesAction,
+  CREATE_ARTICLE,
+  CREATE_ARTICLE_FAIL,
+  LOAD_ARTICLES,
+  LOAD_ARTICLES_FAIL,
+  LOAD_ARTICLES_SUCCESS
+} from 'app/store/actions/articles.actions';
 
 type ArticleEntities = { [id: string]: IArticle };
 
@@ -44,6 +51,21 @@ export function articlesReducer(state = initialState, action: ArticlesAction): A
     }
 
     case LOAD_ARTICLES_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false
+      }
+    }
+
+    case CREATE_ARTICLE: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+
+    case CREATE_ARTICLE_FAIL: {
       return {
         ...state,
         loading: false,
