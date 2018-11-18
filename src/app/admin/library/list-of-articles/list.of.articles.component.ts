@@ -1,9 +1,11 @@
 import { Component, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
 
+import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
 import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 import { IIssue } from 'app/models/issue';
 
@@ -13,7 +15,6 @@ import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/mo
 import { AddArticleFormComponent } from 'app/admin/library/add-article/add.article.component';
 
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'rs-list-of-articles',
@@ -30,6 +31,8 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   @Output()
   createArticle: EventEmitter<RawArticleWithTypeId> = new EventEmitter<RawArticleWithTypeId>();
+
+  articleCardDisplayModes = ArticleCardDisplayMode;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 

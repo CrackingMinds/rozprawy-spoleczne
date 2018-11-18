@@ -1,0 +1,109 @@
+@import "variables";
+
+$border: 2px solid $main-green-color;
+
+:host {
+  font-family: $main-font;
+  font-size: 13px;
+  line-height: 15px;
+
+  mat-card.rs-article-card {
+    font-family: inherit;
+    border: $border;
+    border-bottom: none;
+    padding: 0;
+    margin: 10px;
+    width: 500px;
+    min-height: 145px;
+
+    &.rs-add-article-mode {
+      border: none;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      //color: $main-green-color;
+      background-color: $main-green-color;
+      color: $white;
+
+      &:hover {
+        background-color: $hover-color;
+        color: $white;
+      }
+
+      mat-icon {
+        font-size: 100px;
+        width: auto;
+        height: auto;
+      }
+    }
+  }
+
+  .rs-article-preview {
+    padding: $universal-padding-half;
+    margin: 0;
+    border-bottom: $border;
+
+    .rs-article-data {
+      line-height: 15px;
+      margin: 5px 0;
+    }
+
+    .rs-article-type, .rs-article-title {
+      color: $main-blue-color;
+      font-weight: 700;
+    }
+
+    .rs-article-authors {
+      color: $black;
+    }
+
+    .rs-location-in-issue {
+      color: $main-grey-color;
+    }
+  }
+
+  .rs-buttons-container {
+    display: flex;
+    flex-direction: row;
+
+    .rs-view-buttons, .rs-edit-buttons {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    button {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: $main-green-color;
+      border: none;
+      color: $white;
+      padding: 5px 20px 7px;
+      font-size: 14px;
+      font-weight: 700;
+
+      &:hover {
+        background-color: $hover-color;
+      }
+
+      mat-icon {
+        width: auto;
+        height: auto;
+        font-size: 18px;
+        margin-right: 5px;
+      }
+    }
+
+    .rs-separator {
+      height: 100%;
+      width: 2px;
+      background-color: transparent;
+    }
+  }
+
+}

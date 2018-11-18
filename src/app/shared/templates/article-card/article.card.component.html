@@ -1,37 +1,51 @@
-<mat-card class="rs-article-card">
-  <div class="article-preview article-short-info">
-    <p class="type">{{article.articleType.namePl}}</p>
-    <p class="title">
-      <a [routerLink]="['/articles', article.id]" target="_blank">{{article.title}}</a>
-    </p>
-    <div class="rs-authors">
-      <ng-container *ngFor="let author of article.authors; let last = last;">
-              <span class="rs-author">{{ authorToString(author) }}</span><span *ngIf="!last">,</span>
-      </ng-container>
+<mat-card class="rs-article-card" [class.rs-add-article-mode]="mode === AvailableModes.ADD">
+
+  <ng-container *ngIf="mode === AvailableModes.ADD; else showArticleDetails">
+    <mat-icon>add</mat-icon>
+  </ng-container>
+
+  <ng-template #showArticleDetails>
+    <div class="rs-article-preview">
+      <p class="rs-article-data rs-article-type">{{article.articleType.namePl}}</p>
+      <a [routerLink]="['/articles', article.id]" target="_blank">
+        <p class="rs-article-data rs-article-title">{{ article.title }}</p>
+      </a>
+      <div class="rs-article-data rs-article-authors">
+        <ng-container *ngFor="let author of article.authors; let last = last;">
+          <span class="rs-author">{{ authorToString(author) }}</span><span *ngIf="!last">,</span>
+        </ng-container>
+      </div>
+      <p class="rs-article-data rs-location-in-issue">{{ getLocationInIssue() }}</p>
+      <a href="{{article.doi}}" target="_blank">
+        <p class="rs-article-data rs-article-doi">{{ article.doi }}</p>
+      </a>
     </div>
-    <p class="location">{{ getLocationInIssue() }}</p>
-    <a href="{{article.doi}}" target="_blank" class="doi">{{article.doi}}</a>
-  </div>
-  <!--<div class="buttons-wrapper">-->
-    <!--<div *ngIf="!isEdit" class="redirect-buttons">-->
-      <!--<a *ngIf="isShortInfo" [routerLink]="['/articles', article.id]" target="_blank" class="abstract">-->
+    <div class="rs-buttons-container">
+
+      <div *ngIf="mode === AvailableModes.VIEW" class="rs-view-buttons">
+        <!--<a [routerLink]="['/articles', article.id]" target="_blank" class="abstract">-->
         <!--<mat-icon>subject</mat-icon>-->
         <!--<span>Streszczenie</span>-->
-      <!--</a>-->
-      <!--<a href="{{article.pdf}}" target="_blank" class="full-article">-->
+        <!--</a>-->
+        <!--<a href="{{article.pdf}}" target="_blank" class="full-article">-->
         <!--<mat-icon>library_books</mat-icon>-->
         <!--<span>Pełna treść artykułu</span>-->
-      <!--</a>-->
-    <!--</div>-->
-    <!--<div *ngIf="isEdit" class="edit-buttons">-->
-      <!--<a [routerLink]="['/articles', article.id]" class="edit-article">-->
-        <!--<mat-icon>subject</mat-icon>-->
-        <!--<span>Edytuj</span>-->
-      <!--</a>-->
-      <!--<button mat-button class="delete-article">-->
-        <!--<mat-icon>library_books</mat-icon>-->
-        <!--<span>Usuń</span>-->
-      <!--</button>-->
-    <!--</div>-->
-  <!--</div>-->
+        <!--</a>-->
+      </div>
+
+      <div *ngIf="mode === AvailableModes.EDIT" class="rs-edit-buttons">
+        <button class="rs-edit-article-btn">
+          <mat-icon>edit</mat-icon>
+          <span>Edytuj</span>
+        </button>
+        <div class="rs-separator"></div>
+        <button class="rs-delete-article-btn">
+          <mat-icon>delete</mat-icon>
+          <span>Usuń</span>
+        </button>
+      </div>
+
+    </div>
+  </ng-template>
+
 </mat-card>

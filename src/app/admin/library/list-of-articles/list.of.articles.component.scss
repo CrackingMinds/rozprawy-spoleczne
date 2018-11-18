@@ -5,25 +5,4 @@
   flex-direction: row;
   flex-wrap: wrap;
   padding: 10px;
-
-  .rs-add-article-btn {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    color: $main-green-color;
-
-    &:hover {
-      background-color: $hover-color;
-      color: $white;
-    }
-
-    mat-icon {
-      font-size: 100px;
-      width: auto;
-      height: auto;
-    }
-  }
 }
