@@ -1,37 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+
+import { ClientPageState, getClientPageIndexingInfo } from 'app/client/store/client.page.reducers';
+import { LoadIndexingInfo } from 'app/store/actions/indexing.info.actions';
 
 import { IIndexing } from 'app/models/indexing';
-
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
-import { IndexingService } from 'app/pages/indexing/indexing.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'rs-header',
     templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-    indexing: IIndexing[];
+export class HeaderComponent implements OnInit {
 
-    private subscriptions = new Subscription();
+    indexingInfo$: Observable<IIndexing[]>;
 
-    constructor(private indexingService: IndexingService,
-                private basicWrapperService: BasicWrapperService) {
+    constructor(private store: Store<ClientPageState>) {
     }
 
     ngOnInit() {
-      this.subscriptions.add(
-        this.indexingService.getIndexingInfo()
-            .pipe(take(1))
-            .subscribe((res: IIndexing[]) => {
-              this.indexing = res;
-              this.basicWrapperService.headerLoaded();
-            })
-      );
+      this.indexingInfo$ = this.store.select(getClientPageIndexingInfo);
+      this.store.dispatch(new LoadIndexingInfo());
     }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
 }

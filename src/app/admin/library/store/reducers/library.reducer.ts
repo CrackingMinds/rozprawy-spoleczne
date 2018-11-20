@@ -1,10 +1,10 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 
-import { IssueState, issuesReducer, getIssueEntities, getIssuesLoading } from 'app/store/reducers/issues.reducer';
+import { IssuesState, issuesReducer, getIssueEntities, getIssuesLoading } from 'app/store/reducers/issues.reducer';
 import { ArticleState, articlesReducer, getArticleEntities, getArticlesLoading } from 'app/store/reducers/articles.reducer';
 
 export interface LibraryState {
-  issues: IssueState;
+  issues: IssuesState;
   articles: ArticleState;
 }
 

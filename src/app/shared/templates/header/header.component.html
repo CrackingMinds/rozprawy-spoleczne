@@ -3,7 +3,7 @@
     {{ 'Czasopismo naukowe Państwowej Szkoły Wyższej im. Papieża Jana Pawła II w Białej Podlaskiej' | uppercase }}
 </p>
 <div class="indexing-info-wrapper">
-    <ng-container *ngFor="let info of indexing">
+    <ng-container *ngFor="let info of (indexingInfo$ | async)">
         <mat-card *ngIf="(info.name == 'Index Copernicus') || (info.name == 'MNiSW') || (info.name == 'ISSN')"
                   class="indexing-info">
             <div class="name-wrapper">

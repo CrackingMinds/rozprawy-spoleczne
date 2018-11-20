@@ -1,19 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+
+import { ClientPageState, getClientPageContactInfo } from 'app/client/store/client.page.reducers';
 
 import { IContactData } from 'app/models/contact-data';
-import { ContactDataService } from 'app/pages/contact-data/contact.data.service';
-import { Subscription } from 'rxjs/Subscription';
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
+import { LoadContactInfo } from 'app/store/actions/contact.info.actions';
 
 @Component({
     selector: 'menu',
     templateUrl: './menu.component.html'
 })
-export class MenuComponent implements OnInit, OnDestroy {
-    contactInfo: IContactData;
-    contactDataLoaded: boolean = false;
-    menuItems = [
+export class MenuComponent implements OnInit {
+  contactInfo$: Observable<IContactData>;
+  menuItems = [
         {
             title: 'Bieżący numer',
             url: '/issues/current'
@@ -65,25 +67,12 @@ export class MenuComponent implements OnInit, OnDestroy {
         }
     ];
 
-    private subscriptions = new Subscription();
-
-    constructor(private contactDataService: ContactDataService,
-                private basicWrapperService: BasicWrapperService) {}
+  constructor(private store: Store<ClientPageState>) {
+  }
 
     ngOnInit() {
-        this.subscriptions.add(
-          this.contactDataService.getContactInfo()
-              .pipe(take(1))
-              .subscribe((res: IContactData) => {
-                this.contactInfo = res;
-                this.contactDataLoaded = true;
-                this.basicWrapperService.menuLoaded();
-              })
-        );
-    }
-
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
+      this.contactInfo$ = this.store.select(getClientPageContactInfo);
+      this.store.dispatch(new LoadContactInfo());
     }
 
 }

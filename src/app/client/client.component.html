@@ -1,0 +1,37 @@
+<rs-page-load-spinner [visible]="contentLoading$ | async">
+  <div id="page-content">
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav [mode]="'side'" [opened]="true" id="menu-container">
+        <menu id="menu"></menu>
+      </mat-sidenav>
+      <mat-sidenav-content class="main-wrapper">
+        <div class="content-wrapper">
+          <div class="container-fluid">
+            <div class="row page-header-wrapper">
+              <button mat-icon-button (click)="sidenav.toggle()" id="menu-toggle">
+                <mat-icon>menu</mat-icon>
+              </button>
+              <rs-header class="page-header"></rs-header>
+            </div>
+          </div>
+          <div class="container-fluid page-header-title">
+            <div class="container">
+              <h2 class="title">{{ pageName | async }}</h2>
+            </div>
+          </div>
+          <div class="container">
+            <div class="row active-area">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="row page-footer">
+              <img src="../../assets/images/logo_wydawnictwa_blue_168x91.png">
+              <a class="developed-by" target="_blank" href="{{ linkedInProfileLink }}">Developed by Viacheslav Guselnykov</a>
+            </div>
+          </div>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</rs-page-load-spinner>

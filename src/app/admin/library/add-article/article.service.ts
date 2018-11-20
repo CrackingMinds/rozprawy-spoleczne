@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 
-import { FirestoreArticleService } from 'app/services/firestore/article.service';
-import { ArticleCrudService } from 'app/services/article.crud.service';
+import { FirestoreArticleService } from 'app/services/crud/firestore/article.service';
+import { ArticleCrudService } from 'app/services/crud/article.crud.service';
 
 @Injectable()
 export class ArticleService implements ArticleCrudService {

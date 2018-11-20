@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { IArticleType } from 'app/models/article.type';
-import { ArticleTypesService } from 'app/services/article.types.service';
+import { ArticleTypesService } from 'app/services/crud/article.types.service';
 
 @Component({
   selector: 'rs-select-article-type',

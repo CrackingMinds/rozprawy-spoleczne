@@ -23,23 +23,24 @@
     <div class="rs-buttons-container">
 
       <div *ngIf="mode === AvailableModes.VIEW" class="rs-view-buttons">
-        <!--<a [routerLink]="['/articles', article.id]" target="_blank" class="abstract">-->
-        <!--<mat-icon>subject</mat-icon>-->
-        <!--<span>Streszczenie</span>-->
-        <!--</a>-->
-        <!--<a href="{{article.pdf}}" target="_blank" class="full-article">-->
-        <!--<mat-icon>library_books</mat-icon>-->
-        <!--<span>Pełna treść artykułu</span>-->
-        <!--</a>-->
+        <a [routerLink]="['/articles', article.id]" target="_blank" class="rs-button">
+          <mat-icon>subject</mat-icon>
+          <span>Streszczenie</span>
+        </a>
+        <div class="rs-separator"></div>
+        <a href="{{ article.pdf.downloadUrl }}" target="_blank" class="rs-button">
+          <mat-icon>library_books</mat-icon>
+          <span>Pełna treść artykułu</span>
+        </a>
       </div>
 
       <div *ngIf="mode === AvailableModes.EDIT" class="rs-edit-buttons">
-        <button class="rs-edit-article-btn">
+        <button class="rs-button rs-edit-article-btn">
           <mat-icon>edit</mat-icon>
           <span>Edytuj</span>
         </button>
         <div class="rs-separator"></div>
-        <button class="rs-delete-article-btn">
+        <button class="rs-button rs-delete-article-btn">
           <mat-icon>delete</mat-icon>
           <span>Usuń</span>
         </button>

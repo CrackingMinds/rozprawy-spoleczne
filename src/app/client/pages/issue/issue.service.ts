@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 import { IIssue, IRawIssue } from 'app/models/issue';
 
-import { FirestoreIssueService } from 'app/services/firestore/issue.service';
-import { IssueCrudService } from 'app/services/issue.crud.service';
+import { FirestoreIssueService } from 'app/services/crud/firestore/issue.service';
+import { IssueCrudService } from 'app/services/crud/issue.crud.service';
 
 @Injectable()
 export class IssueService implements IssueCrudService {
@@ -15,6 +15,10 @@ export class IssueService implements IssueCrudService {
 
   getIssues(): Observable<IIssue[]> {
     return this.firestoreIssueService.getIssues();
+  }
+
+  getIssue(id?: string): Observable<IIssue> {
+    return this.firestoreIssueService.getIssue(id);
   }
 
   postIssue(issue: IRawIssue): Observable<void> {

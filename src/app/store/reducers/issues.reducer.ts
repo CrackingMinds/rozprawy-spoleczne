@@ -13,19 +13,19 @@ import {
 
 type IssueEntities = { [id: string]: IIssue };
 
-export interface IssueState {
+export interface IssuesState {
   entities: IssueEntities;
   loaded: boolean;
   loading: boolean;
 }
 
-export const initialState: IssueState = {
+export const initialState: IssuesState = {
   entities: {},
   loaded: false,
   loading: true
 };
 
-export function issuesReducer(state = initialState, action: IssuesAction): IssueState {
+export function issuesReducer(state = initialState, action: IssuesAction): IssuesState {
 
   switch (action.type) {
 
@@ -97,6 +97,6 @@ export function issuesReducer(state = initialState, action: IssuesAction): Issue
   return state;
 }
 
-export const getIssueEntities = (state: IssueState) => state.entities;
-export const getIssuesLoading = (state: IssueState) => state.loading;
-export const getIssuesLoaded = (state: IssueState) => state.loaded;
+export const getIssueEntities = (state: IssuesState) => state.entities;
+export const getIssuesLoading = (state: IssuesState) => state.loading;
+export const getIssuesLoaded = (state: IssuesState) => state.loaded;

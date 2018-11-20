@@ -74,7 +74,7 @@ $border: 2px solid $main-green-color;
       width: 100%;
     }
 
-    button {
+    .rs-button {
       flex: 1;
       display: flex;
       flex-direction: row;
@@ -86,6 +86,7 @@ $border: 2px solid $main-green-color;
       padding: 5px 20px 7px;
       font-size: 14px;
       font-weight: 700;
+      text-decoration: none;
 
       &:hover {
         background-color: $hover-color;

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { IArticleType } from 'app/models/article.type';
 
-import { FirestoreArticleTypeService } from 'app/services/firestore/article.types.service';
+import { FirestoreArticleTypeService } from 'app/services/crud/firestore/article.types.service';
 
 @Injectable()
 export class ArticleTypesService {

@@ -6,87 +6,94 @@ import { ArchiveComponent } from 'app/pages/archive/archive.component';
 import { AuthorRequirementsComponent } from 'app/pages/author-requirements/author.requirements.component';
 import { IndexingComponent } from 'app/pages/indexing/indexing.component';
 import { ArticleComponent } from 'app/pages/article/article.component';
-import { IssueComponent } from 'app/pages/issue/issue.component';
+import { IssueComponent } from 'app/client/pages/issue/issue.component';
 import { AuthGuard } from 'app/guards/auth.guard';
 import { AboutComponent } from 'app/pages/about/about.component';
 import { SubscriptionsComponent } from 'app/pages/subscriptions/subscriptions.component';
-import { SignupComponent } from 'app/auth/signup/signup.component';
 import { SigninComponent } from 'app/auth/signin/signin.component';
 import { ContactDataComponent } from 'app/pages/contact-data/contact.data.component';
 import { AdminDashboardComponent } from 'app/admin-dashboard/admin.dashboard.component';
 import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
-import { PlaygroundComponent } from 'app/pages/playground/playground.component';
 import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.standards.component';
+
+import { ClientComponent } from 'app/client/client.component';
+import { AdminComponent } from 'app/admin/admin.component';
 
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/about',
-    pathMatch: 'full'
+    component: ClientComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/about'
+      },
+      {
+        path: 'archive',
+        component: ArchiveComponent
+      },
+      {
+        path: 'reviewers',
+        component: ReviewersComponent
+      },
+      {
+        path: 'indexing',
+        component: IndexingComponent
+      },
+      {
+        path: 'subscriptions',
+        component: SubscriptionsComponent
+      },
+      {
+        path: 'contact',
+        component: ContactDataComponent
+      },
+      {
+        path: 'requirements',
+        component: AuthorRequirementsComponent
+      },
+      {
+        path: 'ethics-statement',
+        component: EthicalStandardsComponent
+      },
+      {
+        path: 'issues/current',
+        component: IssueComponent
+      },
+      {
+        path: 'issues/:issueId',
+        component: IssueComponent
+      },
+      {
+        path: 'articles/:id',
+        component: ArticleComponent
+      },
+      {
+        path: 'about',
+        component: AboutComponent
+      },
+      {
+        path: 'editorial-scientific-board',
+        component: EditorialScientificBoardComponent
+      },
+    ]
   },
   {
-    path: 'archive',
-    component: ArchiveComponent
-  },
-  {
-    path: 'reviewers',
-    component: ReviewersComponent
-  },
-  {
-    path: 'indexing',
-    component: IndexingComponent
-  },
-  {
-    path: 'subscriptions',
-    component: SubscriptionsComponent
-  },
-  {
-    path: 'contact',
-    component: ContactDataComponent
-  },
-  {
-    path: 'requirements',
-    component: AuthorRequirementsComponent
-  },
-  {
-    path: 'ethics-statement',
-    component: EthicalStandardsComponent
-  },
-  {
-    path: 'issues/current',
-    component: IssueComponent,
-    data: {currentIssue: true}
-  },
-  {
-    path: 'issues/:id',
-    component: IssueComponent,
-    data: {currentIssue: false}
-  },
-  {
-    path: 'articles/:id',
-    component: ArticleComponent
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent
+      }
+    ]
   },
   {
     path: 'sign-in',
     component: SigninComponent
   },
-  {
-    path: 'admin/dashboard',
-    component: AdminDashboardComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'about',
-    component: AboutComponent
-  },
-  {
-    path: 'editorial-scientific-board',
-    component: EditorialScientificBoardComponent
-  },
-  {
-    path: 'playground',
-    component: PlaygroundComponent,
-  }
 ];
 
 const providers = [

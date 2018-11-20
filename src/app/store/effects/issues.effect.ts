@@ -17,7 +17,7 @@ import {
   UpdateIssue
 } from 'app/store/actions/issues.actions';
 
-import { IssueService } from 'app/pages/issue/issue.service';
+import { IssueService } from 'app/client/pages/issue/issue.service';
 import { IIssue } from 'app/models/issue';
 
 @Injectable()

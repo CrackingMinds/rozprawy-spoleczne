@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { SigninComponent } from 'app/auth/signin/signin.component';
-import { AuthModule } from 'app/auth/auth.module';
 
 const declarations = [
   SigninComponent
@@ -16,9 +15,7 @@ const declarations = [
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
-
-    AuthModule.forRoot()
+    RouterModule
   ]
 })
 export class SigninModule {

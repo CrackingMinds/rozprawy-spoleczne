@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, zip } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
 
 import { IIssue, IRawIssue } from 'app/models/issue';
 
-import { FirestoreArticleService } from 'app/services/firestore/article.service';
-import { IssueCrudService } from 'app/services/issue.crud.service';
+import { FirestoreArticleService } from 'app/services/crud/firestore/article.service';
+import { IssueCrudService } from 'app/services/crud/issue.crud.service';
 
 type IFirestoreIssue = IRawIssue;
 
@@ -36,6 +36,32 @@ export class FirestoreIssueService implements IssueCrudService {
     return rawIssues$
       .pipe(
         switchMap((issues: IIssue[]) => this.processIssues(issues))
+      );
+  }
+
+  getIssue(id?: string): Observable<IIssue> {
+    let queryFunc: QueryFn;
+    if (id) {
+      queryFunc = ref => ref.where('id', '==', id);
+    } else {
+      queryFunc = ref => ref.where('isCurrent', '==', true);
+    }
+    const issuesCollection = this.angularFirestore.collection<IFirestoreIssue>(FirestoreIssueService.collectionName, queryFunc);
+    let rawIssue$ = issuesCollection.snapshotChanges()
+      .pipe(
+        map(actions => {
+          const data = actions[0].payload.doc.data() as IFirestoreIssue;
+          return {
+            id: actions[0].payload.doc.id,
+            ...data,
+            hasArticles: undefined
+          };
+        })
+      );
+
+    return rawIssue$
+      .pipe(
+        switchMap((issue: IIssue) => this.determineWhetherIssueHasArticles(issue))
       );
   }
 

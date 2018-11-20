@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { AuthComponent } from 'app/auth/auth.component';
 import { AuthGuard } from 'app/guards/auth.guard';
 
+import { SigninModule } from 'app/auth/signin/signin.module';
+import { SignupModule } from 'app/auth/signup/signup.module';
+
 import 'app/auth/auth.component.scss';
 
 const declarations = [
@@ -15,11 +18,14 @@ const providers = [
 ];
 
 @NgModule({
-	imports: [
-		CommonModule
+  imports: [
+    CommonModule,
+
+    SignupModule,
+    SigninModule
   ],
-	declarations: declarations,
-	exports: declarations,
+  declarations: declarations,
+  exports: declarations,
   providers: providers
 })
 export class AuthModule {

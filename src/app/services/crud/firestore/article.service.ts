@@ -9,8 +9,8 @@ import { IIssue } from 'app/models/issue';
 import { ArticleWithId, ArticleWithTypeId, IArticle, RawArticle, RawArticleWithTypeId } from 'app/models/article';
 import { IArticleType } from 'app/models/article.type';
 
-import { FirestoreArticleTypeService } from 'app/services/firestore/article.types.service';
-import { ArticleCrudService } from 'app/services/article.crud.service';
+import { FirestoreArticleTypeService } from 'app/services/crud/firestore/article.types.service';
+import { ArticleCrudService } from 'app/services/crud/article.crud.service';
 
 type FirestoreArticle = RawArticle & ArticleWithTypeId;
 type FirestoreArticleWithId = FirestoreArticle & ArticleWithId;

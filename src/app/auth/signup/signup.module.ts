@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { SignupComponent } from 'app/auth/signup/signup.component';
-import { AuthModule } from 'app/auth/auth.module';
 
 const declarations = [
   SignupComponent
@@ -16,9 +15,7 @@ const declarations = [
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
-
-    AuthModule.forRoot()
+    RouterModule
   ]
 })
 export class SignupModule {

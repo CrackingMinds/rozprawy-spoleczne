@@ -5,7 +5,7 @@ import { IIssue } from 'app/models/issue';
 
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { IssueService } from 'app/pages/issue/issue.service';
+import { IssueService } from 'app/client/pages/issue/issue.service';
 import { Utilits } from 'app/shared/services/utilits';
 
 @Component({

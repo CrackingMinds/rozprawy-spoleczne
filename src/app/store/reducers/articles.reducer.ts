@@ -9,7 +9,7 @@ import {
   LOAD_ARTICLES_SUCCESS
 } from 'app/store/actions/articles.actions';
 
-type ArticleEntities = { [id: string]: IArticle };
+export type ArticleEntities = { [id: string]: IArticle };
 
 export interface ArticleState {
   entities: ArticleEntities;
