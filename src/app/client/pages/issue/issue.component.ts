@@ -27,7 +27,8 @@ import { RouterStateUrl } from 'app/store/reducers/app.reducers';
 
 @Component({
     selector: 'rs-issue',
-    templateUrl: './issue.component.html'
+    templateUrl: './issue.component.html',
+    styleUrls: ['./issue.component.scss']
 })
 export class IssueComponent implements OnInit, OnDestroy {
 

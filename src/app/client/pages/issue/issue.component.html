@@ -1,8 +1,3 @@
 <ng-container *ngFor="let article of (articles$ | async)">
   <rs-article-card [article]="article" [issue]="issue$ | async"></rs-article-card>
 </ng-container>
-<!--<rs-basic-wrapper>-->
-  <!--<div class="articles">-->
-    <!--<article-card *ngFor="let article of articles" [article]="article" [isShortInfo]="true" class="article-card"></article-card>-->
-  <!--</div>-->
-<!--</rs-basic-wrapper>-->
