@@ -13,6 +13,10 @@ import { PageNameService } from 'app/shared/services/page.name.service';
     host: {'[@moveIn]': ''}
 })
 export class SigninComponent implements OnInit {
+
+    email: string;
+    password: string;
+
     state: string = '';
     error: any;
 

@@ -28,7 +28,7 @@ export class AuthService extends ApiService{
   }
 
   loggedIn() {
-    return false;
+    // return tokenNotExpired('id_token');
   }
 
   logout() {

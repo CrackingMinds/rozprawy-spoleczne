@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="save()">
+<form [formGroup]="form" (ngSubmit)="submit()">
   <div class="rs-form-field">
     <mat-form-field color="accent">
       <rs-select-article-type placeholder="Typ artykułu" formControlName="articleTypeId" required></rs-select-article-type>
@@ -121,8 +121,8 @@
 
 </form>
 
-<div>
-  <pre>{{ form.value | json }}</pre>
-  <pre>isFormValid: {{ form.valid }}</pre>
-  <pre>issue: {{ params | json }}</pre>
-</div>
+<!--<div>-->
+  <!--<pre>{{ form.value | json }}</pre>-->
+  <!--<pre>isFormValid: {{ form.valid }}</pre>-->
+  <!--<pre>issue: {{ params | json }}</pre>-->
+<!--</div>-->

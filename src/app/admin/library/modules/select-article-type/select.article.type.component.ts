@@ -114,17 +114,17 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   setDescribedByIds(ids: string[]) {
   }
 
-  protected onFocus(): void {
+  onFocus(): void {
     this.focused = true;
     this._stateChange$.next();
   }
 
-  protected onBlur(): void {
+  onBlur(): void {
     this.focused = false;
     this._stateChange$.next();
   }
 
-  protected onOpenedChange(): void {
+  onOpenedChange(): void {
 
     if (!this.touched) {
       this.touched = true;
@@ -135,7 +135,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
     this._stateChange$.next();
   }
 
-  protected onSelectionChange(change: MatSelectChange): void {
+  onSelectionChange(change: MatSelectChange): void {
     this.selectedType = change.value as IArticleType;
     if (this.onChange) {
       this.onChange(this.selectedType.id);

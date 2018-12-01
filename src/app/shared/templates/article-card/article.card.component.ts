@@ -21,7 +21,7 @@ export class ArticleCardComponent {
   @Input()
   mode: ArticleCardDisplayMode = ArticleCardDisplayMode.VIEW;
 
-  protected AvailableModes = ArticleCardDisplayMode;
+  AvailableModes = ArticleCardDisplayMode;
 
   constructor() {
   }

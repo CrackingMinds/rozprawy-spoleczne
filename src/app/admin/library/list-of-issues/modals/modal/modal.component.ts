@@ -41,7 +41,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
 
     constructor(public dialogRef: MatDialogRef<ModalComponent>,
-                @Inject(MAT_DIALOG_DATA) private modalData: ModalData,
+                @Inject(MAT_DIALOG_DATA) public modalData: ModalData,
                 private componentFactoryResolver: ComponentFactoryResolver,
                 private appRef: ApplicationRef,
                 private injector: Injector) {
