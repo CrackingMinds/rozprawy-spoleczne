@@ -1,10 +1,10 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { MatSidenavModule, MatIconModule } from '@angular/material';
 
 import { ClientComponent } from 'app/client/client.component';
+import { ClientRoutingModule } from 'app/client/client.routing.module';
 
 import { ArchiveModule } from 'app/pages/archive/archive.module';
 import { ReviewersModule } from 'app/pages/reviewers/reviewers.module';
@@ -39,7 +39,7 @@ const providers = [
   exports: declarations,
   imports: [
     CommonModule,
-    RouterModule,
+    ClientRoutingModule,
 
     StoreModule.forFeature('clientPage', clientPageReducers),
     EffectsModule.forFeature(clientPageEffects),

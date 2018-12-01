@@ -1,10 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { AdminComponent } from 'app/admin/admin.component';
-
-import { AdminDashboardModule } from 'app/admin-dashboard/admin.dashboard.module';
+import { AdminRoutingModule } from 'app/admin/admin.routing.module';
 
 const declarations = [
   AdminComponent
@@ -19,9 +17,7 @@ const providers = [
   exports: declarations,
   imports: [
     CommonModule,
-    RouterModule,
-
-    AdminDashboardModule
+    AdminRoutingModule
   ],
   providers: providers
 })
