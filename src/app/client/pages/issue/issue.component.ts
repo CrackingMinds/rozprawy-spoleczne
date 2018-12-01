@@ -35,9 +35,6 @@ export class IssueComponent implements OnInit, OnDestroy {
   issue$: Observable<IIssue>;
   articles$: Observable<IArticle[]>;
 
-  issueLoading$: Observable<boolean>;
-  articlesLoading$: Observable<boolean>;
-
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private store: Store<IssuePageState>,
@@ -52,12 +49,9 @@ export class IssueComponent implements OnInit, OnDestroy {
     this.issue$ = this.store.select(getIssue);
     this.articles$ = this.store.select(getIssuePageArticles);
 
-    this.issueLoading$ = this.store.select(getIssueLoading);
-    this.articlesLoading$ = this.store.select(getIssuePageArticlesLoading);
-
     const contentLoading$ = zip(
-      this.issueLoading$,
-      this.articlesLoading$
+      this.store.select(getIssueLoading),
+      this.store.select(getIssuePageArticlesLoading)
     ).pipe(
       map((contentLoading: boolean[]) => {
         const issuesLoading = contentLoading[0];
