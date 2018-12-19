@@ -3,8 +3,7 @@ import 'rxjs/add/operator/map'
 
 @Injectable()
 export class ApiService {
-    private prodUrl: string = 'http://api.rs.guselnykov.com';
-    private devUrl: string = 'http://rs-api/app_dev.php';
+    private prodUrl: string = 'http://api.rozprawyspoleczne.edu.pl';
     protected backendUrl: string = this.prodUrl;
 
     constructor() {

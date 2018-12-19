@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {ApiService} from "../services/api.service";
-import {tokenNotExpired} from "angular2-jwt";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
@@ -29,7 +28,7 @@ export class AuthService extends ApiService{
   }
 
   loggedIn() {
-    return tokenNotExpired('id_token');
+    return false;
   }
 
   logout() {
