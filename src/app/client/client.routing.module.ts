@@ -15,6 +15,8 @@ import { ContactDataComponent } from 'app/pages/contact-data/contact.data.compon
 import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.standards.component';
 import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
 
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+
 const routes: Routes = [
   {
     path: '',
@@ -23,54 +25,54 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/about'
+        redirectTo: RoutesResolver.about
       },
       {
-        path: 'archive',
+        path: RoutesResolver.archive,
         component: ArchiveComponent
       },
       {
-        path: 'reviewers',
+        path: RoutesResolver.reviewers,
         component: ReviewersComponent
       },
       {
-        path: 'indexing',
+        path: RoutesResolver.indexing,
         component: IndexingComponent
       },
       {
-        path: 'subscriptions',
+        path: RoutesResolver.subscriptions,
         component: SubscriptionsComponent
       },
       {
-        path: 'contact',
+        path: RoutesResolver.contact,
         component: ContactDataComponent
       },
       {
-        path: 'requirements',
+        path: RoutesResolver.requirements,
         component: AuthorRequirementsComponent
       },
       {
-        path: 'ethics-statement',
+        path: RoutesResolver.ethicsStatement,
         component: EthicalStandardsComponent
       },
       {
-        path: 'issues/current',
+        path: RoutesResolver.currentIssue,
         component: IssueComponent
       },
       {
-        path: 'issues/:issueId',
+        path: `${RoutesResolver.issue}/:issueId`,
         component: IssueComponent
       },
       {
-        path: 'articles/:id',
+        path: `${RoutesResolver.article}/:id`,
         component: ArticleComponent
       },
       {
-        path: 'about',
+        path: RoutesResolver.about,
         component: AboutComponent
       },
       {
-        path: 'editorial-scientific-board',
+        path: RoutesResolver.editorialAndScientificBoard,
         component: EditorialScientificBoardComponent
       }
     ]

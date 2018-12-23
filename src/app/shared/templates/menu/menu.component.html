@@ -1,4 +1,4 @@
-<a id="logo" routerLink="/about">
+<a id="logo" routerLink="">
     <img src="../../../../assets/images/logo_psw_2010_300.png">
 </a>
 <div class="line-wrapper top">
@@ -12,7 +12,7 @@
         </a>
     </li>
 </ul>
-<div *ngIf="contactInfo$ | async" class="hideable-area">
+<div *ngIf="contactInfo" class="hideable-area">
     <div class="line-wrapper bottom">
         <div class="line"></div>
     </div>
@@ -21,8 +21,8 @@
             <p>KONTAKT</p>
         </div>
         <div class="info">
-            <a href="mailto:{{ (contactInfo$ | async).email }}">{{ (contactInfo$ | async).email }}</a>
-            <phone-num [phone_num]="(contactInfo$ | async).phone_num"></phone-num>
+            <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>
+            <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
         </div>
     </div>
 </div>

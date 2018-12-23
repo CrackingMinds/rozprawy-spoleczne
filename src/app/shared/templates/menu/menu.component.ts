@@ -1,78 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { Store } from '@ngrx/store';
+import { IContactInfo } from 'app/models/contact-info';
+import { ContactInfoService } from 'app/services/endpoint/contact-info/contact.info.service';
 
-import { ClientPageState, getClientPageContactInfo } from 'app/client/store/client.page.reducers';
-
-import { IContactData } from 'app/models/contact-data';
-import { LoadContactInfo } from 'app/store/actions/contact.info.actions';
+import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 
 @Component({
-    selector: 'menu',
-    templateUrl: './menu.component.html'
+  selector: 'rs-menu',
+  templateUrl: './menu.component.html'
 })
-export class MenuComponent implements OnInit {
-  contactInfo$: Observable<IContactData>;
-  menuItems = [
-        {
-            title: 'Bieżący numer',
-            url: '/issues/current'
-        },
-        {
-            title: 'Archiwum',
-            url: '/archive',
-            param: ''
-        },
-        {
-            title: 'O czasopiśmie',
-            url: '/about',
-            param: ''
-        },
-        {
-            title: 'Rada Redakcyjna i Rada Naukowa',
-            url: '/editorial-scientific-board',
-            param: ''
-        },
-        {
-            title: 'Recenzenci',
-            url: '/reviewers',
-            param: ''
-        },
-        {
-            title: 'Bazy indeksacyjne',
-            url: '/indexing',
-            param: ''
-        },
-        {
-            title: 'Prenumerata',
-            url: '/subscriptions',
-            param: ''
-        },
-        {
-            title: 'Kontakt',
-            url: '/contact',
-            param: ''
-        },
-        {
-            title: 'Zasady publikacji prac',
-            url: '/requirements',
-            param: ''
-        },
-        {
-            title: 'Standardy etyczne',
-            url: '/ethics-statement',
-            param: ''
-        }
-    ];
+export class MenuComponent implements OnInit, OnDestroy {
 
-  constructor(private store: Store<ClientPageState>) {
+  contactInfo: IContactInfo;
+  menuItems: MenuItems = new Menu()
+    .withPage({ title: 'Bieżący numer', url: RoutesResolver.currentIssue })
+    .withPage({ title: 'Archiwum', url: RoutesResolver.archive })
+    .withPage({ title: 'O czasopiśmie', url: RoutesResolver.about })
+    .withPage({ title: 'Rada Redakcyjna i Rada Naukowa', url: RoutesResolver.editorialAndScientificBoard })
+    .withPage({ title: 'Recenzenci', url: RoutesResolver.reviewers })
+    .withPage({ title: 'Bazy indeksacyjne', url: RoutesResolver.indexing })
+    .withPage({ title: 'Prenumerata', url: RoutesResolver.subscriptions })
+    .withPage({ title: 'Kontakt', url: RoutesResolver.contact })
+    .withPage({ title: 'Zasady publikacji prac', url: RoutesResolver.requirements })
+    .withPage({ title: 'Standardy etyczne', url: RoutesResolver.ethicsStatement })
+    .items;
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
+
+  constructor(private contactInfoService: ContactInfoService) {}
+
+  ngOnInit() {
+    this.contactInfoService.fetchContactInfo()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: IContactInfo) => {
+        this.contactInfo = data;
+      });
   }
 
-    ngOnInit() {
-      this.contactInfo$ = this.store.select(getClientPageContactInfo);
-      this.store.dispatch(new LoadContactInfo());
-    }
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
 }
