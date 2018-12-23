@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IndexingData } from 'app/models/interfaces';
+import { IIndexingInfo } from 'app/models/indexing-info';
 
-import { IndexingService } from 'app/pages/indexing/indexing.service';
+import { IndexingInfoService } from 'app/services/endpoint/indexing-info/indexing.info.service';
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
@@ -12,12 +12,12 @@ import { PageNameService } from 'app/shared/services/page.name.service';
     templateUrl: './indexing.component.html'
 })
 export class IndexingComponent implements OnInit, OnDestroy {
-    indexingData: IndexingData[];
-    indexingDataToShow: IndexingData[];
+    indexingData: IIndexingInfo[];
+    indexingDataToShow: IIndexingInfo[];
 
     private subscriptions = new Subscription();
 
-    constructor(private indexingService: IndexingService,
+    constructor(private indexingService: IndexingInfoService,
                 private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
@@ -25,8 +25,8 @@ export class IndexingComponent implements OnInit, OnDestroy {
       this.pageNameService.setPageName('Bazy indeksacyjne');
 
       this.subscriptions.add(
-          this.indexingService.getIndexingInfo()
-              .subscribe((res: IndexingData[]) => {
+          this.indexingService.fetchIndexingInfo()
+              .subscribe((res: IIndexingInfo[]) => {
                 this.indexingData = res;
 
                 this.indexingDataToShow = this.indexingData.filter(function (data) {

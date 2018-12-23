@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ArticleComponent } from 'app/pages/article/article.component';
@@ -9,14 +9,9 @@ const declarations = [
   ArticleComponent
 ];
 
-const providers = [
-
-];
-
 @NgModule({
   declarations: declarations,
   exports: declarations,
-  providers: providers,
   imports: [
     CommonModule,
 
@@ -25,12 +20,4 @@ const providers = [
   ]
 })
 export class ArticleModule {
-
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ArticleModule,
-      providers: providers
-    };
-  }
-
 }

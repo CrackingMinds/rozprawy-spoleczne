@@ -7,10 +7,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
-import { AngularFirestore } from 'angularfire2/firestore';
-
 import { IArticleType } from 'app/models/article.type';
-import { ArticleTypesService } from 'app/services/crud/article.types.service';
 
 @Component({
   selector: 'rs-select-article-type',
@@ -23,6 +20,9 @@ import { ArticleTypesService } from 'app/services/crud/article.types.service';
   ]
 })
 export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
+
+  @Input()
+  articleTypes: IArticleType;
 
   @Input()
   get placeholder(): string { return this._placeholder; }
@@ -55,8 +55,6 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   get empty(): boolean { return !this.selectedType; }
 
-  articleTypes: Observable<IArticleType[]>;
-
   stateChanges: Observable<void>;
 
   value: string;
@@ -77,16 +75,13 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   private selectedType: IArticleType;
 
-  constructor(private angularFirestore: AngularFirestore,
-              private articleTypesService: ArticleTypesService,
-              @Optional() @Self() public ngControl: NgControl) {
+  constructor(@Optional() @Self() public ngControl: NgControl) {
 
     if (this.ngControl != null) { this.ngControl.valueAccessor = this; }
 
   }
 
   ngOnInit() {
-    this.articleTypes = this.articleTypesService.getArticleTypes();
     this.stateChanges = this._stateChange$.asObservable();
   }
 

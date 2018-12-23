@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ISubsriptionsInfo } from 'app/models/subscriptions';
 
-import { SubscriptionsService } from 'app/pages/subscriptions/subscriptions.service';
+import { SubscriptionsInfoService } from 'app/services/endpoint/subscriptions/subscriptions.info.service';
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
@@ -17,7 +17,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private subscriptionsService: SubscriptionsService,
+    constructor(private subscriptionsService: SubscriptionsInfoService,
                 private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
@@ -25,7 +25,7 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
       this.pageNameService.setPageName('Prenumerata');
 
       this.subscriptions.add(
-        this.subscriptionsService.getSubscriptionsInfo()
+        this.subscriptionsService.fetchSubscriptionsInfo()
             .subscribe((res: ISubsriptionsInfo) => {
               this.subscriptionsInfo = res;
               this.dataLoaded = true;

@@ -6,21 +6,25 @@ import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
-import {
-  getLibraryArticles,
-  getLibraryArticlesLoading,
-  getLibraryIssues,
-  getLibraryIssuesLoading,
-  LibraryState
-} from 'app/admin/library/store/reducers/library.reducer';
-import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/store/actions/issues.actions';
-import { CreateArticle, LoadArticles } from 'app/store/actions/articles.actions';
+// import {
+//   getLibraryArticles,
+//   getLibraryArticlesLoading,
+//   getLibraryIssues,
+//   getLibraryIssuesLoading,
+//   LibraryState
+// } from 'app/admin/library/store/reducers/library.reducer';
+import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/repos/ngrx/issues/issues.actions';
+import { CreateArticle, LoadArticles } from 'app/repos/ngrx/articles/articles.actions';
 
 import { IArticle, RawArticleWithTypeId } from 'app/models/article';
 import { IIssue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { Utilits } from 'app/shared/services/utilits';
+import { AppState } from 'app/store/reducers/app.reducers';
+
+// import { getIssues, getIssuesLoading } from 'app/store/selectors/issues.selectors';
+import { getArticles, getArticlesLoading } from 'app/store/selectors/articles.selectors';
 
 @Component({
   selector: 'rs-library-editorial',
@@ -43,41 +47,41 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private pageNameService: PageNameService,
-              private store: Store<LibraryState>) {
+              private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.pageNameService.setPageName('Numery');
-
-    this.issues$ = this.store.select(getLibraryIssues)
-                       .pipe(
-                         map((issues: IIssue[]) => {
-                           return this.sortIssues(issues);
-                         })
-                       );
-    this.issues$
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe((issues: IIssue[]) => {
-          this.issueMarkedAsCurrent = issues.filter((issue: IIssue) => issue.isCurrent)[0];
-        });
-    this.articles$ = this.store.select(getLibraryArticles);
-
-    this.issuesLoading$ = this.store.select(getLibraryIssuesLoading);
-    this.articlesLoading$ = this.store.select(getLibraryArticlesLoading);
-    this.contentLoading$ = zip(
-      this.issuesLoading$,
-      this.articlesLoading$
-    ).pipe(
-      map((contentLoading: boolean[]) => {
-        const issuesLoading = contentLoading[0];
-        const articlesLoading = contentLoading[1];
-        return issuesLoading && articlesLoading;
-      })
-    );
-
-    this.store.dispatch(new LoadIssues());
+    // this.pageNameService.setPageName('Numery');
+	//
+    // this.issues$ = this.store.select(getIssues)
+    //                    .pipe(
+    //                      map((issues: IIssue[]) => {
+    //                        return this.sortIssues(issues);
+    //                      })
+    //                    );
+    // this.issues$
+    //     .pipe(
+    //       takeUntil(this.unsubscribe$)
+    //     )
+    //     .subscribe((issues: IIssue[]) => {
+    //       this.issueMarkedAsCurrent = issues.filter((issue: IIssue) => issue.isCurrent)[0];
+    //     });
+    // this.articles$ = this.store.select(getArticles);
+	//
+    // this.issuesLoading$ = this.store.select(getIssuesLoading);
+    // this.articlesLoading$ = this.store.select(getArticlesLoading);
+    // this.contentLoading$ = zip(
+    //   this.issuesLoading$,
+    //   this.articlesLoading$
+    // ).pipe(
+    //   map((contentLoading: boolean[]) => {
+    //     const issuesLoading = contentLoading[0];
+    //     const articlesLoading = contentLoading[1];
+    //     return issuesLoading && articlesLoading;
+    //   })
+    // );
+	//
+    // this.store.dispatch(new LoadIssues());
   }
 
   ngOnDestroy() {

@@ -1,28 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { Store } from '@ngrx/store';
-
-import { ClientPageState, getClientPageIndexingInfo } from 'app/client/store/client.page.reducers';
-import { LoadIndexingInfo } from 'app/store/actions/indexing.info.actions';
-
-import { IIndexing } from 'app/models/indexing';
+import { IIndexingInfo } from 'app/models/indexing-info';
+import { IndexingInfoService } from 'app/services/endpoint/indexing-info/indexing.info.service';
 
 @Component({
     selector: 'rs-header',
     templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
-    indexingInfo$: Observable<IIndexing[]>;
+    indexingInfo: IIndexingInfo[];
 
-    constructor(private store: Store<ClientPageState>) {
-    }
+    private unsubscribe$: Subject<void> = new Subject<void>();
+
+    constructor(private indexingInfoService: IndexingInfoService) {}
 
     ngOnInit() {
-      this.indexingInfo$ = this.store.select(getClientPageIndexingInfo);
-      this.store.dispatch(new LoadIndexingInfo());
+      this.indexingInfoService.fetchIndexingInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: IIndexingInfo[]) => {
+          this.indexingInfo = data;
+        });
+    }
+
+    ngOnDestroy() {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
     }
 
 }

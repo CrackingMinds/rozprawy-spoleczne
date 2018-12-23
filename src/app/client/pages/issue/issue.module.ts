@@ -28,9 +28,6 @@ const providers = [
   imports: [
     CommonModule,
 
-    StoreModule.forFeature('issuePage', issuePageReducers),
-    EffectsModule.forFeature(issuePageEffects),
-
     CustomPipesModule.forRoot(),
     BasicWrapperModule.forRoot(),
     ArticleCardModule

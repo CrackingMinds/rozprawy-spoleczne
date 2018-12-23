@@ -20,10 +20,6 @@ import { EditorialScientificBoardModule } from 'app/pages/editorial-scientific-b
 import { HeaderModule } from 'app/shared/templates/header/header.module';
 import { MenuModule } from 'app/shared/templates/menu/menu.module';
 import { PageLoadSpinnerModule } from 'app/page-load-spinner/page.load.spinner.module';
-import { clientPageReducers } from 'app/client/store/client.page.reducers';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { clientPageEffects } from 'app/client/store/client.page.effects';
 import { ClientContentService } from 'app/client/client.content.service';
 
 const declarations = [
@@ -40,9 +36,6 @@ const providers = [
   imports: [
     CommonModule,
     ClientRoutingModule,
-
-    StoreModule.forFeature('clientPage', clientPageReducers),
-    EffectsModule.forFeature(clientPageEffects),
 
     MatSidenavModule,
     MatIconModule,

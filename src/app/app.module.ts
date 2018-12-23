@@ -22,6 +22,8 @@ import { ServicesModule } from 'app/services/services.module';
 import { ModalModule } from 'app/admin/library/list-of-issues/modals/modal/modal.module';
 
 import { AppComponent } from 'app/app.component';
+import { RepositoriesModule } from 'app/repos/RepositoriesModule';
+import { IssuesEffect } from 'app/repos/ngrx/issues/issues.effect';
 
 const devOnlyModules = [
   StoreDevtoolsModule.instrument()
@@ -37,10 +39,14 @@ const devOnlyModules = [
     HttpClientModule,
 
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([
-      RouterEffects
-    ]),
+	//
+    // EffectsModule.forRoot([
+    //   RouterEffects,
+    //   IssuesEffect
+    // ]),
     StoreRouterConnectingModule,
+
+    RepositoriesModule.forRoot(),
 
     AuthModule.forRoot(),
     RoutingModule.forRoot(),

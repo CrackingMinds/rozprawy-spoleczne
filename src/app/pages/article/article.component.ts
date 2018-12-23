@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IArticle } from 'app/models/article';
 
-import { ArticleService } from 'app/pages/article/article.service';
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
+import { ArticleService } from 'app/services/endpoint/article/article.service';
 
 @Component({
     selector: 'article',
@@ -19,25 +19,24 @@ export class ArticleComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private route: ActivatedRoute,
-                private articleService: ArticleService,
                 private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
-      this.subscriptions.add(
-        this.route.paramMap
-            .subscribe(params => {
-              let articleId = params.get('id');
-              this.subscriptions.add(
-                this.articleService.getArticle(articleId).subscribe((res: IArticle) => {
-                  this.article = res;
-                  this.dataLoaded = true;
-                  this.pageNameService.setPageName(this.article.title);
-                  this.basicWrapperService.contentLoaded();
-                })
-              );
-            })
-      );
+      // this.subscriptions.add(
+      //   this.route.paramMap
+      //       .subscribe(params => {
+      //         let articleId = params.get('id');
+      //         this.subscriptions.add(
+      //           this.articleService.getArticle(articleId).subscribe((res: IArticle) => {
+      //             this.article = res;
+      //             this.dataLoaded = true;
+      //             this.pageNameService.setPageName(this.article.title);
+      //             this.basicWrapperService.contentLoaded();
+      //           })
+      //         );
+      //       })
+      // );
     }
 
     ngOnDestroy() {

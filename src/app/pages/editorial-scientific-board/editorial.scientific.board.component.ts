@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { zip } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 
-import { EditorialBoardMember, ScientificBoardMember } from 'app/models/interfaces';
+import { EditorialBoardMember } from 'app/models/editorial-board-member';
+import { ScientificBoardMember } from 'app/models/scientific-board-member';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { EditorialScientificBoardService } from 'app/pages/editorial-scientific-board/editorial.scientific.board.service';
+import { EditorialScientificBoardService } from 'app/services/endpoint/editorial-and-scientific-board/editorial.scientific.board.service';
 import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
@@ -25,8 +27,8 @@ export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.pageNameService.setPageName('Rada Redakcyjna i Rada Naukowa');
 
-        let getEditorialBoardMembers = this.editorialScientificBoardService.getEditorialBoardMembers();
-        let getScientificBoardMembers = this.editorialScientificBoardService.getScientificBoardMembers();
+        let getEditorialBoardMembers = this.editorialScientificBoardService.fetchEditorialBoardMembers();
+        let getScientificBoardMembers = this.editorialScientificBoardService.fetchScientificBoardMembers();
 
         this.subscriptions.add(
           getEditorialBoardMembers.subscribe((res: EditorialBoardMember[]) => {

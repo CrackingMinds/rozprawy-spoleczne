@@ -1,7 +1,7 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 
-import { articlesReducer, ArticleState, getArticleEntities, getArticlesLoading } from 'app/store/reducers/articles.reducer';
-import { issueReducer, IssueState } from 'app/store/reducers/issue.reducer';
+import { reducer, ArticleState, getArticleEntities, getArticlesLoading } from 'app/repos/ngrx/articles/articles.reducer';
+import { issueReducer, IssueState } from 'app/repos/ngrx/issues/issue.reducer';
 import { getRouterState, RouterStateUrl } from 'app/store/reducers/app.reducers';
 import { RouterReducerState } from '@ngrx/router-store';
 
@@ -12,7 +12,7 @@ export interface IssuePageState {
 
 export const issuePageReducers: ActionReducerMap<IssuePageState> = {
   issue: issueReducer,
-  articles: articlesReducer
+  articles: reducer
 };
 
 export const getIssuePageState = createFeatureSelector<IssuePageState>('issuePage');

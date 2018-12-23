@@ -1,23 +1,26 @@
-import { Injectable } from '@angular/core';
-import {ApiService} from "../services/api.service";
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { ENDPOINT_URL } from 'app/services/endpoint/endpoint.services.tokens';
+
 @Injectable()
-export class AuthService extends ApiService{
+export class AuthService {
   authToken: any;
   user: any;
-  constructor(private http: HttpClient) { super(); }
+
+  constructor(@Inject(ENDPOINT_URL) private endpointUrl: string,
+              private http: HttpClient) {}
 
   registerUser(user) {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
-    return this.http.post(this.backendUrl + '/sign-up', user, { headers: headers});
+    return this.http.post(this.endpointUrl + '/sign-up', user, { headers: headers});
   }
 
   authenticateUser(user) {
       let headers = new HttpHeaders();
       headers.append('Content-Type', 'application/json');
-      return this.http.post(this.backendUrl + '/sign-in', user, { headers: headers});
+      return this.http.post(this.endpointUrl + '/sign-in', user, { headers: headers});
   }
 
   storeUserData(token, user) {
