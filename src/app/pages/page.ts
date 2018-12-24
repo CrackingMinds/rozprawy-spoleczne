@@ -1,8 +1,10 @@
 import { Observable } from 'rxjs';
 
-export interface Page {
+import { AsyncComponent } from 'app/pages/async.component';
 
-  observeContentLoaded(): Observable<void>;
-  observePageName(): Observable<string>;
+export abstract class Page implements AsyncComponent {
+
+  abstract observeContentLoaded(): Observable<void>;
+  abstract observePageName(): Observable<string>;
 
 }

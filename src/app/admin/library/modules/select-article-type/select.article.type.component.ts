@@ -7,7 +7,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
-import { IArticleType } from 'app/models/article.type';
+import { ArticleType } from 'app/models/article.type';
 
 @Component({
   selector: 'rs-select-article-type',
@@ -22,7 +22,7 @@ import { IArticleType } from 'app/models/article.type';
 export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
 
   @Input()
-  articleTypes: IArticleType;
+  articleTypes: ArticleType;
 
   @Input()
   get placeholder(): string { return this._placeholder; }
@@ -73,7 +73,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   private onChange: (articleTypeId: string) => any;
   private onTouched: () => any;
 
-  private selectedType: IArticleType;
+  private selectedType: ArticleType;
 
   constructor(@Optional() @Self() public ngControl: NgControl) {
 
@@ -131,7 +131,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   }
 
   onSelectionChange(change: MatSelectChange): void {
-    this.selectedType = change.value as IArticleType;
+    this.selectedType = change.value as ArticleType;
     if (this.onChange) {
       this.onChange(this.selectedType.id);
     }

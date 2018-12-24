@@ -1,4 +1,4 @@
-import { IArticle } from 'app/models/article';
+import { Article } from 'app/models/article';
 
 import {
   ArticlesAction,
@@ -9,7 +9,7 @@ import {
   LOAD_ARTICLES_SUCCESS
 } from 'app/repos/ngrx/articles/articles.actions';
 
-export type ArticleEntities = { [id: string]: IArticle };
+export type ArticleEntities = { [id: string]: Article };
 export type ArticlesEntitiesByIssueId = { [id: string]: ArticleEntities }
 
 export interface ArticleState {
@@ -36,7 +36,7 @@ export function reducer(state = initialState, action: ArticlesAction): ArticleSt
     }
 
     case LOAD_ARTICLES_SUCCESS: {
-      const articles: IArticle[] = action.payload;
+      const articles: Article[] = action.payload;
       const entities = turnIntoEntities(articles);
       // const entities = articles.reduce((entities: ArticleEntities, article: IArticle) => {
       //     return {
@@ -84,11 +84,11 @@ export const getArticleEntities = (state: ArticleState) => state.entities;
 export const getArticlesLoading = (state: ArticleState) => state.loading;
 export const getArticlesLoaded = (state: ArticleState) => state.loaded;
 
-function turnIntoEntities(articles: IArticle[]): ArticlesEntitiesByIssueId {
+function turnIntoEntities(articles: Article[]): ArticlesEntitiesByIssueId {
 
   let entities: ArticlesEntitiesByIssueId = {};
 
-  articles.forEach((article: IArticle) => {
+  articles.forEach((article: Article) => {
     entities[article.issueId] = { [article.id]: article };
   });
 
@@ -109,8 +109,8 @@ function turnIntoEntities(articles: IArticle[]): ArticlesEntitiesByIssueId {
   // }, {});
 }
 
-function processArticles(articles: IArticle[], issueId: string): ArticleEntities {
-  return articles.reduce((entities: ArticleEntities, article: IArticle) => {
+function processArticles(articles: Article[], issueId: string): ArticleEntities {
+  return articles.reduce((entities: ArticleEntities, article: Article) => {
     return {
       ...entities,
       [article.id]: article

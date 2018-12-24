@@ -5,8 +5,8 @@ import { Subject } from 'rxjs';
 
 import { UploadArticleComponent } from 'app/admin/library/modules/upload-article/upload.article.component';
 import { ModalContentComponent, ModalReturnData } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
-import { IIssue } from 'app/models/issue';
-import { RawArticleWithTypeId } from 'app/models/article';
+import { Issue } from 'app/models/issue';
+import { RawArticle } from 'app/models/article';
 
 @Component({
   selector: 'rs-add-article',
@@ -42,7 +42,7 @@ export class AddArticleFormComponent implements ModalContentComponent, OnDestroy
     return this.form.valid;
   }
 
-  params: IIssue;
+  params: Issue;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -59,7 +59,7 @@ export class AddArticleFormComponent implements ModalContentComponent, OnDestroy
     return;
   }
 
-  submit(): RawArticleWithTypeId {
+  submit(): RawArticle {
     if (!this.form.valid) {
       return null;
     }

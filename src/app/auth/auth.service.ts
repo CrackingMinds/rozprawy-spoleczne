@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { ENDPOINT_URL } from 'app/services/endpoint/endpoint.services.tokens';
+import { ENDPOINT_URL } from 'app/endpoints/endpoint.tokens';
 
 @Injectable()
 export class AuthService {

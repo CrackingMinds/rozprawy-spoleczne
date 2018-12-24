@@ -1,34 +1,44 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
-import { IndexingInfoService } from 'app/services/endpoint/indexing-info/indexing.info.service';
+import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { AsyncComponent } from 'app/pages/async.component';
 
 @Component({
-    selector: 'rs-header',
-    templateUrl: './header.component.html'
+  selector: 'rs-header',
+  templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
-    indexingInfo: IIndexingInfo[];
+  indexingInfo: IIndexingInfo[];
 
-    private unsubscribe$: Subject<void> = new Subject<void>();
+  private contentLoaded$: Subject<void> = new Subject<void>();
 
-    constructor(private indexingInfoService: IndexingInfoService) {}
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-      this.indexingInfoService.fetchIndexingInfo()
+  constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) {}
+
+  ngOnInit() {
+    this.indexingInfoEndpoint.getIndexingInfo()
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((data: IIndexingInfo[]) => {
           this.indexingInfo = data;
+          this.contentLoaded$.next();
         });
-    }
+  }
 
-    ngOnDestroy() {
-      this.unsubscribe$.next();
-      this.unsubscribe$.complete();
-    }
+  ngOnDestroy() {
+    this.contentLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.contentLoaded$.asObservable();
+  }
 
 }

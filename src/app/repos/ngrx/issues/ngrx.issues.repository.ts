@@ -9,7 +9,7 @@ import * as issuesSelectors from './issues.selectors';
 
 import { IssuesRepository } from 'app/repos/issues.repository';
 
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 import { LoadIssues } from 'app/repos/ngrx/issues/issues.actions';
 
 @Injectable()
@@ -21,11 +21,11 @@ export class NgrxIssuesRepository extends IssuesRepository {
     this.store.dispatch(new LoadIssues());
   }
 
-  getIssueForCurrentRoute(): Observable<IIssue> {
+  getIssueForCurrentRoute(): Observable<Issue> {
     return this.store.select(issuesSelectors.getIssueByRoute);
   }
 
-  getIssues(): Observable<IIssue[]> {
+  getIssues(): Observable<Issue[]> {
     return undefined;
   }
 

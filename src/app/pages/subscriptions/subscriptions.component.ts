@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ISubsriptionsInfo } from 'app/models/subscriptions';
 
-import { SubscriptionsInfoService } from 'app/services/endpoint/subscriptions/subscriptions.info.service';
+import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
@@ -16,14 +16,14 @@ export class SubscriptionsComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private subscriptionsService: SubscriptionsInfoService,
+    constructor(private subscriptionsEndpoint: SubscriptionsEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
       this.pageNameService.setPageName('Prenumerata');
 
       this.subscriptions.add(
-        this.subscriptionsService.fetchSubscriptionsInfo()
+        this.subscriptionsEndpoint.getSubscriptionsInfo()
             .subscribe((res: ISubsriptionsInfo) => {
               this.subscriptionsInfo = res;
               this.dataLoaded = true;

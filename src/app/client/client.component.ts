@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
-import { Observable, zip, Subject } from 'rxjs';
-import { map, takeUntil, first } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, zip } from 'rxjs';
+import { first, map, takeUntil } from 'rxjs/operators';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 
-import { IssueComponent } from 'app/client/pages/issue/issue.component';
 import { Page } from 'app/pages/page';
+import { MenuComponent } from 'app/shared/templates/menu/menu.component';
+import { HeaderComponent } from 'app/shared/templates/header/header.component';
+import { AsyncComponent } from 'app/pages/async.component';
 
 @Component({
   selector: 'rs-client',
@@ -15,24 +17,49 @@ import { Page } from 'app/pages/page';
 })
 export class ClientComponent implements OnInit, OnDestroy {
 
+  @ViewChild(MenuComponent)
+  menuComponentRef: MenuComponent;
+
+  @ViewChild(HeaderComponent)
+  headerComponentRef: HeaderComponent;
+
   linkedInProfileLink = 'https://www.linkedin.com/in/viacheslav-guselnykov-13b25b15a/';
 
   pageName: string;
 
-  private headerLoaded$: Observable<void>;
-  private menuLoaded$: Observable<void>;
-  private contentLoaded$: Subject<boolean> = new Subject<boolean>();
+  private headerLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private menuLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private pageContentLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  private pageLoaded$: Observable<boolean>;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private pageNameService: PageNameService) {}
 
   ngOnInit() {
-    this.contentLoaded$.subscribe((value: boolean) => console.log('content loaded: ', value));
+    this.pageLoaded$ = zip(
+      this.headerLoaded$.asObservable(),
+      this.menuLoaded$.asObservable(),
+      this.pageContentLoaded$.asObservable()
+    ).pipe(
+      map((contentLoading: boolean[]) => {
+        const headerLoaded = contentLoading[0];
+        const menuLoaded = contentLoading[1];
+        const contentLoaded = contentLoading[2];
+        return headerLoaded && menuLoaded && contentLoaded;
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    this.observeHeaderContentLoading();
+    this.observeMenuContentLoading();
   }
 
   ngOnDestroy() {
-    this.contentLoaded$.complete();
+    this.headerLoaded$.complete();
+    this.menuLoaded$.complete();
+    this.pageContentLoaded$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -49,12 +76,26 @@ export class ClientComponent implements OnInit, OnDestroy {
     page.observeContentLoaded()
       .pipe(first())
       .subscribe(() => {
-        this.contentLoaded$.next(true);
+        this.pageContentLoaded$.next(true);
       });
   }
 
   onDeactivate(page: Page): void {
-    this.contentLoaded$.next(false);
+    this.pageContentLoaded$.next(false);
+  }
+
+  private observeMenuContentLoading(): void {
+    const menuComponent: AsyncComponent = this.menuComponentRef;
+    menuComponent.observeContentLoaded()
+                 .pipe(first())
+                 .subscribe(() => this.menuLoaded$.next(true));
+  }
+
+  private observeHeaderContentLoading(): void {
+    const headerComponent: AsyncComponent = this.headerComponentRef;
+    headerComponent.observeContentLoaded()
+                   .pipe(first())
+                   .subscribe(() => this.headerLoaded$.next(true));
   }
 
 }

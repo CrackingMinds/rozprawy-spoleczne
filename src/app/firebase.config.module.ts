@@ -5,10 +5,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
-import { FirestoreArticleTypeService } from 'app/services/endpoint/article-type/firestore.article.type.service';
-import { FirestoreIssueService } from 'app/services/endpoint/issue/firestore.issue.service';
-import { FirestoreArticleService } from 'app/services/endpoint/article/firestore.article.service';
-
 const firebaseConfig = {
   apiKey: 'AIzaSyDpzaK27gxywB2GmUqbARaTr8JVvtFikk8',
   authDomain: 'rozprawy-spoleczne-ea7db.firebaseapp.com',
@@ -19,9 +15,6 @@ const firebaseConfig = {
 };
 
 const providers = [
-  FirestoreIssueService,
-  FirestoreArticleService,
-  FirestoreArticleTypeService
 ];
 
 @NgModule({

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { IssueService } from 'app/services/endpoint/issue/issue.service';
+import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { Utilits } from 'app/shared/services/utilits';
 
 @Component({
@@ -16,7 +16,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private issueService: IssueService,
+    constructor(private issueEndpoint: IssueEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -40,7 +40,7 @@ export class ArchiveComponent implements OnInit, OnDestroy {
       this.subscriptions.unsubscribe();
     }
 
-    private createIssueTitleFromObj(issue: IIssue, withYear: boolean = true): string {
+    private createIssueTitleFromObj(issue: Issue, withYear: boolean = true): string {
         return Utilits.createIssueTitleFromObj(issue, withYear);
     }
 }

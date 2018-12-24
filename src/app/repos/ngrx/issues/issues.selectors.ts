@@ -2,7 +2,7 @@ import { createSelector } from '@ngrx/store';
 
 import * as issuesReducer from 'app/repos/ngrx/issues/issues.reducer';
 import { AppState, getAppState, getRouterState, RouterStateUrl } from 'app/store/reducers/app.reducers';
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 import { RouterReducerState } from '@ngrx/router-store';
 import { IssueEntities } from 'app/repos/ngrx/issues/issues.reducer';
 
@@ -18,7 +18,7 @@ export const getIssuesLoading = createSelector(getIssuesState, issuesReducer.get
 export const getIssueByRoute = createSelector(
   getIssueEntities,
   getRouterState,
-  (entities: issuesReducer.IssueEntities, router: RouterReducerState<RouterStateUrl>): IIssue => {
+  (entities: issuesReducer.IssueEntities, router: RouterReducerState<RouterStateUrl>): Issue => {
 
     if (router.state) {
       const issueId: string = router.state.params.issueId;
@@ -26,7 +26,7 @@ export const getIssueByRoute = createSelector(
       if (issueId) {
         return entities[router.state.params.issueId];
       } else {
-        const issues: IIssue[] = entitiesToArray(entities);
+        const issues: Issue[] = entitiesToArray(entities);
         return getCurrentIssue(issues);
       }
 
@@ -36,10 +36,10 @@ export const getIssueByRoute = createSelector(
   }
 );
 
-function entitiesToArray(entities: IssueEntities): IIssue[] {
+function entitiesToArray(entities: IssueEntities): Issue[] {
   return Object.keys(entities).map(id => entities[id]);
 }
 
-function getCurrentIssue(issues: IIssue[]): IIssue {
-  return issues.filter((issue: IIssue) => issue.isCurrent)[0];
+function getCurrentIssue(issues: Issue[]): Issue {
+  return issues.filter((issue: Issue) => issue.isCurrent)[0];
 }

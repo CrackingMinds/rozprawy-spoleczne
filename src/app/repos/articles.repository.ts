@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 
-import { IArticle } from 'app/models/article';
+import { Article } from 'app/models/article';
 
 export abstract class ArticlesRepository {
 
   abstract getArticles();
-  abstract getArticles(issueId: string): Observable<IArticle[]>;
+  abstract getArticles(issueId: string): Observable<Article[]>;
 
-  abstract getArticlesForCurrentRoute(): Observable<IArticle[]>;
+  abstract getArticlesForCurrentRoute(): Observable<Article[]>;
 
   abstract getLoading(): Observable<boolean>;
 

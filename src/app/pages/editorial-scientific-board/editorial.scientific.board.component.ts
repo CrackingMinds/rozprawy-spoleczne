@@ -7,7 +7,7 @@ import { EditorialBoardMember } from 'app/models/editorial-board-member';
 import { ScientificBoardMember } from 'app/models/scientific-board-member';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { EditorialScientificBoardService } from 'app/services/endpoint/editorial-and-scientific-board/editorial.scientific.board.service';
+import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
 
 @Component({
     selector: 'editorial-scientific-board',
@@ -19,14 +19,14 @@ export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private editorialScientificBoardService: EditorialScientificBoardService,
+    constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
         this.pageNameService.setPageName('Rada Redakcyjna i Rada Naukowa');
 
-        let getEditorialBoardMembers = this.editorialScientificBoardService.fetchEditorialBoardMembers();
-        let getScientificBoardMembers = this.editorialScientificBoardService.fetchScientificBoardMembers();
+        let getEditorialBoardMembers = this.editorialScientificBoardEndpoint.getEditorialBoardMembers();
+        let getScientificBoardMembers = this.editorialScientificBoardEndpoint.getScientificBoardMembers();
 
         this.subscriptions.add(
           getEditorialBoardMembers.subscribe((res: EditorialBoardMember[]) => {

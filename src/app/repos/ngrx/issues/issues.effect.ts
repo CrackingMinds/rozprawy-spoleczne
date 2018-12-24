@@ -17,22 +17,22 @@ import {
   UpdateIssue
 } from 'app/repos/ngrx/issues/issues.actions';
 
-import { IssueService } from 'app/services/endpoint/issue/issue.service';
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
+import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 @Injectable()
 export class IssuesEffect {
 
   constructor(private actions$: Actions,
-              private issueService: IssueService) {}
+              private issueEndpoint: IssueEndpoint) {}
 
   @Effect()
   loadIssues$ = this.actions$.ofType(LOAD_ISSUES)
     .pipe(
       switchMap(() => {
-        return this.issueService.getIssues()
+        return this.issueEndpoint.getAllIssues()
           .pipe(
-            map((issues: IIssue[]) => new LoadIssuesSuccess(issues)),
+            map((issues: Issue[]) => new LoadIssuesSuccess(issues)),
             catchError(error => of(new LoadIssuesFail(error)))
           );
       })
@@ -43,7 +43,7 @@ export class IssuesEffect {
     .pipe(
       switchMap((action: CreateIssue) => {
         // @TODO: implement error handler
-        return this.issueService.postIssue(action.payload);
+        return this.issueEndpoint.postIssue(action.payload);
       })
     );
 
@@ -52,7 +52,7 @@ export class IssuesEffect {
     .pipe(
       switchMap((action: RemoveIssue) => {
         // @TODO: implement error handler
-        return this.issueService.deleteIssue(action.payload);
+        return this.issueEndpoint.deleteIssue(action.payload);
       })
     );
 
@@ -61,7 +61,7 @@ export class IssuesEffect {
     .pipe(
       switchMap((action: UpdateIssue) => {
         // @TODO: implement error handler
-        return this.issueService.updateIssue(action.payload);
+        return this.issueEndpoint.updateIssue(action.payload);
       })
     );
 }

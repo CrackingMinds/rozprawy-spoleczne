@@ -1,12 +1,12 @@
 import { Observable } from 'rxjs';
 
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 
 export abstract class IssuesRepository {
 
-  abstract getIssueForCurrentRoute(): Observable<IIssue>;
+  abstract getIssueForCurrentRoute(): Observable<Issue>;
 
-  abstract getIssues(): Observable<IIssue[]>;
+  abstract getIssues(): Observable<Issue[]>;
 
   abstract getLoading(): Observable<boolean>;
 

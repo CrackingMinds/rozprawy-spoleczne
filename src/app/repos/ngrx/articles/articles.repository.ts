@@ -8,7 +8,7 @@ import { AppState } from 'app/store/reducers/app.reducers';
 
 import { ArticlesRepository } from 'app/repos/articles.repository';
 
-import { IArticle } from 'app/models/article';
+import { Article } from 'app/models/article';
 import { LoadArticles } from 'app/repos/ngrx/articles/articles.actions';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class NgrxArticlesRepository extends ArticlesRepository {
     this.store.dispatch(new LoadArticles());
   }
 
-  getArticles(issueId?: string): Observable<IArticle[]> {
+  getArticles(issueId?: string): Observable<Article[]> {
 
     if (!issueId) {
       return undefined;
@@ -29,7 +29,7 @@ export class NgrxArticlesRepository extends ArticlesRepository {
 
   }
 
-  getArticlesForCurrentRoute(): Observable<IArticle[]> {
+  getArticlesForCurrentRoute(): Observable<Article[]> {
     // return this.store.select()
     return undefined;
   }

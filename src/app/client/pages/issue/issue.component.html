@@ -1,3 +1,9 @@
-<ng-container *ngFor="let article of (articles$ | async)">
-  <rs-article-card [article]="article" [issue]="issue$ | async"></rs-article-card>
+<ng-container *ngIf="issueArticles; else noArticles">
+  <ng-container *ngFor="let article of issueArticles">
+    <rs-article-card [article]="article" [issue]="issue"></rs-article-card>
+  </ng-container>
 </ng-container>
+
+<ng-template #noArticles>
+  <h1>Brak artykułów</h1>
+</ng-template>

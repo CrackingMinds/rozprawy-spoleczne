@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { IArticle, RawArticleWithTypeId } from 'app/models/article';
+import { Article, RawArticle } from 'app/models/article';
 
 export const LOAD_ARTICLES = '[Articles] Load Articles';
 export const LOAD_ARTICLES_SUCCESS = '[Articles] Load Articles Success';
@@ -16,7 +16,7 @@ export class LoadArticles implements Action {
 
 export class LoadArticlesSuccess implements Action {
   readonly type: string = LOAD_ARTICLES_SUCCESS;
-  constructor(public payload: IArticle[]) {}
+  constructor(public payload: Article[]) {}
 }
 
 export class LoadArticlesFail implements Action {
@@ -26,7 +26,7 @@ export class LoadArticlesFail implements Action {
 
 export class CreateArticle implements Action {
   readonly type: string = CREATE_ARTICLE;
-  constructor(public payload: RawArticleWithTypeId) {}
+  constructor(public payload: RawArticle) {}
 }
 
 export class CreateArticleFail implements Action {

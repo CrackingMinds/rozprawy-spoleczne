@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 
 export const LOAD_ISSUE = '[Issue] Load Issue by ID';
 export const LOAD_ISSUE_SUCCESS = '[Issue] Load Issue by ID Success';
@@ -16,7 +16,7 @@ export class LoadIssue implements Action {
 export class LoadIssueSuccess implements Action {
   readonly type: string = LOAD_ISSUE_SUCCESS;
 
-  constructor(public payload: IIssue) {
+  constructor(public payload: Issue) {
   }
 }
 

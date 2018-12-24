@@ -1,4 +1,4 @@
-<rs-page-load-spinner [visible]="contentLoading$ | async">
+<rs-page-load-spinner [visible]="!(pageLoaded$ | async)">
   <div id="page-content">
     <mat-sidenav-container>
       <mat-sidenav #sidenav [mode]="'side'" [opened]="true" id="menu-container">

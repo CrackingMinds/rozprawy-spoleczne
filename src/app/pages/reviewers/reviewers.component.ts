@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ReviewersService } from 'app/services/endpoint/reviewers/reviewers.service';
+import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
@@ -13,14 +13,14 @@ export class ReviewersComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private reviewersService: ReviewersService,
+    constructor(private reviewersEndpoint: ReviewersEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
       this.pageNameService.setPageName('Recenzenci');
 
       this.subscriptions.add(
-        this.reviewersService.fetchReviewers()
+        this.reviewersEndpoint.getReviewers()
             .subscribe(data => {
               this.reviewersData = data;
             })

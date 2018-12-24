@@ -1,99 +1,107 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, Subject, zip, of } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, zip } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
 
-import { IIssue } from 'app/models/issue';
-import { IArticle } from 'app/models/article';
-
-import { PageNameService } from 'app/shared/services/page.name.service';
+import { Issue } from 'app/models/issue';
+import { Article } from 'app/models/article';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-
-import { ArticlesRepository } from 'app/repos/articles.repository';
-import { IssuesRepository } from 'app/repos/issues.repository';
 import { Page } from 'app/pages/page';
+
+import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 @Component({
     selector: 'rs-issue',
     templateUrl: './issue.component.html',
     styleUrls: ['./issue.component.scss']
 })
-export class IssueComponent implements Page, OnInit, OnDestroy {
+export class IssueComponent extends Page implements OnInit, OnDestroy {
 
-  issue$: Observable<IIssue>;
-  articles$: Observable<IArticle[]>;
+  issue: Issue;
+  issueArticles: Article[];
 
-  private contentLoaded$: Subject<void> = new Subject<void>();
+  private pageName$: Subject<string> = new Subject<string>();
+
+  private issueLoaded$: Subject<void> = new Subject<void>();
+  private issueArticlesLoaded$: Subject<void> = new Subject<void>();
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private articlesRepo: ArticlesRepository,
-              private issuesRepo: IssuesRepository,
-              private issueStringPipe: IssueStringPipe,
-              private pageNameService: PageNameService) {
-  }
+  constructor(private route: ActivatedRoute,
+              private issueEndpoint: IssueEndpoint,
+              private articleEndpoint: ArticleEndpoint,
+              private issueStringPipe: IssueStringPipe) { super(); }
 
   ngOnInit() {
 
-    this.issue$ = this.issuesRepo.getIssueForCurrentRoute();
-    this.articles$ = of([]);
-
-    this.contentLoaded$.next();
-
-    this.issue$.subscribe((issue: IIssue) => console.log(issue));
-
-    // const contentLoading$: Observable<boolean> = zip(
-    //   this.issuesRepo.getLoading(),
-    //   this.articlesRepo.getLoading()
-    // ).pipe(
-    //   map((contentLoading: boolean[]) => {
-    //     const issuesLoading = contentLoading[0];
-    //     const articlesLoading = contentLoading[1];
-    //     return issuesLoading && articlesLoading;
-    //   })
-    // );
-	//
-    // contentLoading$
-    //     .pipe(
-    //       filter((contentLoading: boolean) => !contentLoading)
-    //     )
-    //     .subscribe(() => this.clientContentService.emitContentLoaded());
-
-    // this.rootStore.select(getCurrentIssueId)
-    //     .pipe(
-    //       takeUntil(this.unsubscribe$)
-    //     )
-    //     .subscribe((issueId: string) => {
-    //       this.store.dispatch(new LoadIssue(issueId));
-    //     });
-	//
-    // this.issue$
-    //     .pipe(
-    //       filter((issue: IIssue) => !!issue),
-    //       takeUntil(this.unsubscribe$)
-    //     )
-    //     .subscribe((issue: IIssue) => {
-	//
-    //       let pageName: string = this.issueStringPipe.transform(issue);
-	//
-    //       if (issue.isCurrent) {
-    //         pageName = `Bieżący numer | ${pageName}`;
-    //       }
-    //       this.pageNameService.setPageName(pageName);
-	//
-    //       this.store.dispatch(new LoadArticles(issue.id));
-    //     });
+    this.route.params
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((params: Params) => {
+          const issueId: string = params.issueId;
+          this.fetchIssueAndArticles(issueId);
+        });
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
 
-    this.contentLoaded$.complete();
+    this.pageName$.complete();
+
+    this.issueLoaded$.complete();
+    this.issueArticlesLoaded$.complete();
   }
 
   observeContentLoaded(): Observable<void> {
-    return this.contentLoaded$.asObservable();
+
+    return zip(
+      this.issueLoaded$,
+      this.issueArticlesLoaded$
+    ).pipe(
+      map(() => null)
+    );
+  }
+
+  observePageName(): Observable<string> {
+    return this.pageName$.asObservable();
+  }
+
+  private fetchIssueAndArticles(issueId: string): void {
+
+    let issue$: Observable<Issue>;
+
+    if (issueId) {
+      issue$ = this.issueEndpoint.getIssue(issueId);
+    } else {
+      issue$ = this.issueEndpoint.getCurrentIssue();
+    }
+
+    issue$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((issue: Issue) => {
+          let pageName: string = this.issueStringPipe.transform(issue);
+
+          if (issue.isCurrent)
+            pageName = `Bieżący numer | ${pageName}`;
+
+          this.pageName$.next(pageName);
+
+          this.issue = issue;
+          this.issueLoaded$.next();
+
+          this.fetchArticles(issue.id);
+        });
+  }
+
+  private fetchArticles(issueId: string): void {
+    this.articleEndpoint.getIssueArticles(issueId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((articles: Article[]) => {
+          this.issueArticles = articles;
+          this.issueArticlesLoaded$.next();
+        });
   }
 
 }

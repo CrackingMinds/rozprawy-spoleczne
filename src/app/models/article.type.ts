@@ -1,4 +1,4 @@
-export class IArticleType {
+export class ArticleType {
   id: string;
   namePl: string;
 }

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { IIssue, IRawIssue } from 'app/models/issue';
+import { Issue, RawIssue } from 'app/models/issue';
 
 export const LOAD_ISSUES = '[Issues] Load Issues';
 export const LOAD_ISSUES_SUCCESS = '[Issues] Load Issues Success';
@@ -22,7 +22,7 @@ export class LoadIssues implements Action {
 
 export class LoadIssuesSuccess implements Action {
   readonly type: string = LOAD_ISSUES_SUCCESS;
-  constructor(public payload: IIssue[]) {}
+  constructor(public payload: Issue[]) {}
 }
 
 export class LoadIssuesFail implements Action {
@@ -32,7 +32,7 @@ export class LoadIssuesFail implements Action {
 
 export class CreateIssue implements Action {
   readonly type: string = CREATE_ISSUE;
-  constructor(public payload: IRawIssue) {}
+  constructor(public payload: RawIssue) {}
 }
 
 export class CreateIssueFail implements Action {
@@ -42,7 +42,7 @@ export class CreateIssueFail implements Action {
 
 export class UpdateIssue implements Action {
   readonly type: string = UPDATE_ISSUE;
-  constructor(public payload: IIssue) {}
+  constructor(public payload: Issue) {}
 }
 
 export class UpdateIssueFail implements Action {
@@ -52,7 +52,7 @@ export class UpdateIssueFail implements Action {
 
 export class RemoveIssue implements Action {
   readonly type: string = REMOVE_ISSUE;
-  constructor(public payload: IIssue) {}
+  constructor(public payload: Issue) {}
 }
 
 export class RemoveIssueFail implements Action {

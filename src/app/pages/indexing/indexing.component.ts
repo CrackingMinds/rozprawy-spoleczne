@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
 
-import { IndexingInfoService } from 'app/services/endpoint/indexing-info/indexing.info.service';
+import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
@@ -16,14 +16,14 @@ export class IndexingComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private indexingService: IndexingInfoService,
+    constructor(private indexingInfoEndpoint: IndexingInfoEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
       this.pageNameService.setPageName('Bazy indeksacyjne');
 
       this.subscriptions.add(
-          this.indexingService.fetchIndexingInfo()
+          this.indexingInfoEndpoint.getIndexingInfo()
               .subscribe((res: IIndexingInfo[]) => {
                 this.indexingData = res;
 

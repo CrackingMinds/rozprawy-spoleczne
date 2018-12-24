@@ -7,15 +7,14 @@ import { Effect, Actions } from '@ngrx/effects';
 
 import { CREATE_ARTICLE, CreateArticle, LOAD_ARTICLES, LoadArticles, LoadArticlesFail, LoadArticlesSuccess } from 'app/repos/ngrx/articles/articles.actions';
 
-import { ArticleService } from 'app/services/endpoint/article/article.service';
-
-import { IArticle } from 'app/models/article';
+import { Article } from 'app/models/article';
+import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 
 @Injectable()
 export class ArticlesEffect {
 
   constructor(private actions$: Actions,
-              private articleService: ArticleService) {}
+              private articleEndpoint: ArticleEndpoint) {}
 
   // @Effect()
   // loadArticles$ = this.actions$.ofType(LOAD_ARTICLES)
@@ -35,7 +34,7 @@ export class ArticlesEffect {
     .pipe(
       switchMap((action: CreateArticle) => {
         // @TODO: implement error handler
-        return this.articleService.postArticle(action.payload);
+        return this.articleEndpoint.postArticle(action.payload);
       })
     );
 }

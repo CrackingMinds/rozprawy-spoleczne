@@ -23,11 +23,13 @@
     <div class="rs-buttons-container">
 
       <div *ngIf="mode === AvailableModes.VIEW" class="rs-view-buttons">
-        <a [routerLink]="['/articles', article.id]" target="_blank" class="rs-button">
-          <mat-icon>subject</mat-icon>
-          <span>Streszczenie</span>
-        </a>
-        <div class="rs-separator"></div>
+        <ng-container *ngIf="!withoutAbstractBtn">
+          <a [routerLink]="['/articles', article.id]" target="_blank" class="rs-button">
+            <mat-icon>subject</mat-icon>
+            <span>Streszczenie</span>
+          </a>
+          <div class="rs-separator"></div>
+        </ng-container>
         <a href="{{ article.pdf.downloadUrl }}" target="_blank" class="rs-button">
           <mat-icon>library_books</mat-icon>
           <span>Pełna treść artykułu</span>

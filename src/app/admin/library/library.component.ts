@@ -16,15 +16,12 @@ import { Store } from '@ngrx/store';
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/repos/ngrx/issues/issues.actions';
 import { CreateArticle, LoadArticles } from 'app/repos/ngrx/articles/articles.actions';
 
-import { IArticle, RawArticleWithTypeId } from 'app/models/article';
-import { IIssue } from 'app/models/issue';
+import { Article, RawArticle } from 'app/models/article';
+import { Issue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { Utilits } from 'app/shared/services/utilits';
 import { AppState } from 'app/store/reducers/app.reducers';
-
-// import { getIssues, getIssuesLoading } from 'app/store/selectors/issues.selectors';
-import { getArticles, getArticlesLoading } from 'app/store/selectors/articles.selectors';
 
 @Component({
   selector: 'rs-library-editorial',
@@ -32,16 +29,16 @@ import { getArticles, getArticlesLoading } from 'app/store/selectors/articles.se
   styleUrls: ['./library.component.scss']
 })
 export class LibraryComponent implements OnInit, OnDestroy {
-  issues$: Observable<IIssue[]>;
-  articles$: Observable<IArticle[]>;
+  issues$: Observable<Issue[]>;
+  articles$: Observable<Article[]>;
 
   issuesLoading$: Observable<boolean>;
   articlesLoading$: Observable<boolean>;
   contentLoading$: Observable<boolean>;
 
-  issueMarkedAsCurrent: IIssue;
+  issueMarkedAsCurrent: Issue;
 
-  selectedIssue: IIssue;
+  selectedIssue: Issue;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
@@ -55,7 +52,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
 	//
     // this.issues$ = this.store.select(getIssues)
     //                    .pipe(
-    //                      map((issues: IIssue[]) => {
+    //                      map((issues: Issue[]) => {
     //                        return this.sortIssues(issues);
     //                      })
     //                    );
@@ -63,8 +60,8 @@ export class LibraryComponent implements OnInit, OnDestroy {
     //     .pipe(
     //       takeUntil(this.unsubscribe$)
     //     )
-    //     .subscribe((issues: IIssue[]) => {
-    //       this.issueMarkedAsCurrent = issues.filter((issue: IIssue) => issue.isCurrent)[0];
+    //     .subscribe((issues: Issue[]) => {
+    //       this.issueMarkedAsCurrent = issues.filter((issue: Issue) => issue.isCurrent)[0];
     //     });
     // this.articles$ = this.store.select(getArticles);
 	//
@@ -89,36 +86,36 @@ export class LibraryComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  onIssueSelect(issue: IIssue): void {
+  onIssueSelect(issue: Issue): void {
     this.selectedIssue = issue;
     this.store.dispatch(new LoadArticles(issue.id));
   }
 
-  onIssueCreate(issue: IIssue): void {
+  onIssueCreate(issue: Issue): void {
     if (issue.isCurrent) {
       this.unmarkLastCurrentNumber();
     }
     this.store.dispatch(new CreateIssue(issue));
   }
 
-  onIssueEdit(issue: IIssue): void {
+  onIssueEdit(issue: Issue): void {
     if (issue !== this.issueMarkedAsCurrent && issue.isCurrent) {
       this.unmarkLastCurrentNumber();
     }
     this.store.dispatch(new UpdateIssue(issue));
   }
 
-  onIssueRemove(issue: IIssue): void {
+  onIssueRemove(issue: Issue): void {
     this.store.dispatch(new RemoveIssue(issue));
   }
 
-  onCreateArticle(newArticle: RawArticleWithTypeId) {
+  onCreateArticle(newArticle: RawArticle) {
     this.store.dispatch(new CreateArticle(newArticle));
   }
 
-  private sortIssues(issues: IIssue[]): IIssue[] {
-    let updatedIssues: IIssue[] = [...issues];
-    updatedIssues.sort((a: IIssue, b: IIssue) => {
+  private sortIssues(issues: Issue[]): Issue[] {
+    let updatedIssues: Issue[] = [...issues];
+    updatedIssues.sort((a: Issue, b: Issue) => {
       if (a.year === b.year) {
 
         if (a.vol === b.vol) {

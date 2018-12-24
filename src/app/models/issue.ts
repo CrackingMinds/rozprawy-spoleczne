@@ -1,13 +1,15 @@
-export type IIssue = IRawIssue & IDBIssue;
+export type Issue = IssueEntity & WithId & WithArticleInfo;
+export type RawIssue = IssueBase;
+export type IssueEntity = IssueBase;
+export type IssueEntityWithId = IssueEntity & WithId;
 
-export interface IRawIssue {
+type IssueBase = {
   year: string;
   vol: number;
   number: number;
   isCurrent: boolean;
 }
 
-export interface IDBIssue {
-  id: string;
-  hasArticles: boolean;
-}
+type WithId = { id: string; }
+
+type WithArticleInfo = { hasArticles: boolean; }

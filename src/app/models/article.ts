@@ -1,23 +1,13 @@
 import { ArticleFile } from 'app/models/article.file';
 import { Author } from 'app/models/author';
-import { IArticleType } from 'app/models/article.type';
+import { ArticleType } from 'app/models/article.type';
 
-export type IArticle = RawArticle & ArticleWithId & ArticleWithType;
-export type RawArticleWithTypeId = RawArticle & ArticleWithTypeId;
+export type Article = ArticleBase & WithId & WithArticleType;
+export type RawArticle = ArticleBase & WithArticleTypeId;
+export type UntypedArticle = ArticleBase & WithId & WithArticleTypeId;
+export type ArticleEntity = ArticleBase & WithArticleTypeId;
 
-export type ArticleWithType = {
-  articleType: IArticleType;
-};
-
-export type ArticleWithTypeId = {
-  articleTypeId: string
-};
-
-export type ArticleWithId = {
-  id: string;
-}
-
-export type RawArticle = {
+type ArticleBase = {
   authors: Author[];
   conclusions: string;
   doi: string;
@@ -30,3 +20,9 @@ export type RawArticle = {
   results: string;
   title: string;
 }
+
+type WithArticleTypeId = { articleTypeId: string };
+
+type WithArticleType = { articleType: ArticleType };
+
+type WithId = { id: string };

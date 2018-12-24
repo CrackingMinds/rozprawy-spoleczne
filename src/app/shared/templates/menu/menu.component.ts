@@ -1,19 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { IContactInfo } from 'app/models/contact-info';
-import { ContactInfoService } from 'app/services/endpoint/contact-info/contact.info.service';
 
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
 import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+
+import { AsyncComponent } from 'app/pages/async.component';
 
 @Component({
   selector: 'rs-menu',
   templateUrl: './menu.component.html'
 })
-export class MenuComponent implements OnInit, OnDestroy {
+export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
 
   contactInfo: IContactInfo;
   menuItems: MenuItems = new Menu()
@@ -29,21 +31,30 @@ export class MenuComponent implements OnInit, OnDestroy {
     .withPage({ title: 'Standardy etyczne', url: RoutesResolver.ethicsStatement })
     .items;
 
+  private contentLoaded$: Subject<void> = new Subject<void>();
+
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private contactInfoService: ContactInfoService) {}
+  constructor(private contactInfoEndpoint: ContactInfoEndpoint) {}
 
   ngOnInit() {
-    this.contactInfoService.fetchContactInfo()
+    this.contactInfoEndpoint.getContactInfo()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: IContactInfo) => {
         this.contactInfo = data;
+        this.contentLoaded$.next();
       });
   }
 
   ngOnDestroy() {
+    this.contentLoaded$.complete();
+
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.contentLoaded$.asObservable();
   }
 
 }

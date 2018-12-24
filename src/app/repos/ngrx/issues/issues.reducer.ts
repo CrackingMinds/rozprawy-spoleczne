@@ -1,4 +1,4 @@
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 
 import {
   CREATE_ISSUE,
@@ -11,7 +11,7 @@ import {
   UPDATE_ISSUE_FAIL
 } from 'app/repos/ngrx/issues/issues.actions';
 
-export type IssueEntities = { [id: string]: IIssue };
+export type IssueEntities = { [id: string]: Issue };
 
 export interface IssuesState {
   entities: IssueEntities;
@@ -38,7 +38,7 @@ export function reducer(state = initialState, action: IssuesAction): IssuesState
 
     case LOAD_ISSUES_SUCCESS: {
       const issues = action.payload;
-      const entities = issues.reduce((entities: IssueEntities, issue: IIssue) => {
+      const entities = issues.reduce((entities: IssueEntities, issue: Issue) => {
           return {
             ...entities,
             [issue.id]: issue

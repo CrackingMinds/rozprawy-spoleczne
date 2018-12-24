@@ -19,34 +19,34 @@ import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 import { ClientRoute } from 'app/client/client.route';
 
 const clientRoutes: ClientRoute[] = [
-  {
-    path: RoutesResolver.archive,
-    component: ArchiveComponent
-  },
-  {
-    path: RoutesResolver.reviewers,
-    component: ReviewersComponent
-  },
-  {
-    path: RoutesResolver.indexing,
-    component: IndexingComponent
-  },
-  {
-    path: RoutesResolver.subscriptions,
-    component: SubscriptionsComponent
-  },
-  {
-    path: RoutesResolver.contact,
-    component: ContactDataComponent
-  },
-  {
-    path: RoutesResolver.requirements,
-    component: AuthorRequirementsComponent
-  },
-  {
-    path: RoutesResolver.ethicsStatement,
-    component: EthicalStandardsComponent
-  },
+  // {
+  //   path: RoutesResolver.archive,
+  //   component: ArchiveComponent
+  // },
+  // {
+  //   path: RoutesResolver.reviewers,
+  //   component: ReviewersComponent
+  // },
+  // {
+  //   path: RoutesResolver.indexing,
+  //   component: IndexingComponent
+  // },
+  // {
+  //   path: RoutesResolver.subscriptions,
+  //   component: SubscriptionsComponent
+  // },
+  // {
+  //   path: RoutesResolver.contact,
+  //   component: ContactDataComponent
+  // },
+  // {
+  //   path: RoutesResolver.requirements,
+  //   component: AuthorRequirementsComponent
+  // },
+  // {
+  //   path: RoutesResolver.ethicsStatement,
+  //   component: EthicalStandardsComponent
+  // },
   {
     path: RoutesResolver.currentIssue,
     component: IssueComponent
@@ -56,17 +56,17 @@ const clientRoutes: ClientRoute[] = [
     component: IssueComponent
   },
   {
-    path: `${RoutesResolver.article}/:id`,
+    path: `${RoutesResolver.article}/:articleId`,
     component: ArticleComponent
   },
-  {
-    path: RoutesResolver.about,
-    component: AboutComponent
-  },
-  {
-    path: RoutesResolver.editorialAndScientificBoard,
-    component: EditorialScientificBoardComponent
-  }
+  // {
+  //   path: RoutesResolver.about,
+  //   component: AboutComponent
+  // },
+  // {
+  //   path: RoutesResolver.editorialAndScientificBoard,
+  //   component: EditorialScientificBoardComponent
+  // }
 ];
 
 const routes: Routes = [

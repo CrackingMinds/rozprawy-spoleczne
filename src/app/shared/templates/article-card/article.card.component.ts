@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { IArticle } from 'app/models/article';
-import { IIssue } from 'app/models/issue';
+import { Article } from 'app/models/article';
+import { Issue } from 'app/models/issue';
 import { Author } from 'app/models/author';
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
 
@@ -13,10 +13,13 @@ import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/articl
 export class ArticleCardComponent {
 
   @Input()
-  article: IArticle;
+  article: Article;
 
   @Input()
-  issue: IIssue;
+  issue: Issue;
+
+  @Input()
+  withoutAbstractBtn: boolean = false;
 
   @Input()
   mode: ArticleCardDisplayMode = ArticleCardDisplayMode.VIEW;

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
-import { ContactInfoService } from 'app/services/endpoint/contact-info/contact.info.service';
+import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
@@ -17,14 +17,14 @@ export class AuthorRequirementsComponent implements OnInit, OnDestroy {
 
     private subscriptions = new Subscription();
 
-    constructor(private contactDataService: ContactInfoService,
+    constructor(private contactInfoEndpoint: ContactInfoEndpoint,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
         this.pageNameService.setPageName('Zasady publikacji prac');
 
         this.subscriptions.add(
-          this.contactDataService.fetchContactInfo()
+          this.contactInfoEndpoint.getContactInfo()
               .subscribe((res: IContactInfo) => {
                 this.contactInfo = res;
                 this.dataLoaded = true;

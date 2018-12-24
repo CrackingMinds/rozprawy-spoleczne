@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
 
-import { IIssue, IRawIssue } from 'app/models/issue';
+import { Issue, RawIssue } from 'app/models/issue';
 import { DialogType } from 'app/base/modal/dialog.type';
 
 import { ModalComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.component';
@@ -20,21 +20,21 @@ import { IssueCRUDModalComponent } from 'app/admin/library/list-of-issues/modals
 export class ListOfIssuesComponent implements OnInit, OnDestroy {
 
   @Input('issues')
-  issues$: Observable<IIssue[]>;
+  issues$: Observable<Issue[]>;
 
   @Output()
-  issueSelect: EventEmitter<IIssue> = new EventEmitter<IIssue>();
+  issueSelect: EventEmitter<Issue> = new EventEmitter<Issue>();
 
   @Output()
-  issueCreate: EventEmitter<IRawIssue> = new EventEmitter<IRawIssue>();
+  issueCreate: EventEmitter<RawIssue> = new EventEmitter<RawIssue>();
 
   @Output()
-  issueEdit: EventEmitter<IIssue> = new EventEmitter<IIssue>();
+  issueEdit: EventEmitter<Issue> = new EventEmitter<Issue>();
 
   @Output()
-  issueRemove: EventEmitter<IIssue> = new EventEmitter<IIssue>();
+  issueRemove: EventEmitter<Issue> = new EventEmitter<Issue>();
 
-  selectedIssue: IIssue;
+  selectedIssue: Issue;
 
   dialogType = {
     CREATE_ISSUE: DialogType.CREATE_ISSUE,
@@ -53,8 +53,8 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
         .pipe(
           takeUntil(this.unsubscribe$)
         )
-        .subscribe((issues: IIssue[]) => {
-          const issueMarkedAsSelected: IIssue = issues.filter((issue: IIssue) => issue.isCurrent)[0];
+        .subscribe((issues: Issue[]) => {
+          const issueMarkedAsSelected: Issue = issues.filter((issue: Issue) => issue.isCurrent)[0];
           this.selectIssue(issueMarkedAsSelected);
         });
   }
@@ -64,7 +64,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  selectIssue(issue: IIssue): void {
+  selectIssue(issue: Issue): void {
     if (issue === this.selectedIssue) {
       return;
     }
@@ -73,7 +73,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
     this.issueSelect.emit(issue);
   }
 
-  openDialog(dialogType: DialogType, issue?: IIssue): void {
+  openDialog(dialogType: DialogType, issue?: Issue): void {
 
     switch (dialogType) {
       case DialogType.CREATE_ISSUE: {
@@ -124,7 +124,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              .pipe(
                takeUntil(this.unsubscribe$)
              )
-             .subscribe((newIssue: IRawIssue) => {
+             .subscribe((newIssue: RawIssue) => {
                if (!newIssue) {
                  return;
                }
@@ -132,7 +132,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              });
   }
 
-  private openIssueEditDialog(issue: IIssue): void {
+  private openIssueEditDialog(issue: Issue): void {
 
     const modalData: ModalData = {
       title: 'Edycja numeru',
@@ -154,7 +154,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              .pipe(
                takeUntil(this.unsubscribe$)
              )
-             .subscribe((updatedIssue: IIssue) => {
+             .subscribe((updatedIssue: Issue) => {
                if (!updatedIssue) {
                  return;
                }
@@ -162,7 +162,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              });
   }
 
-  private openMakeIssueCurrentDialog(issue: IIssue): void {
+  private openMakeIssueCurrentDialog(issue: Issue): void {
 
     const modalData: ModalData = {
       title: undefined,
@@ -195,7 +195,7 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
              });
   }
 
-  private openIssueRemovalDialog(issue: IIssue): void {
+  private openIssueRemovalDialog(issue: Issue): void {
 
     const modalData: ModalData = {
       title: undefined,

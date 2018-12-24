@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { ModalContentComponent } from 'app/admin/library/list-of-issues/modals/modal/modal.content.component';
 
-import { IIssue, IRawIssue } from 'app/models/issue';
+import { Issue, RawIssue } from 'app/models/issue';
 
 @Component({
     selector: 'rs-create-issue',
@@ -13,7 +13,7 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
 
   currentYear = new Date().getFullYear();
 
-  params: IIssue;
+  params: Issue;
 
   form: FormGroup;
 
@@ -29,7 +29,7 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
 
   ngOnInit() {
 
-    let initialIssue: IRawIssue;
+    let initialIssue: RawIssue;
 
     if (this.params) {
       initialIssue = {
@@ -68,12 +68,12 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
 
   cancel(): void {}
 
-  submit(): IIssue | IRawIssue | null {
+  submit(): Issue | RawIssue | null {
     if (!this.form.valid) {
       return null;
     }
 
-    let newIssue: IRawIssue = this.form.value;
+    let newIssue: RawIssue = this.form.value;
 
     if (this.params) {
       return {

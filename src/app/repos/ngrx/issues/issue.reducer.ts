@@ -1,8 +1,8 @@
-import { IIssue } from 'app/models/issue';
+import { Issue } from 'app/models/issue';
 import { IssueActions, LOAD_ISSUE, LOAD_ISSUE_FAIL, LOAD_ISSUE_SUCCESS } from 'app/repos/ngrx/issues/issue.actions';
 
 export interface IssueState {
-  issue: IIssue;
+  issue: Issue;
   loaded: boolean;
   loading: boolean;
 }
