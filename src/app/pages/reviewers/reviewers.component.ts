@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ReviewersService } from 'app/services/endpoint/reviewers/reviewers.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
     selector: 'reviewers',
@@ -15,7 +14,6 @@ export class ReviewersComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private reviewersService: ReviewersService,
-                private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -25,7 +23,6 @@ export class ReviewersComponent implements OnInit, OnDestroy {
         this.reviewersService.fetchReviewers()
             .subscribe(data => {
               this.reviewersData = data;
-              this.basicWrapperService.contentLoaded();
             })
       );
     }

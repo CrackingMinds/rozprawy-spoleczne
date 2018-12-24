@@ -1,14 +1,12 @@
-<rs-basic-wrapper>
-  <div class="indexing">
-    <h3 class="heading">Czasopismo indeksowane w:</h3>
-    <div class="underline"></div>
-    <ul class="indexing-list">
-      <li *ngFor="let data of indexingDataToShow" class="indexing-data-wrapper">
-        <div class="indexing-data" [class.name-only]="!data.value">
-          <p class="name">{{data.name}}</p>
-          <p *ngIf="data.value" class="value">{{data.value}}</p>
-        </div>
-      </li>
-    </ul>
-  </div>
-</rs-basic-wrapper>
+<div class="indexing">
+  <h3 class="heading">Czasopismo indeksowane w:</h3>
+  <div class="underline"></div>
+  <ul class="indexing-list">
+    <li *ngFor="let data of indexingDataToShow" class="indexing-data-wrapper">
+      <div class="indexing-data" [class.name-only]="!data.value">
+        <p class="name">{{data.name}}</p>
+        <p *ngIf="data.value" class="value">{{data.value}}</p>
+      </div>
+    </li>
+  </ul>
+</div>

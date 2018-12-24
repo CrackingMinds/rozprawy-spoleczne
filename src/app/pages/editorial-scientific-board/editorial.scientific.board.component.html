@@ -1,26 +1,24 @@
-<rs-basic-wrapper>
-  <div class="editorial-and-scientific-board">
-    <div class="editorial-board">
-      <h3 class="heading">
-        Rada Redakcyjna
-      </h3>
-      <ul>
-        <li *ngFor="let member of editorialBoard" class="member">
-          <span class="position bold">{{member.position}}: </span>
-          <span class="name-surname">{{member.name}} {{member.surname}}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="scientific-board">
-      <h3 class="heading">
-        Rada Naukowa
-      </h3>
-      <ul>
-        <li *ngFor="let member of scientificBoard" class="member">
-          <span class="name-surname bold">{{member.name}} {{member.surname}}, </span>
-          <span class="institute">{{member.institute}}</span>
-        </li>
-      </ul>
-    </div>
+<div class="editorial-and-scientific-board">
+  <div class="editorial-board">
+    <h3 class="heading">
+      Rada Redakcyjna
+    </h3>
+    <ul>
+      <li *ngFor="let member of editorialBoard" class="member">
+        <span class="position bold">{{member.position}}: </span>
+        <span class="name-surname">{{member.name}} {{member.surname}}</span>
+      </li>
+    </ul>
   </div>
-</rs-basic-wrapper>
+  <div class="scientific-board">
+    <h3 class="heading">
+      Rada Naukowa
+    </h3>
+    <ul>
+      <li *ngFor="let member of scientificBoard" class="member">
+        <span class="name-surname bold">{{member.name}} {{member.surname}}, </span>
+        <span class="institute">{{member.institute}}</span>
+      </li>
+    </ul>
+  </div>
+</div>

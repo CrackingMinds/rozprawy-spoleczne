@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SubscriptionsComponent } from 'app/pages/subscriptions/subscriptions.component';
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 
 const declarations = [
   SubscriptionsComponent
@@ -12,9 +11,7 @@ const declarations = [
   declarations: declarations,
   exports: declarations,
   imports: [
-    CommonModule,
-
-    BasicWrapperModule.forRoot()
+    CommonModule
   ]
 })
 export class SubscriptionsModule {

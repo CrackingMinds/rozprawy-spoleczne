@@ -8,7 +8,6 @@ import { ScientificBoardMember } from 'app/models/scientific-board-member';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { EditorialScientificBoardService } from 'app/services/endpoint/editorial-and-scientific-board/editorial.scientific.board.service';
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
     selector: 'editorial-scientific-board',
@@ -21,7 +20,6 @@ export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private editorialScientificBoardService: EditorialScientificBoardService,
-                private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -46,7 +44,6 @@ export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
           getEditorialBoardMembers,
           getScientificBoardMembers
         ).subscribe(() => {
-          this.basicWrapperService.contentLoaded();
         });
         this.subscriptions.add(
           allContentLoaded

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 
 @Component({
   selector: 'rs-ethical-standards',
@@ -10,11 +9,9 @@ import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 })
 export class EthicalStandardsComponent implements OnInit {
 
-  constructor(private pageNameService: PageNameService,
-              private basicWrapperService: BasicWrapperService) {}
+  constructor(private pageNameService: PageNameService) {}
 
   ngOnInit() {
     this.pageNameService.setPageName('Standardy etyczne');
-    this.basicWrapperService.contentLoaded();
   }
 }

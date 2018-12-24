@@ -1,26 +1,24 @@
-<rs-basic-wrapper>
-  <div class="reviewers">
-    <div class="page-heading-wrapper">
-      <h3 class="page-heading">Lista recenzentów Czasopisma „Rozprawy Społeczne"</h3>
-    </div>
-    <mat-accordion class="years-list">
-      <mat-expansion-panel *ngFor="let year of reviewersData; first as isFirst"
-                           class="year"
-                           [expanded]="isFirst">
-        <mat-expansion-panel-header>
-          <mat-panel-title class="year-number">
-            {{year.year}}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul class="reviewers-list">
-          <li *ngFor="let reviewer of year.reviewers" class="reviewer">
-            <span>{{ reviewer.title }} </span>
-            <span>{{ reviewer.name }} </span>
-            <span>{{ reviewer.surname }}</span>
-            <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
-          </li>
-        </ul>
-      </mat-expansion-panel>
-    </mat-accordion>
+<div class="reviewers">
+  <div class="page-heading-wrapper">
+    <h3 class="page-heading">Lista recenzentów Czasopisma „Rozprawy Społeczne"</h3>
   </div>
-</rs-basic-wrapper>
+  <mat-accordion class="years-list">
+    <mat-expansion-panel *ngFor="let year of reviewersData; first as isFirst"
+                         class="year"
+                         [expanded]="isFirst">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="year-number">
+          {{year.year}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ul class="reviewers-list">
+        <li *ngFor="let reviewer of year.reviewers" class="reviewer">
+          <span>{{ reviewer.title }} </span>
+          <span>{{ reviewer.name }} </span>
+          <span>{{ reviewer.surname }}</span>
+          <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

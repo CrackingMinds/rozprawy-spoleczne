@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IArticle } from 'app/models/article';
 
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { ArticleService } from 'app/services/endpoint/article/article.service';
 
@@ -19,7 +18,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private route: ActivatedRoute,
-                private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -32,7 +30,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
       //             this.article = res;
       //             this.dataLoaded = true;
       //             this.pageNameService.setPageName(this.article.title);
-      //             this.basicWrapperService.contentLoaded();
       //           })
       //         );
       //       })

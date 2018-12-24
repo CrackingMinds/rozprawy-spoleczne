@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { MatIconModule } from '@angular/material';
 
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.standards.component';
 
 const declarations = [
@@ -13,9 +12,7 @@ const declarations = [
   declarations: declarations,
   exports: declarations,
   imports: [
-    MatIconModule,
-
-    BasicWrapperModule.forRoot()
+    MatIconModule
   ]
 })
 export class EthicalStandardsModule {

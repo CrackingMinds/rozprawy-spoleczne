@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 
 const declarations = [
   EditorialScientificBoardComponent
@@ -12,9 +11,7 @@ const declarations = [
   declarations: declarations,
   exports: declarations,
   imports: [
-    CommonModule,
-
-    BasicWrapperModule.forRoot()
+    CommonModule
   ]
 })
 export class EditorialScientificBoardModule {

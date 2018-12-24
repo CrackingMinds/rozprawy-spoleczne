@@ -5,7 +5,6 @@ import { MatExpansionModule, MatIconModule } from '@angular/material';
 
 import { ArchiveComponent } from 'app/pages/archive/archive.component';
 import { CommonModule } from '@angular/common';
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 
 import { IssueService } from 'app/services/endpoint/issue/issue.service';
 import { FirestoreIssueService } from 'app/services/endpoint/issue/firestore.issue.service';
@@ -22,9 +21,7 @@ const declarations = [
     RouterModule,
 
     MatExpansionModule,
-    MatIconModule,
-
-    BasicWrapperModule.forRoot()
+    MatIconModule
   ],
   providers: [
     {

@@ -9,7 +9,6 @@ import { issuePageEffects } from 'app/client/pages/issue/store/issue.page.effect
 
 import { IssueComponent } from 'app/client/pages/issue/issue.component';
 
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 import { ArticleCardModule } from 'app/shared/templates/article-card/article.card.module';
 import { CustomPipesModule } from 'app/shared/pipes/custom.pipes.module';
 
@@ -29,7 +28,6 @@ const providers = [
     CommonModule,
 
     CustomPipesModule.forRoot(),
-    BasicWrapperModule.forRoot(),
     ArticleCardModule
   ]
 })

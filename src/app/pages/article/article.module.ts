@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { ArticleComponent } from 'app/pages/article/article.component';
 import { ArticleCardModule } from 'app/shared/templates/article-card/article.card.module';
-import { BasicWrapperModule } from 'app/basic-wrapper/basic.wrapper.module';
 
 const declarations = [
   ArticleComponent
@@ -15,8 +14,7 @@ const declarations = [
   imports: [
     CommonModule,
 
-    ArticleCardModule,
-    BasicWrapperModule.forRoot()
+    ArticleCardModule
   ]
 })
 export class ArticleModule {

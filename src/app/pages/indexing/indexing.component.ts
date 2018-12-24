@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { IIndexingInfo } from 'app/models/indexing-info';
 
 import { IndexingInfoService } from 'app/services/endpoint/indexing-info/indexing.info.service';
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
@@ -18,7 +17,6 @@ export class IndexingComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private indexingService: IndexingInfoService,
-                private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -32,8 +30,6 @@ export class IndexingComponent implements OnInit, OnDestroy {
                 this.indexingDataToShow = this.indexingData.filter(function (data) {
                   return data.name !== 'ISSN';
                 });
-
-                this.basicWrapperService.contentLoaded();
               })
       );
     }

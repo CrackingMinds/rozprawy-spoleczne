@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
-import { BasicWrapperService } from 'app/basic-wrapper/basic.wrapper.service';
 import { ContactInfoService } from 'app/services/endpoint/contact-info/contact.info.service';
 import { PageNameService } from 'app/shared/services/page.name.service';
 
@@ -19,7 +18,6 @@ export class AuthorRequirementsComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
 
     constructor(private contactDataService: ContactInfoService,
-                private basicWrapperService: BasicWrapperService,
                 private pageNameService: PageNameService) {}
 
     ngOnInit() {
@@ -30,7 +28,6 @@ export class AuthorRequirementsComponent implements OnInit, OnDestroy {
               .subscribe((res: IContactInfo) => {
                 this.contactInfo = res;
                 this.dataLoaded = true;
-                this.basicWrapperService.contentLoaded();
               })
         );
     }
