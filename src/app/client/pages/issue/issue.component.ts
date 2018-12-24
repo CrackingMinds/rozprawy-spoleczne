@@ -7,35 +7,38 @@ import { IIssue } from 'app/models/issue';
 import { IArticle } from 'app/models/article';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { ClientContentService } from 'app/client/client.content.service';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
 
 import { ArticlesRepository } from 'app/repos/articles.repository';
 import { IssuesRepository } from 'app/repos/issues.repository';
+import { Page } from 'app/pages/page';
 
 @Component({
     selector: 'rs-issue',
     templateUrl: './issue.component.html',
     styleUrls: ['./issue.component.scss']
 })
-export class IssueComponent implements OnInit, OnDestroy {
+export class IssueComponent implements Page, OnInit, OnDestroy {
 
   issue$: Observable<IIssue>;
   articles$: Observable<IArticle[]>;
+
+  private contentLoaded$: Subject<void> = new Subject<void>();
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private articlesRepo: ArticlesRepository,
               private issuesRepo: IssuesRepository,
               private issueStringPipe: IssueStringPipe,
-              private pageNameService: PageNameService,
-              private clientContentService: ClientContentService) {
+              private pageNameService: PageNameService) {
   }
 
   ngOnInit() {
 
     this.issue$ = this.issuesRepo.getIssueForCurrentRoute();
     this.articles$ = of([]);
+
+    this.contentLoaded$.next();
 
     this.issue$.subscribe((issue: IIssue) => console.log(issue));
 
@@ -85,6 +88,12 @@ export class IssueComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.contentLoaded$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.contentLoaded$.asObservable();
   }
 
 }

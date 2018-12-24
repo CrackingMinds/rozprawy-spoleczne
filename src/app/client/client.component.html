@@ -16,12 +16,15 @@
           </div>
           <div class="container-fluid page-header-title">
             <div class="container">
-              <h2 class="title">{{ pageName | async }}</h2>
+              <h2 class="title">{{ pageName }}</h2>
             </div>
           </div>
           <div class="container">
             <div class="row active-area">
-              <router-outlet></router-outlet>
+              <router-outlet
+                (activate)="onActivate($event)"
+                (deactivate)="onDeactivate($event)">
+              </router-outlet>
             </div>
           </div>
           <div class="container-fluid">
