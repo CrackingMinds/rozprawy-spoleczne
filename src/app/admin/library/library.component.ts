@@ -20,7 +20,7 @@ import { Article, RawArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { Utilits } from 'app/shared/services/utilits';
+import { Utils } from 'app/shared/services/utils';
 import { AppState } from 'app/store/reducers/app.reducers';
 
 @Component({
@@ -111,32 +111,6 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   onCreateArticle(newArticle: RawArticle) {
     this.store.dispatch(new CreateArticle(newArticle));
-  }
-
-  private sortIssues(issues: Issue[]): Issue[] {
-    let updatedIssues: Issue[] = [...issues];
-    updatedIssues.sort((a: Issue, b: Issue) => {
-      if (a.year === b.year) {
-
-        if (a.vol === b.vol) {
-
-          if (a.number === b.number) {
-            return 0;
-          }
-          else {
-            return Utilits.sortByValue(a.number, b.number);
-          }
-        }
-        else {
-          return Utilits.sortByValue(a.vol, b.vol);
-        }
-      }
-      else {
-        return Utilits.sortByValue(a.year, b.year);
-      }
-    });
-
-    return updatedIssues;
   }
 
   private unmarkLastCurrentNumber(): void {

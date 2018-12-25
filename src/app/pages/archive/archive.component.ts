@@ -1,46 +1,73 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
 
-import { Issue } from 'app/models/issue';
+import { Observable, Subject, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { PageNameService } from 'app/shared/services/page.name.service';
+import { IssuesByYear } from 'app/models/issue';
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
-import { Utilits } from 'app/shared/services/utilits';
+
+import { Page } from 'app/pages/page';
 
 @Component({
-    selector: 'archive',
-    templateUrl: './archive.component.html'
+  selector: 'rs-archive',
+  templateUrl: './archive.component.html'
 })
-export class ArchiveComponent implements OnInit, OnDestroy {
-    archiveData: any;
+export class ArchiveComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  years: string[];
+  issuesByYear: IssuesByYear;
 
-    constructor(private issueEndpoint: IssueEndpoint,
-                private pageNameService: PageNameService) {}
+  private pageLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-      this.pageNameService.setPageName('Archiwum');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-      // this.subscriptions.add(
-      //   this.issueService.getAllIssues()
-      //       .subscribe(data => {
-      //         this.archiveData = data;
-      //         this.archiveData.sort(function (a: any, b: any) {
-      //           return Utilits.sortByValue(a.year, b.year);
-      //         });
-      //         this.archiveData.forEach(function (year) {
-      //           Utilits.sortIssues(year.issues);
-      //         });
-      //       })
-      // );
-    }
+  constructor(private issueEndpoint: IssueEndpoint) { super(); }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+  ngOnInit() {
 
-    private createIssueTitleFromObj(issue: Issue, withYear: boolean = true): string {
-        return Utilits.createIssueTitleFromObj(issue, withYear);
-    }
+    this.issueEndpoint.getAllIssuesByYear()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: IssuesByYear) => {
+        this.issuesByYear = data;
+        this.years = Object.keys(this.issuesByYear).sort((a: string, b: string) => {
+
+          if (a > b) {
+            return -1;
+          }
+
+          if (a < b) {
+            return 1;
+          }
+          if (a === b) {
+            return 0;
+          }
+
+        });
+        this.pageLoaded$.next();
+      });
+  }
+
+  ngOnDestroy() {
+    this.pageLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.pageLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Archiwum');
+  }
+
+  composeIssueRouterLink(issueId: string): string[] {
+    return [
+      `/${RoutesResolver.issue}`,
+      issueId
+    ];
+  }
+
 }

@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 
 import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
-import { Author } from 'app/models/author';
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
+
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 
 @Component({
   selector: 'rs-article-card',
@@ -33,13 +34,10 @@ export class ArticleCardComponent {
     return `Rozprawy Społeczne, ${this.issue.vol}(${this.issue.number}), ${this.article.pages}`;
   }
 
-  authorToString(author: Author): string {
-
-    // @TODO: replace with pipe
-    if (!author.middleName) {
-      return `${author.firstName} ${author.lastName}`;
-    } else {
-      return 'format unknown';
-    }
+  composeArticleRouterLink(articleId: string): string[] {
+    return [
+      `/${RoutesResolver.article}`,
+      articleId
+    ];
   }
 }

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
 
-import { Issue, IssueEntity, IssueEntityWithId, RawIssue } from 'app/models/issue';
+import { Issue, IssueEntity, IssueEntityWithId, IssuesByYear, RawIssue } from 'app/models/issue';
 
 import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { Utils } from 'app/shared/services/utils';
 
 @Injectable()
 export class FirestoreIssueEndpoint extends IssueEndpoint {
@@ -40,6 +41,38 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
     //     switchMap((issues: IIssue[]) => this.processIssues(issues))
     //   );
 
+  }
+
+  getAllIssuesByYear(): Observable<IssuesByYear> {
+
+    const issuesCollection = this.angularFirestore.collection<IssueEntity>(FirestoreIssueEndpoint.collectionName);
+    const issuesWithoutArticleInfo$ = issuesCollection.snapshotChanges()
+                                     .pipe(
+                                       map(actions => actions.map(a => {
+                                         const data = a.payload.doc.data() as IssueEntity;
+                                         return {
+                                           id: a.payload.doc.id,
+                                           ...data
+                                         };
+                                       }))
+                                     );
+    const issues$: Observable<Issue[]> = issuesWithoutArticleInfo$
+      .pipe(
+        switchMap((issues: IssueEntityWithId[]) => {
+          return zip(
+            ...issues.map((issue: IssueEntityWithId) => {
+              return this.addArticleInfo(issue);
+            })
+          );
+        })
+      );
+
+    return issues$
+      .pipe(
+        map((issues: Issue[]) => {
+          return this.mapIssuesByYear(issues);
+        })
+      );
   }
 
   getIssue(id: string): Observable<Issue> {
@@ -162,5 +195,24 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
                    }
                  })
                );
+  }
+
+  private mapIssuesByYear(issues: Issue[]): IssuesByYear {
+    let issuesByYear: IssuesByYear = {};
+    issues.forEach((issue: Issue) => {
+
+      if (issuesByYear[issue.year]) {
+        issuesByYear[issue.year].push(issue);
+      } else {
+        issuesByYear[issue.year] = [ issue ];
+      }
+
+    });
+
+    Object.keys(issuesByYear).forEach((year: string) => {
+      issuesByYear[year] = Utils.sortIssues(issuesByYear[year]);
+    });
+
+    return issuesByYear;
   }
 }

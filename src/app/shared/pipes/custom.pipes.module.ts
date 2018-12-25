@@ -2,10 +2,12 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { PhoneNumPipe } from 'app/shared/pipes/phone-num.pipe';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
+import { AuthorPipe } from 'app/shared/pipes/author.pipe';
 
 const declarations = [
   PhoneNumPipe,
-  IssueStringPipe
+  IssueStringPipe,
+  AuthorPipe
 ];
 
 const providers = declarations;

@@ -7,12 +7,12 @@
   <ng-template #showArticleDetails>
     <div class="rs-article-preview">
       <p class="rs-article-data rs-article-type">{{article.articleType.namePl}}</p>
-      <a [routerLink]="['/articles', article.id]" target="_blank">
+      <a [routerLink]="composeArticleRouterLink(article.id)" target="_blank">
         <p class="rs-article-data rs-article-title">{{ article.title }}</p>
       </a>
       <div class="rs-article-data rs-article-authors">
         <ng-container *ngFor="let author of article.authors; let last = last;">
-          <span class="rs-author">{{ authorToString(author) }}</span><span *ngIf="!last">,</span>
+          <span class="rs-author">{{ author | author }}</span><span *ngIf="!last">,</span>
         </ng-container>
       </div>
       <p class="rs-article-data rs-location-in-issue">{{ getLocationInIssue() }}</p>
@@ -24,7 +24,7 @@
 
       <div *ngIf="mode === AvailableModes.VIEW" class="rs-view-buttons">
         <ng-container *ngIf="!withoutAbstractBtn">
-          <a [routerLink]="['/articles', article.id]" target="_blank" class="rs-button">
+          <a [routerLink]="composeArticleRouterLink(article.id)" target="_blank" class="rs-button">
             <mat-icon>subject</mat-icon>
             <span>Streszczenie</span>
           </a>

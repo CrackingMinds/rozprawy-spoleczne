@@ -3,6 +3,8 @@ export type RawIssue = IssueBase;
 export type IssueEntity = IssueBase;
 export type IssueEntityWithId = IssueEntity & WithId;
 
+export type IssuesByYear = { [year: string]: Issue[] };
+
 type IssueBase = {
   year: string;
   vol: number;

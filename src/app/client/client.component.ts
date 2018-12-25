@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject, zip } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -31,26 +31,14 @@ export class ClientComponent implements OnInit, OnDestroy {
   private menuLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private pageContentLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  private pageLoaded$: Observable<boolean>;
+  private pageLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private pageNameService: PageNameService) {}
 
   ngOnInit() {
-    this.pageLoaded$ = zip(
-      this.headerLoaded$.asObservable(),
-      this.menuLoaded$.asObservable(),
-      this.pageContentLoaded$.asObservable()
-    ).pipe(
-      map((contentLoading: boolean[]) => {
-        const headerLoaded = contentLoading[0];
-        const menuLoaded = contentLoading[1];
-        const contentLoaded = contentLoading[2];
-        return headerLoaded && menuLoaded && contentLoaded;
-      }),
-      takeUntil(this.unsubscribe$)
-    );
+    this.initPageSpinnerManager();
 
     this.observeHeaderContentLoading();
     this.observeMenuContentLoading();
@@ -60,6 +48,8 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.headerLoaded$.complete();
     this.menuLoaded$.complete();
     this.pageContentLoaded$.complete();
+
+    this.pageLoaded$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -84,6 +74,13 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.pageContentLoaded$.next(false);
   }
 
+  getSpinnerVisibility(): Observable<boolean> {
+    return this.pageLoaded$.asObservable()
+      .pipe(
+        map((value: boolean) => !value)
+      );
+  }
+
   private observeMenuContentLoading(): void {
     const menuComponent: AsyncComponent = this.menuComponentRef;
     menuComponent.observeContentLoaded()
@@ -96,6 +93,27 @@ export class ClientComponent implements OnInit, OnDestroy {
     headerComponent.observeContentLoaded()
                    .pipe(first())
                    .subscribe(() => this.headerLoaded$.next(true));
+  }
+
+  private initPageSpinnerManager(): void {
+
+    this.headerLoaded$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((loaded: boolean) => {
+        this.pageLoaded$.next(loaded && this.menuLoaded$.getValue() && this.pageContentLoaded$.getValue());
+      });
+
+    this.menuLoaded$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((loaded: boolean) => {
+          this.pageLoaded$.next(loaded && this.headerLoaded$.getValue() && this.pageContentLoaded$.getValue());
+        });
+
+    this.pageContentLoaded$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((loaded: boolean) => {
+          this.pageLoaded$.next(loaded && this.headerLoaded$.getValue() && this.menuLoaded$.getValue());
+        });
   }
 
 }

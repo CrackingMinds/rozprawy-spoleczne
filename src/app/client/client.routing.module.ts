@@ -19,10 +19,10 @@ import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 import { ClientRoute } from 'app/client/client.route';
 
 const clientRoutes: ClientRoute[] = [
-  // {
-  //   path: RoutesResolver.archive,
-  //   component: ArchiveComponent
-  // },
+  {
+    path: RoutesResolver.archive,
+    component: ArchiveComponent
+  },
   // {
   //   path: RoutesResolver.reviewers,
   //   component: ReviewersComponent

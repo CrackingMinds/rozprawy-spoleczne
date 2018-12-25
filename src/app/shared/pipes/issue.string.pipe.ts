@@ -7,7 +7,7 @@ import { Issue } from 'app/models/issue';
 })
 export class IssueStringPipe implements PipeTransform {
 
-  transform(issue: Issue): any {
+  transform(issue: Issue): string {
     return `${issue.year} - Tom ${issue.vol} Nr ${issue.number}`;
   }
 

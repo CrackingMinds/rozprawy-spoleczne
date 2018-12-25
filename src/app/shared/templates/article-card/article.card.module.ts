@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule, MatIconModule } from '@angular/material';
 
 import { ArticleCardComponent } from 'app/shared/templates/article-card/article.card.component';
+import { CustomPipesModule } from 'app/shared/pipes/custom.pipes.module';
 
 const declarations = [
   ArticleCardComponent
@@ -15,11 +16,12 @@ const declarations = [
   exports: declarations,
   imports: [
     CommonModule,
+    RouterModule,
 
     MatIconModule,
     MatCardModule,
 
-    RouterModule
+    CustomPipesModule.forRoot()
   ]
 })
 export class ArticleCardModule {
