@@ -7,7 +7,6 @@ import {SpinnerService} from "./services/spinner/spinner.service";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    title = 'app';
 
     constructor() {
     }

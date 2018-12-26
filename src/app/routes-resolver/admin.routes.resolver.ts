@@ -8,4 +8,8 @@ export class AdminRoutesResolver {
     return 'dashboard';
   }
 
+  static get library(): string {
+    return 'library';
+  }
+
 }

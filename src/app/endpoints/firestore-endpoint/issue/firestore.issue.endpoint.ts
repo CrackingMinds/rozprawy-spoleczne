@@ -114,7 +114,7 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
 
   }
 
-  deleteIssue(issue: Issue): Observable<void> {
+  deleteIssue(issueId: string): Observable<void> {
 
     return of(null);
 

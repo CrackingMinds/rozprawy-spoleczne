@@ -1,51 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { fallIn, moveIn } from 'app/auth/auth.animations';
-import { PageNameService } from 'app/shared/services/page.name.service';
-
 @Component({
-    selector: 'sign-in',
-    templateUrl: './signin.component.html',
-    animations: [moveIn(), fallIn()],
-    host: {'[@moveIn]': ''}
+  selector: 'rs-sign-in',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
 
-    email: string;
-    password: string;
+  form: FormGroup = this.formBuilder.group({
+    email: [undefined, Validators.required],
+    password: [undefined, Validators.required]
+  });
 
-    state: string = '';
-    error: any;
+  loginError: string;
 
-    constructor(private angularFireAuth: AngularFireAuth,
-                private router: Router,
-                private pageNameService: PageNameService) {
+  constructor(private angularFireAuth: AngularFireAuth,
+              private router: Router,
+              private formBuilder: FormBuilder) {
 
-      this.angularFireAuth.authState.subscribe(auth => {
-        if(auth) {
-          this.router.navigateByUrl('/admin/dashboard');
-        }
-      });
-    }
-
-    ngOnInit() {
-      this.pageNameService.setPageName('Logowanie');
-    }
-
-    onSubmit(formData) {
-      if (formData.valid) {
-        this.angularFireAuth.auth.signInWithEmailAndPassword(formData.value.email, formData.value.password).then(
-          (success) => {
-            this.router.navigateByUrl('/admin/dashboard');
-          }
-        ).catch(
-          (err) => {
-            this.error = err;
-          }
-        )
+    this.angularFireAuth.authState.subscribe(auth => {
+      if (auth) {
+        this.router.navigateByUrl('/admin/dashboard');
       }
-    }
+    });
+  }
+
+  ngOnInit() {
+    // this.pageNameService.setPageName('Logowanie');
+  }
+
+  onSubmit(): void {
+    const email: string = this.form.value.email;
+    const password: string = this.form.value.password;
+
+    // TODO: Validate email and password
+    return;
+
+    this.angularFireAuth.auth.signInWithEmailAndPassword(email, password).then(
+      () => {
+        // this.router.navigateByUrl('/admin/dashboard');
+      }
+    ).catch(
+      (err) => {
+        this.loginError = err;
+      }
+    );
+  }
 }

@@ -11,7 +11,7 @@ export abstract class IssueEndpoint {
   abstract getAllIssuesByYear(): Observable<IssuesByYear>;
 
   abstract postIssue(issue: RawIssue): Observable<void>;
-  abstract deleteIssue(issue: Issue): Observable<void>;
+  abstract deleteIssue(issueId: string): Observable<void>;
   abstract updateIssue(issue: Issue): Observable<void>;
 
 }

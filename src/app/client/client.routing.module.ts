@@ -16,9 +16,9 @@ import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.s
 import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
 
 import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
-import { ClientRoute } from 'app/client/client.route';
+import { PageRoute } from 'app/client/page.route';
 
-const clientRoutes: ClientRoute[] = [
+const clientRoutes: PageRoute[] = [
   {
     path: RoutesResolver.archive,
     component: ArchiveComponent
