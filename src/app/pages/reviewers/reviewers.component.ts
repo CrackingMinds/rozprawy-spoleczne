@@ -1,34 +1,53 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Subject, Observable, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
+
+import { IReviewer } from 'app/models/reviewer';
 
 import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
-import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
-    selector: 'reviewers',
-    templateUrl: './reviewers.component.html'
+  selector: 'rs-reviewers',
+  templateUrl: './reviewers.component.html'
 })
-export class ReviewersComponent implements OnInit, OnDestroy {
-    reviewersData: any;
+export class ReviewersComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  reviewersData: IReviewer[];
 
-    constructor(private reviewersEndpoint: ReviewersEndpoint,
-                private pageNameService: PageNameService) {}
+  private reviewersLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-      this.pageNameService.setPageName('Recenzenci');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-      this.subscriptions.add(
-        this.reviewersEndpoint.getReviewers()
-            .subscribe(data => {
-              this.reviewersData = data;
-            })
-      );
-    }
+  constructor(private reviewersEndpoint: ReviewersEndpoint) {
+    super();
+  }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+  ngOnInit() {
+
+    this.reviewersEndpoint.getReviewers()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: IReviewer[]) => {
+          this.reviewersData = data;
+          this.reviewersLoaded$.next();
+        });
+  }
+
+  ngOnDestroy() {
+    this.reviewersLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.reviewersLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Recenzenci');
+  }
 
 }

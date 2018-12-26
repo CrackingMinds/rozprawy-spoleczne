@@ -1,36 +1,52 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
-import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
-  selector: 'contact-data',
+  selector: 'rs-contact-data',
   templateUrl: './contact.data.component.html',
   styles: []
 })
-export class ContactDataComponent implements OnInit, OnDestroy {
+export class ContactDataComponent extends Page implements OnInit, OnDestroy {
+
   contactInfo: IContactInfo = new ContactInfo();
 
-  private subscriptions = new Subscription();
+  private contactInfoLoaded$: Subject<void> = new Subject<void>();
 
-  constructor(private contactInfoEndpoint: ContactInfoEndpoint,
-              private pageNameService: PageNameService) {}
+  private unsubscribe$: Subject<void> = new Subject<void>();
+
+  constructor(private contactInfoEndpoint: ContactInfoEndpoint) { super(); }
 
   ngOnInit() {
-    this.pageNameService.setPageName('Kontakt');
-
-    this.subscriptions.add(
-      this.contactInfoEndpoint.getContactInfo()
-          .subscribe((res: IContactInfo) => {
-            this.contactInfo = res;
-          })
-    );
+    this.contactInfoEndpoint.getContactInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: IContactInfo) => {
+          this.contactInfo = data;
+          this.contactInfoLoaded$.next();
+        });
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.contactInfoLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
+
+  observeContentLoaded(): Observable<void> {
+    return this.contactInfoLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Kontakt');
+  }
+
+
 }

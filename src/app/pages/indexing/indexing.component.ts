@@ -1,40 +1,57 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Observable, Subject, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
 
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
-import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
-    selector: 'indexing',
-    templateUrl: './indexing.component.html'
+  selector: 'rs-indexing',
+  templateUrl: './indexing.component.html'
 })
-export class IndexingComponent implements OnInit, OnDestroy {
-    indexingData: IIndexingInfo[];
-    indexingDataToShow: IIndexingInfo[];
+export class IndexingComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  indexingData: IIndexingInfo[];
+  indexingDataToShow: IIndexingInfo[];
 
-    constructor(private indexingInfoEndpoint: IndexingInfoEndpoint,
-                private pageNameService: PageNameService) {}
+  private indexingInfoLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-      this.pageNameService.setPageName('Bazy indeksacyjne');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-      this.subscriptions.add(
-          this.indexingInfoEndpoint.getIndexingInfo()
-              .subscribe((res: IIndexingInfo[]) => {
-                this.indexingData = res;
+  constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
 
-                this.indexingDataToShow = this.indexingData.filter(function (data) {
-                  return data.name !== 'ISSN';
-                });
-              })
-      );
-    }
+  ngOnInit() {
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+    this.indexingInfoEndpoint.getIndexingInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res: IIndexingInfo[]) => {
+          this.indexingData = res;
+
+          this.indexingDataToShow = this.indexingData.filter((data) => {
+            return data.name !== 'ISSN';
+          });
+
+          this.indexingInfoLoaded$.next();
+        });
+  }
+
+  ngOnDestroy() {
+    this.indexingInfoLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.indexingInfoLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Bazy indeksacyjne');
+  }
+
 }

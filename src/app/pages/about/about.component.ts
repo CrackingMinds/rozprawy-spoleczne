@@ -1,17 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 
-import { PageNameService } from 'app/shared/services/page.name.service';
+import { Observable, of } from 'rxjs';
+
+import { Page } from 'app/pages/page';
 
 @Component({
-    selector: 'about',
-    templateUrl: './about.component.html'
+  selector: 'rs-about',
+  templateUrl: './about.component.html'
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent extends Page {
 
-    constructor(private pageNameService: PageNameService) {}
+  constructor() { super(); }
 
-    ngOnInit() {
-        this.pageNameService.setPageName('O czasopiśmie');
-    }
+  observeContentLoaded(): Observable<void> {
+    return of(null);
+  }
+
+  observePageName(): Observable<string> {
+    return of('O czasopiśmie');
+  }
 
 }

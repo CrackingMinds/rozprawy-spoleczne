@@ -1,17 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { PageNameService } from 'app/shared/services/page.name.service';
+import { Observable, of } from 'rxjs';
+
+import { Page } from 'app/pages/page';
 
 @Component({
   selector: 'rs-ethical-standards',
   templateUrl: './ethical.standards.component.html',
   styleUrls: ['./ethical.standards.component.scss']
 })
-export class EthicalStandardsComponent implements OnInit {
+export class EthicalStandardsComponent extends Page {
 
-  constructor(private pageNameService: PageNameService) {}
+  constructor() { super(); }
 
-  ngOnInit() {
-    this.pageNameService.setPageName('Standardy etyczne');
+  observeContentLoaded(): Observable<void> {
+    return of(null);
   }
+
+  observePageName(): Observable<string> {
+    return of('Standardy etyczne');
+  }
+
 }

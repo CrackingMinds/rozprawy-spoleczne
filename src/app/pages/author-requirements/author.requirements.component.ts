@@ -1,38 +1,52 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
-import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
-    selector: 'author-requirements',
-    templateUrl: './author.requirements.component.html',
-    styles: []
+  selector: 'rs-author-requirements',
+  templateUrl: './author.requirements.component.html',
+  styles: []
 })
-export class AuthorRequirementsComponent implements OnInit, OnDestroy {
-    contactInfo: IContactInfo = new ContactInfo();
-    dataLoaded: boolean = false;
+export class AuthorRequirementsComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  contactInfo: IContactInfo = new ContactInfo();
 
-    constructor(private contactInfoEndpoint: ContactInfoEndpoint,
-                private pageNameService: PageNameService) {}
+  private contactInfoLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-        this.pageNameService.setPageName('Zasady publikacji prac');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-        this.subscriptions.add(
-          this.contactInfoEndpoint.getContactInfo()
-              .subscribe((res: IContactInfo) => {
-                this.contactInfo = res;
-                this.dataLoaded = true;
-              })
-        );
-    }
+  constructor(private contactInfoEndpoint: ContactInfoEndpoint) { super(); }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+  ngOnInit() {
+    this.contactInfoEndpoint.getContactInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: IContactInfo) => {
+          this.contactInfo = data;
+          this.contactInfoLoaded$.next();
+        });
+  }
+
+  ngOnDestroy() {
+    this.contactInfoLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.contactInfoLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Zasady publikacji prac');
+  }
+
+
 }

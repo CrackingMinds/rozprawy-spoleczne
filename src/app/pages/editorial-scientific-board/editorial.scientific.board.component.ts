@@ -1,56 +1,71 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { zip } from 'rxjs';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject, zip, Observable, of } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
 
 import { EditorialBoardMember } from 'app/models/editorial-board-member';
 import { ScientificBoardMember } from 'app/models/scientific-board-member';
 
-import { PageNameService } from 'app/shared/services/page.name.service';
 import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
 
 @Component({
-    selector: 'editorial-scientific-board',
-    templateUrl: './editorial.scientific.board.component.html'
+  selector: 'rs-editorial-scientific-board',
+  templateUrl: './editorial.scientific.board.component.html'
 })
-export class EditorialScientificBoardComponent implements OnInit, OnDestroy {
-    editorialBoard: EditorialBoardMember[];
-    scientificBoard: ScientificBoardMember[];
+export class EditorialScientificBoardComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  editorialBoard: EditorialBoardMember[];
+  scientificBoard: ScientificBoardMember[];
 
-    constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint,
-                private pageNameService: PageNameService) {}
+  editorialBoardLoaded$: Subject<void> = new Subject<void>();
+  scientificBoardLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-        this.pageNameService.setPageName('Rada Redakcyjna i Rada Naukowa');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-        let getEditorialBoardMembers = this.editorialScientificBoardEndpoint.getEditorialBoardMembers();
-        let getScientificBoardMembers = this.editorialScientificBoardEndpoint.getScientificBoardMembers();
+  constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint) {
+    super();
+  }
 
-        this.subscriptions.add(
-          getEditorialBoardMembers.subscribe((res: EditorialBoardMember[]) => {
-            this.editorialBoard = res;
-          })
-        );
+  ngOnInit() {
 
-        this.subscriptions.add(
-          getScientificBoardMembers.subscribe((res: ScientificBoardMember[]) => {
-            this.scientificBoard = res;
-          })
-        );
-
-        let allContentLoaded = zip(
-          getEditorialBoardMembers,
-          getScientificBoardMembers
-        ).subscribe(() => {
+    this.editorialScientificBoardEndpoint.getEditorialBoardMembers()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: EditorialBoardMember[]) => {
+          this.editorialBoard = data;
+          this.editorialBoardLoaded$.next();
         });
-        this.subscriptions.add(
-          allContentLoaded
-        );
-    }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+    this.editorialScientificBoardEndpoint.getScientificBoardMembers()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: ScientificBoardMember[]) => {
+          this.scientificBoard = data;
+          this.scientificBoardLoaded$.next();
+        });
+
+  }
+
+  ngOnDestroy() {
+
+    this.editorialBoardLoaded$.complete();
+    this.scientificBoardLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return zip(
+      this.editorialBoardLoaded$.asObservable(),
+      this.scientificBoardLoaded$.asObservable()
+    ).pipe(
+      map(() => null)
+    );
+  }
+
+  observePageName(): Observable<string> {
+    return of('Rada Redakcyjna i Rada Naukowa');
+  }
+
 }

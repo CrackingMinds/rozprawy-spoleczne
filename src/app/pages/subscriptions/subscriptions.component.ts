@@ -1,37 +1,53 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+
+import { Subject, Observable, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Page } from 'app/pages/page';
 
 import { ISubsriptionsInfo } from 'app/models/subscriptions';
 
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
-import { PageNameService } from 'app/shared/services/page.name.service';
 
 @Component({
-    selector: 'subscriptions',
-    templateUrl: './subscriptions.component.html'
+  selector: 'rs-subscriptions',
+  templateUrl: './subscriptions.component.html'
 })
-export class SubscriptionsComponent implements OnInit, OnDestroy {
-    subscriptionsInfo: ISubsriptionsInfo;
-    dataLoaded: boolean = false;
+export class SubscriptionsComponent extends Page implements OnInit, OnDestroy {
 
-    private subscriptions = new Subscription();
+  subscriptionsInfo: ISubsriptionsInfo;
 
-    constructor(private subscriptionsEndpoint: SubscriptionsEndpoint,
-                private pageNameService: PageNameService) {}
+  private subscriptionsInfoLoaded$: Subject<void> = new Subject<void>();
 
-    ngOnInit() {
-      this.pageNameService.setPageName('Prenumerata');
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-      this.subscriptions.add(
-        this.subscriptionsEndpoint.getSubscriptionsInfo()
-            .subscribe((res: ISubsriptionsInfo) => {
-              this.subscriptionsInfo = res;
-              this.dataLoaded = true;
-            })
-      );
-    }
+  constructor(private subscriptionsEndpoint: SubscriptionsEndpoint) {
+    super();
+  }
 
-    ngOnDestroy() {
-      this.subscriptions.unsubscribe();
-    }
+  ngOnInit() {
+
+    this.subscriptionsEndpoint.getSubscriptionsInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: ISubsriptionsInfo) => {
+          this.subscriptionsInfo = data;
+          this.subscriptionsInfoLoaded$.next();
+        });
+  }
+
+  ngOnDestroy() {
+    this.subscriptionsInfoLoaded$.complete();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return this.subscriptionsInfoLoaded$.asObservable();
+  }
+
+  observePageName(): Observable<string> {
+    return of('Prenumerata');
+  }
+
 }
