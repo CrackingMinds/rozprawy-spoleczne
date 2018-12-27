@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { User } from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
+
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
 
 enum LoginErrorType {
   EMAIL,
@@ -16,7 +23,7 @@ const emailRegExp: RegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss']
 })
-export class SigninComponent implements OnInit {
+export class SigninComponent implements OnInit, OnDestroy {
 
   form: FormGroup = this.formBuilder.group({
     email: [undefined, [
@@ -30,19 +37,25 @@ export class SigninComponent implements OnInit {
 
   showLoginSpinner: boolean = false;
 
+  private unsubscribe$: Subject<void> = new Subject<void>();
+
   constructor(private angularFireAuth: AngularFireAuth,
               private router: Router,
-              private formBuilder: FormBuilder) {
-
-    this.angularFireAuth.authState.subscribe(auth => {
-      if (auth) {
-        this.router.navigateByUrl('/admin/dashboard');
-      }
-    });
-  }
+              private formBuilder: FormBuilder,
+              private pageNameService: PageNameService) {}
 
   ngOnInit() {
-    // this.pageNameService.setPageName('Logowanie');
+    this.angularFireAuth.authState
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((user: User) => {
+          user && this.router.navigateByUrl(`/${AdminRoutesResolver.admin}`);
+        });
+    this.pageNameService.setPageName('Zalogowanie');
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   onSubmit(): void {
