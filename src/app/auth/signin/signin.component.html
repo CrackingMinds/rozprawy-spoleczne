@@ -2,34 +2,45 @@
   <div class="rs-login-header">
     <h1 class="rs-header-content">Zalogowanie</h1>
   </div>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rs-login-form">
+  <div class="rs-login-form-container">
+    <div *ngIf="showLoginSpinner" class="rs-login-form-spinner-container">
+      <mat-spinner class="rs-login-form-spinner" color="primary"></mat-spinner>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rs-login-form">
 
-    <mat-form-field color="accent">
-      <input matInput formControlName="email"
-             type="text" placeholder="Email" class="rs-email">
-      <mat-error *ngIf="form.get('email').hasError('required')">
-        Podaj login
-      </mat-error>
-      <mat-error *ngIf="form.get('email').hasError('pattern')">
-        Niepoprawny adres email
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field color="accent" (click)="removeErrorMessage()">
+        <input matInput formControlName="email"
+               type="text" placeholder="Email" class="rs-email">
+        <mat-error *ngIf="form.get('email').hasError('required')">
+          Podaj login
+        </mat-error>
+        <mat-error *ngIf="form.get('email').hasError('pattern')">
+          Błędny adres email
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field color="accent">
-      <input matInput formControlName="password"
-             type="password" placeholder="Hasło" class="rs-password">
-      <mat-error *ngIf="form.get('password').hasError('required')">
-        Podaj hasło
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field color="accent" (click)="removeErrorMessage()">
+        <input matInput formControlName="password"
+               type="password" placeholder="Hasło" class="rs-password">
+        <mat-error *ngIf="form.get('password').hasError('required')">
+          Podaj hasło
+        </mat-error>
+      </mat-form-field>
 
-    <button mat-raised-button
-            color="accent"
-            type="submit"
-            [disabled]="!form.valid"
-            class="rs-submit-btn">
-      Zaloguj się
-    </button>
+      <div class="rs-login-button-with-error">
+        <button *ngIf="!loginError; else showLoginError" mat-raised-button
+                color="accent"
+                type="submit"
+                [disabled]="!form.valid"
+                class="rs-submit-btn">
+          Zaloguj się
+        </button>
 
-  </form>
+        <ng-template #showLoginError>
+          <span class="rs-login-error">{{ loginError.message }}</span>
+        </ng-template>
+      </div>
+
+    </form>
+  </div>
 </mat-card>
