@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
+const emailRegExp: RegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
 @Component({
   selector: 'rs-sign-in',
   templateUrl: './signin.component.html',
@@ -12,7 +14,10 @@ import { AngularFireAuth } from 'angularfire2/auth';
 export class SigninComponent implements OnInit {
 
   form: FormGroup = this.formBuilder.group({
-    email: [undefined, Validators.required],
+    email: [undefined, [
+      Validators.required,
+      Validators.pattern(emailRegExp)
+    ]],
     password: [undefined, Validators.required]
   });
 

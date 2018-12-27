@@ -10,6 +10,9 @@
       <mat-error *ngIf="form.get('email').hasError('required')">
         Podaj login
       </mat-error>
+      <mat-error *ngIf="form.get('email').hasError('pattern')">
+        Niepoprawny adres email
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field color="accent">
