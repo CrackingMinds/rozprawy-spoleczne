@@ -1,12 +1,12 @@
 import { Component, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
 
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
-import { Article, RawArticle } from 'app/models/article';
+import { Article, ArticleEntity } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { ModalData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.data';
@@ -27,10 +27,10 @@ export class ListOfArticlesComponent implements OnDestroy {
   issue: Issue;
 
   @Input('articles')
-  articles$: Observable<Article[]>;
+  articles: Article[];
 
   @Output()
-  createArticle: EventEmitter<RawArticle> = new EventEmitter<RawArticle>();
+  createArticle: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
 
   articleCardDisplayModes = ArticleCardDisplayMode;
 
@@ -66,7 +66,7 @@ export class ListOfArticlesComponent implements OnDestroy {
              .pipe(
                takeUntil(this.unsubscribe$)
              )
-      .subscribe((newArticle: RawArticle) => {
+      .subscribe((newArticle: ArticleEntity) => {
         if (!newArticle) {
           return;
         }

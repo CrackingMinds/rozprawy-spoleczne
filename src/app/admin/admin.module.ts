@@ -12,7 +12,7 @@ import { environment } from 'environments/environment';
 
 import { AdminComponent } from 'app/admin/admin.component';
 import { AdminRoutingModule } from 'app/admin/admin.routing.module';
-import { ModalModule } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.module';
+import { MatButtonModule } from '@angular/material';
 
 const declarations = [
   AdminComponent
@@ -37,9 +37,9 @@ const devOnlyModules = [
 
     StoreRouterConnectingModule,
 
-    AdminRoutingModule,
+    MatButtonModule,
 
-    ModalModule,
+    AdminRoutingModule,
 
     environment.production ? [] : [...devOnlyModules]
   ],

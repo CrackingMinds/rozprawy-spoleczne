@@ -1,19 +1,27 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
+
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 
 @Component({
   selector: 'rs-admin',
   template: `
-    <button (click)="logOut()">Wyloguj</button>
+    <div class="rs-admin-header">
+        <button mat-raised-button color="primary" (click)="logOut()">Wyloguj</button>
+    </div>
     <router-outlet></router-outlet>
-  `
+  `,
+  styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent {
 
-  constructor(private firebaseAuth: AngularFireAuth) {}
+  constructor(private firebaseAuth: AngularFireAuth,
+              private router: Router) {}
 
   logOut(): void {
     this.firebaseAuth.auth.signOut();
+    this.router.navigateByUrl(`/${RoutesResolver.signIn}`);
   }
 }

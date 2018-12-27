@@ -12,6 +12,9 @@ import {
   Type
 } from '@angular/core';
 
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { ModalData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.data';
@@ -33,12 +36,9 @@ export class ModalComponent implements OnInit, OnDestroy {
 
     spinnerVisible: boolean = false;
 
-    get canSubmit(): boolean {
-      if (this.hasStringContent()) {
-        return true;
-      }
-      return this.nestedComponentRef.instance.canSubmit;
-    }
+    canSubmit: boolean;
+
+    private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
     constructor(public dialogRef: MatDialogRef<ModalComponent>,
                 @Inject(MAT_DIALOG_DATA) public modalData: ModalData,
@@ -50,14 +50,21 @@ export class ModalComponent implements OnInit, OnDestroy {
     ngOnInit() {
       if (this.hasStringContent()) {
         this.modalMessage = this.modalData.content as string;
+        this.canSubmit = true;
         return;
       }
 
-      let componentFactory = this.componentFactoryResolver
+      const componentFactory = this.componentFactoryResolver
                                  .resolveComponentFactory(this.modalData.content as Type<ModalContentComponent>);
       this.nestedComponentRef = componentFactory.create(this.injector);
       this.nestedComponentRef.instance.params = this.modalData.otherParams;
       this.dynamicComponentContainer.insert(this.nestedComponentRef.hostView);
+
+      this.nestedComponentRef.changeDetectorRef.detectChanges();
+
+      this.nestedComponentRef.instance.canSubmit()
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((canSubmit: boolean) => this.canSubmit = canSubmit);
     }
 
     ngOnDestroy() {
@@ -65,6 +72,9 @@ export class ModalComponent implements OnInit, OnDestroy {
         this.nestedComponentRef.destroy();
         this.nestedComponentRef = null;
       }
+
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
     }
 
     submit() {

@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 import {
-  ArticleEntity, RawArticle, UntypedArticle
+  ArticleEntity, UntypedArticle
 } from 'app/models/article';
 
 @Injectable()
@@ -49,12 +49,10 @@ export class FirestoreArticleService {
 
   }
 
-  postArticle(article: RawArticle): Observable<void> {
-
-    // TODO: Remove 'id' property from article
+  postArticle(rawArticle: ArticleEntity): Observable<void> {
 
     return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection(FirestoreArticleService.collectionName).add(article)
+      this.angularFirestore.collection<ArticleEntity>(FirestoreArticleService.collectionName).add(rawArticle)
           .then(() => {
             observer.next(null);
             observer.complete();

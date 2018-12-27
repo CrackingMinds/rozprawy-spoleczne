@@ -4,14 +4,18 @@ import { CanActivate, Router } from '@angular/router';
 import { map, first} from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
-import { AngularFireAuth} from 'angularfire2/auth';
 import { User } from 'firebase';
+import { AngularFireAuth} from 'angularfire2/auth';
+
+import { SignInRepository } from 'app/auth/signin/signin.repository';
+import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
 
   constructor(private angularFireAuth: AngularFireAuth,
-              private router: Router) {}
+              private router: Router,
+              private signInRepository: SignInRepository) {}
 
   canActivate(): Observable<boolean> {
     return this.angularFireAuth.authState
@@ -22,11 +26,16 @@ export class AuthGuard implements CanActivate {
           if (user) {
             return true;
           } else {
-            this.router.navigate(['/sign-in']);
+            this.redirectToSignIn();
             return false;
           }
 
         })
       );
+  }
+
+  private redirectToSignIn(): void {
+    this.signInRepository.redirectedFrom = window.location.pathname;
+    this.router.navigateByUrl(`/${RoutesResolver.signIn}`);
   }
 }

@@ -11,9 +11,14 @@ rs-add-article {
     padding: 15px;
   }
 
-  .rs-form-field {
+  .rs-form-field-container {
     border-bottom: 2px solid $main-green-color;
     padding: 10px;
     width: 100%;
   }
+
+  .rs-form-field {
+    width: 100%;
+  }
+
 }

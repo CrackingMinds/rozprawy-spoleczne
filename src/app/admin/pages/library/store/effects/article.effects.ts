@@ -16,18 +16,18 @@ export class ArticleEffects {
   constructor(private actions$: Actions,
               private articleEndpoint: ArticleEndpoint) {}
 
-  // @Effect()
-  // loadArticles$ = this.actions$.ofType(LOAD_ARTICLES)
-  //   .pipe(
-  //     switchMap(() => {
-  //       return this.articleService.getArticles()
-  //         .pipe(
-  //           delay(300), // needed to equalize spinner durations
-  //           map((articles: IArticle[]) => new LoadArticlesSuccess(articles)),
-  //           catchError(error => of(new LoadArticlesFail(error)))
-  //         );
-  //     })
-  //   );
+  @Effect()
+  loadArticles$ = this.actions$.ofType(LOAD_ARTICLES)
+    .pipe(
+      switchMap((action: LoadArticles) => {
+        return this.articleEndpoint.getIssueArticles(action.issueId)
+          .pipe(
+            delay(300), // needed to equalize spinner durations
+            map((articles: Article[]) => new LoadArticlesSuccess(articles)),
+            catchError(error => of(new LoadArticlesFail(error)))
+          );
+      })
+    );
 
   @Effect({dispatch: false})
   createArticle$ = this.actions$.ofType(CREATE_ARTICLE)

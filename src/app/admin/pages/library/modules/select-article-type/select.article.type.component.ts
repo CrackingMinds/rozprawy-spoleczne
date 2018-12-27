@@ -22,7 +22,7 @@ import { ArticleType } from 'app/models/article.type';
 export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
 
   @Input()
-  articleTypes: ArticleType;
+  articleTypes: ArticleType[];
 
   @Input()
   get placeholder(): string { return this._placeholder; }

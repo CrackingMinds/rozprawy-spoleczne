@@ -1,4 +1,4 @@
-<ng-container *ngFor="let article of (articles$ | async)">
+<ng-container *ngFor="let article of articles">
   <rs-article-card [article]="article" [issue]="issue" [mode]="articleCardDisplayModes.EDIT"></rs-article-card>
 </ng-container>
 <rs-article-card [mode]="articleCardDisplayModes.ADD" (click)="openArticleCreationDialog()"></rs-article-card>

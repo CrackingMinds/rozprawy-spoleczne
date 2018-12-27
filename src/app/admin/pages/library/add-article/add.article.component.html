@@ -1,15 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <div class="rs-form-field">
-    <mat-form-field color="accent">
-      <rs-select-article-type placeholder="Typ artykułu" formControlName="articleTypeId" required></rs-select-article-type>
+  <div class="rs-form-field-container">
+    <mat-form-field class="rs-form-field" color="accent">
+      <rs-select-article-type [articleTypes]="articleTypes" placeholder="Typ artykułu" formControlName="articleTypeId" required></rs-select-article-type>
       <mat-error *ngIf="form.get('articleTypeId').hasError('required')">
         Wybierz typ artykułu
       </mat-error>
     </mat-form-field>
   </div>
 
-  <div class="rs-form-field">
-    <mat-form-field color="accent">
+  <div class="rs-form-field-container">
+    <mat-form-field class="rs-form-field" color="accent">
       <input matInput
              placeholder="Nazwa"
              formControlName="title">
@@ -19,14 +19,14 @@
     </mat-form-field>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-add-authors
       name="article-authors"
       [parentForm]="form">
     </rs-add-authors>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <mat-form-field color="accent">
       <input matInput
              placeholder="Strony w artykule"
@@ -40,8 +40,8 @@
     </mat-form-field>
   </div>
 
-  <div class="rs-form-field">
-    <mat-form-field color="accent">
+  <div class="rs-form-field-container">
+    <mat-form-field class="rs-form-field" color="accent">
       <input matInput
              type="url"
              placeholder="DOI"
@@ -55,7 +55,7 @@
     </mat-form-field>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-toggle-area name="Wprowadzenie">
       <mat-form-field>
         <textarea matInput
@@ -66,7 +66,7 @@
     </rs-toggle-area>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-toggle-area name="Materiały i metody">
       <mat-form-field>
         <textarea matInput
@@ -77,7 +77,7 @@
     </rs-toggle-area>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-toggle-area name="Wyniki">
       <mat-form-field>
         <textarea matInput
@@ -88,7 +88,7 @@
     </rs-toggle-area>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-toggle-area name="Wnioski">
       <mat-form-field>
         <textarea matInput
@@ -99,7 +99,7 @@
     </rs-toggle-area>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-toggle-area name="Słowa kluczowe">
       <mat-form-field>
         <textarea matInput
@@ -112,7 +112,7 @@
     </rs-toggle-area>
   </div>
 
-  <div class="rs-form-field">
+  <div class="rs-form-field-container">
     <rs-upload-article
       name="article-pdf"
       formControlName="pdf">

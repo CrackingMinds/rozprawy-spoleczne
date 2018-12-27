@@ -12,7 +12,7 @@
         <input matInput formControlName="email"
                type="text" placeholder="Email" class="rs-email">
         <mat-error *ngIf="form.get('email').hasError('required')">
-          Podaj login
+          Podaj adres email
         </mat-error>
         <mat-error *ngIf="form.get('email').hasError('pattern')">
           Błędny adres email

@@ -12,7 +12,7 @@ export class FirestoreArticleTypeEndpoint extends ArticleTypeEndpoint {
   constructor(private articleTypeService: FirestoreArticleTypeService) { super(); }
 
   getArticleTypes(): Observable<ArticleType[]> {
-    return of([]);
+    return this.articleTypeService.getArticleTypes();
   }
 
 }

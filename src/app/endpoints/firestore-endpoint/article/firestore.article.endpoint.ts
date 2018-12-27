@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
-import { Article, RawArticle, UntypedArticle } from 'app/models/article';
+import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
 
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
@@ -38,8 +38,8 @@ export class FirestoreArticleEndpoint extends ArticleEndpoint {
       );
   }
 
-  postArticle(rawArticle: RawArticle): Observable<void> {
-    return of(null);
+  postArticle(rawArticle: ArticleEntity): Observable<void> {
+   return this.articleService.postArticle(rawArticle);
   }
 
   private replaceTypeIdsWithTypes(untypedArticles: UntypedArticle[]): Observable<Article[]> {

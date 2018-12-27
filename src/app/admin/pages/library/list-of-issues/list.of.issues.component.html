@@ -3,7 +3,7 @@
   <mat-icon>add</mat-icon>
 </button>
 <div class="rs-issues-list">
-  <ng-container *ngFor="let issue of (issues$ | async)">
+  <ng-container *ngFor="let issue of issues">
     <div class="rs-issue-container" [class.rs-current]="issue.isCurrent" [class.rs-selected]="issue === selectedIssue">
       <button [matMenuTriggerFor]="menu" class="rs-edit-issue-btn">
         <mat-icon>more_vert</mat-icon>
@@ -17,7 +17,7 @@
                 (click)="openDialog(dialogType.MAKE_ISSUE_CURRENT, issue)">
           <span>Zrób bieżącym</span>
         </button>
-        <button [disabled]="issue.hasArticles" mat-menu-item
+        <button [disabled]="issue.hasArticles || issue.isCurrent" mat-menu-item
                 (click)="openDialog(dialogType.REMOVE_ISSUE, issue)">
           <span>Usuń</span>
         </button>

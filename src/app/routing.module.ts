@@ -1,7 +1,9 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard } from 'app/guards/auth.guard';
+import { AdminGuard } from 'app/guards/admin.guard';
+import { SigninGuard } from 'app/guards/signin.guard';
+
 import { SigninComponent } from 'app/auth/signin/signin.component';
 
 import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
@@ -15,16 +17,18 @@ const appRoutes: Routes = [
   {
     path: AdminRoutesResolver.admin,
     loadChildren: 'app/admin/admin.module#AdminModule',
-    canActivate: [AuthGuard]
+    canActivate: [AdminGuard]
   },
   {
     path: RoutesResolver.signIn,
-    component: SigninComponent
+    component: SigninComponent,
+    canActivate: [SigninGuard]
   },
 ];
 
 const providers = [
-  AuthGuard
+  AdminGuard,
+  SigninGuard
 ];
 
 @NgModule({

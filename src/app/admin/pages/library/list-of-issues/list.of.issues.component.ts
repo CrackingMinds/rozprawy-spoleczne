@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material';
@@ -17,10 +17,10 @@ import { IssueCRUDModalComponent } from 'app/admin/pages/library/list-of-issues/
   templateUrl: './list.of.issues.component.html',
   styleUrls: ['./list.of.issues.component.scss']
 })
-export class ListOfIssuesComponent implements OnInit, OnDestroy {
+export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   @Input('issues')
-  issues$: Observable<Issue[]>;
+  issues: Issue[];
 
   @Output()
   issueSelect: EventEmitter<Issue> = new EventEmitter<Issue>();
@@ -36,11 +36,13 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
 
   selectedIssue: Issue;
 
+  lastIssueMarkedAsCurrent: Issue;
+
   dialogType = {
     CREATE_ISSUE: DialogType.CREATE_ISSUE,
     EDIT_ISSUE: DialogType.EDIT_ISSUE,
     MAKE_ISSUE_CURRENT: DialogType.MAKE_ISSUE_CURRENT,
-    REMOVE_ISSUE: DialogType.REMOVE_ISSUE,
+    REMOVE_ISSUE: DialogType.REMOVE_ISSUE
   };
 
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -48,15 +50,13 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog) {
   }
 
-  ngOnInit() {
-    this.issues$
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe((issues: Issue[]) => {
-          const issueMarkedAsSelected: Issue = issues.filter((issue: Issue) => issue.isCurrent)[0];
-          this.selectIssue(issueMarkedAsSelected);
-        });
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes.issues && changes.issues.currentValue.length) {
+      this.lastIssueMarkedAsCurrent = this.issues.filter((issue: Issue) => issue.isCurrent)[0];
+      this.selectIssue(this.lastIssueMarkedAsCurrent);
+    }
+
   }
 
   ngOnDestroy() {
@@ -128,6 +128,11 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
                if (!newIssue) {
                  return;
                }
+
+               if (newIssue.isCurrent) {
+                 this.unmarkLastCurrentIssue();
+               }
+
                this.issueCreate.emit({...newIssue});
              });
   }
@@ -158,6 +163,11 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
                if (!updatedIssue) {
                  return;
                }
+
+               if (updatedIssue.isCurrent) {
+                 this.unmarkLastCurrentIssue();
+               }
+
                this.issueEdit.emit({...updatedIssue});
              });
   }
@@ -188,6 +198,9 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
                if (!actionSubmitted) {
                  return;
                }
+
+               this.unmarkLastCurrentIssue();
+
                this.issueEdit.emit({
                  ...issue,
                  isCurrent: true
@@ -224,6 +237,13 @@ export class ListOfIssuesComponent implements OnInit, OnDestroy {
 
                this.issueRemove.emit(issue);
              });
+  }
+
+  private unmarkLastCurrentIssue(): void {
+    this.issueEdit.emit({
+      ...this.lastIssueMarkedAsCurrent,
+      isCurrent: false
+    });
   }
 
 }

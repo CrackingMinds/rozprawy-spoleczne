@@ -1,0 +1,15 @@
+:host {
+
+  .rs-admin-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    background-color: #f7f7f7;
+
+    button {
+      color: white;
+    }
+  }
+
+}

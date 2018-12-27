@@ -1,14 +1,18 @@
+import { Observable } from 'rxjs';
+
 import { Issue, RawIssue } from 'app/models/issue';
-import { RawArticle } from 'app/models/article';
+import { ArticleEntity } from 'app/models/article';
 
 export type ModalParams = undefined | Issue;
-export type ModalReturnData = void | boolean | Issue | RawIssue | RawArticle;
+export type ModalReturnData = void | boolean | Issue | RawIssue | ArticleEntity;
 
 export interface ModalContentComponent {
 
-  canSubmit: boolean;
   params: ModalParams;
 
   submit(): ModalReturnData;
   cancel(): ModalReturnData;
+
+  canSubmit(): Observable<boolean>;
+
 }

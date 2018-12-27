@@ -7,8 +7,15 @@
 </div>
 
 <div class="rs-list-of-issues-container">
+  <div *ngIf="issuesLoading$ | async" class="rs-spinner-wrapper">
+    <mat-progress-spinner class="rs-progress-spinner"
+                          mode="indeterminate"
+                          color="primary"
+                          [diameter]="100">
+    </mat-progress-spinner>
+  </div>
   <rs-list-of-issues
-    [issues]="issues$"
+    [issues]="issues"
     (issueSelect)="onIssueSelect($event)"
     (issueCreate)="onIssueCreate($event)"
     (issueEdit)="onIssueEdit($event)"
@@ -20,12 +27,12 @@
   <div *ngIf="articlesLoading$ | async" class="rs-spinner-wrapper">
     <mat-progress-spinner class="rs-progress-spinner"
                           mode="indeterminate"
-                          color="accent"
+                          color="primary"
                           [diameter]="100">
     </mat-progress-spinner>
   </div>
   <rs-list-of-articles
     [issue]="selectedIssue"
-    [articles]="articles$"
+    [articles]="articles"
     (createArticle)="onCreateArticle($event)"></rs-list-of-articles>
 </div>

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Article, RawArticle } from 'app/models/article';
+import { Article, ArticleEntity } from 'app/models/article';
 
 import { ACTION_PREFIX } from 'app/admin/pages/library/store/actions/action.prefix';
 
@@ -28,7 +28,7 @@ export class LoadArticlesFail implements Action {
 
 export class CreateArticle implements Action {
   readonly type: string = CREATE_ARTICLE;
-  constructor(public article: RawArticle) {}
+  constructor(public article: ArticleEntity) {}
 }
 
 export class CreateArticleFail implements Action {

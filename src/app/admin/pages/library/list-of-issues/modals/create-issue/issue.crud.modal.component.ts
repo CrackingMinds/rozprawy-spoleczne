@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+
+import { Observable, ReplaySubject } from 'rxjs';
 
 import { ModalContentComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.content.component';
 
@@ -9,7 +11,7 @@ import { Issue, RawIssue } from 'app/models/issue';
     selector: 'rs-create-issue',
     templateUrl: './issue.crud.modal.component.html'
 })
-export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
+export class IssueCRUDModalComponent implements ModalContentComponent, OnInit, OnDestroy {
 
   currentYear = new Date().getFullYear();
 
@@ -17,12 +19,7 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
 
   form: FormGroup;
 
-  get canSubmit(): boolean {
-    if (!this.form) {
-      return false;
-    }
-    return this.form.valid;
-  }
+  private canSubmit$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -47,6 +44,14 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
       };
     }
 
+    let currentIssueCheckboxDisabled: boolean;
+
+    if (this.params) {
+      currentIssueCheckboxDisabled = this.params.isCurrent;
+    } else {
+      currentIssueCheckboxDisabled = false;
+    }
+
     this.form = this.formBuilder.group(
       {
         year: [initialIssue.year, [
@@ -61,9 +66,18 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
           Validators.required,
           Validators.pattern(/^[1-9][\d]?$/)
         ]],
-        isCurrent: [initialIssue.isCurrent]
+        isCurrent: [{
+          value: initialIssue.isCurrent,
+          disabled: currentIssueCheckboxDisabled
+        }]
       }
     );
+
+    this.initFormValidityListener();
+  }
+
+  ngOnDestroy() {
+    this.canSubmit$.complete();
   }
 
   cancel(): void {}
@@ -83,6 +97,32 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit {
     }
 
     return newIssue;
+  }
+
+  canSubmit(): Observable<boolean> {
+    return this.canSubmit$.asObservable();
+  }
+
+  private initFormValidityListener(): void {
+    this.canSubmit$.next(this.form.valid);
+
+    this.form.statusChanges
+        .subscribe((value: string) => {
+
+          switch (value) {
+
+            case 'INVALID': {
+              this.canSubmit$.next(false);
+              break;
+            }
+
+            case 'VALID': {
+              this.canSubmit$.next(true);
+              break;
+            }
+          }
+
+        });
   }
 
 }

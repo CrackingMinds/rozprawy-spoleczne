@@ -4,7 +4,7 @@
   (openedChange)="onOpenedChange()"
   (focus)="onFocus()"
   (blur)="onBlur()">
-  <mat-option *ngFor="let articleType of articleTypes | async" [value]="articleType">
+  <mat-option *ngFor="let articleType of articleTypes" [value]="articleType">
     {{ articleType.namePl }}
   </mat-option>
 </mat-select>

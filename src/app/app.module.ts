@@ -13,6 +13,8 @@ import { EndpointModule } from 'app/endpoints/endpoint.module';
 
 import { AppComponent } from 'app/app.component';
 
+import { SignInRepository } from 'app/auth/signin/signin.repository';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -24,11 +26,14 @@ import { AppComponent } from 'app/app.component';
 
     EndpointModule.forRoot(),
 
-    AuthModule.forRoot(),
+    AuthModule,
     RoutingModule.forRoot(),
     FirebaseConfigModule,
 
     ServicesModule.forRoot(),
+  ],
+  providers: [
+    SignInRepository
   ],
   bootstrap: [AppComponent]
 })
