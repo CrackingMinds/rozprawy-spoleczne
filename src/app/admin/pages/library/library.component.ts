@@ -10,7 +10,7 @@ import * as libraryReducer from 'app/admin/pages/library/store/reducers/library.
 import { LibraryState } from 'app/admin/pages/library/store/reducers/library.reducer';
 
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/admin/pages/library/store/actions/issue.actions';
-import { CreateArticle, LoadArticles } from 'app/admin/pages/library/store/actions/article.actions';
+import { CreateArticle, LoadArticles, RemoveArticle } from 'app/admin/pages/library/store/actions/article.actions';
 
 import { Article, ArticleEntity } from 'app/models/article';
 import { Issue } from 'app/models/issue';
@@ -90,6 +90,10 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   onCreateArticle(newArticle: ArticleEntity) {
     this.store.dispatch(new CreateArticle(newArticle));
+  }
+
+  onArticleDelete(article: Article): void {
+    this.store.dispatch(new RemoveArticle(article.id));
   }
 
   private initMainSpinnerManager(): void {

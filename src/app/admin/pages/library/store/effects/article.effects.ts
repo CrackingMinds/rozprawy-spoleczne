@@ -5,7 +5,15 @@ import { switchMap, map, catchError, delay } from 'rxjs/operators';
 
 import { Effect, Actions } from '@ngrx/effects';
 
-import { CREATE_ARTICLE, CreateArticle, LOAD_ARTICLES, LoadArticles, LoadArticlesFail, LoadArticlesSuccess } from 'app/admin/pages/library/store/actions/article.actions';
+import {
+  CREATE_ARTICLE,
+  CreateArticle,
+  LOAD_ARTICLES,
+  LoadArticles,
+  LoadArticlesFail,
+  LoadArticlesSuccess,
+  REMOVE_ARTICLE, RemoveArticle
+} from 'app/admin/pages/library/store/actions/article.actions';
 
 import { Article } from 'app/models/article';
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
@@ -37,4 +45,13 @@ export class ArticleEffects {
         return this.articleEndpoint.postArticle(action.article);
       })
     );
+
+  @Effect({dispatch: false})
+  removeArticle$ = this.actions$.ofType(REMOVE_ARTICLE)
+    .pipe(
+      switchMap((action: RemoveArticle) => {
+        // @TODO: implement error handler
+        return this.articleEndpoint.deleteArticle(action.articleId);
+      })
+    )
 }

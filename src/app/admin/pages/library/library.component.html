@@ -34,5 +34,7 @@
   <rs-list-of-articles
     [issue]="selectedIssue"
     [articles]="articles"
-    (createArticle)="onCreateArticle($event)"></rs-list-of-articles>
+    (createArticle)="onCreateArticle($event)"
+    (deleteArticle)="onArticleDelete($event)">
+  </rs-list-of-articles>
 </div>

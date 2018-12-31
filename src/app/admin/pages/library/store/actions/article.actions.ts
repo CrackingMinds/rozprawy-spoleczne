@@ -11,6 +11,9 @@ export const LOAD_ARTICLES_FAIL = `${ACTION_PREFIX} Load Articles Fail`;
 export const CREATE_ARTICLE = `${ACTION_PREFIX} Create Article`;
 export const CREATE_ARTICLE_FAIL = `${ACTION_PREFIX} Create Article Fail`;
 
+export const REMOVE_ARTICLE = `${ACTION_PREFIX} Remove Article`;
+export const REMOVE_ARTICLE_FAIL = `${ACTION_PREFIX} Remove Article Fail`;
+
 export class LoadArticles implements Action {
   readonly type: string = LOAD_ARTICLES;
   constructor(public issueId: string) {}
@@ -36,10 +39,23 @@ export class CreateArticleFail implements Action {
   constructor(public error: any) {}
 }
 
+export class RemoveArticle implements Action {
+  readonly type: string = REMOVE_ARTICLE;
+  constructor(public articleId: string) {}
+}
+
+export class RemoveArticleFail implements Action {
+  readonly type: string = REMOVE_ARTICLE_FAIL;
+  constructor(public error: any) {}
+}
+
 export type ArticleAction =
   LoadArticles|
   LoadArticlesSuccess |
   LoadArticlesFail |
 
   CreateArticle |
-  CreateArticleFail;
+  CreateArticleFail |
+
+  RemoveArticle |
+  RemoveArticleFail;

@@ -32,6 +32,9 @@ export class ListOfArticlesComponent implements OnDestroy {
   @Output()
   createArticle: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
 
+  @Output('deleteArticle')
+  deleteArticle$: EventEmitter<Article> = new EventEmitter<Article>();
+
   articleCardDisplayModes = ArticleCardDisplayMode;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -74,4 +77,36 @@ export class ListOfArticlesComponent implements OnDestroy {
       });
 
   }
+
+  openArticleDeleteDialog(article: Article): void {
+
+    const modalData: ModalData = {
+      title: undefined,
+      content: 'Czy napewno chcesz usunąć ten artykuł?',
+      buttons: {
+        submit: {
+          text: 'Tak'
+        }
+      },
+      otherParams: undefined
+    };
+
+    const dialogRef = this.dialog.open(ModalComponent, {
+      disableClose: true,
+      data: modalData
+    });
+
+    dialogRef.afterClosed()
+             .pipe(
+               takeUntil(this.unsubscribe$)
+             )
+             .subscribe((actionSubmitted: boolean) => {
+               if (!actionSubmitted) {
+                 return;
+               }
+
+               this.deleteArticle$.emit(article);
+             });
+  }
+
 }

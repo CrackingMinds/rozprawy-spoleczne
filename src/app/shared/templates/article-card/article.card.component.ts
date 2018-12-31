@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
@@ -25,6 +25,9 @@ export class ArticleCardComponent {
   @Input()
   mode: ArticleCardDisplayMode = ArticleCardDisplayMode.VIEW;
 
+  @Output('deleteArticle')
+  deleteArticle$: EventEmitter<Article> = new EventEmitter<Article>();
+
   AvailableModes = ArticleCardDisplayMode;
 
   constructor() {
@@ -40,4 +43,9 @@ export class ArticleCardComponent {
       articleId
     ];
   }
+
+  deleteArticle(): void {
+    this.deleteArticle$.emit(this.article);
+  }
+
 }

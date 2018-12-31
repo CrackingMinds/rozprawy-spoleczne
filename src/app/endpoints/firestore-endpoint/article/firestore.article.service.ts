@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 import {
+  Article,
   ArticleEntity, UntypedArticle
 } from 'app/models/article';
 
@@ -58,6 +59,20 @@ export class FirestoreArticleService {
             observer.complete();
           })
           .catch((reason) => observer.error(reason));
+    });
+
+  }
+
+  deleteArticle(articleId: string): Observable<void> {
+
+    return Observable.create((observer: Observer<void>) => {
+      const articleDocToBeDeleted: AngularFirestoreDocument<Article> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${articleId}`);
+      articleDocToBeDeleted.delete()
+        .then(() => {
+          observer.next(null);
+          observer.complete();
+        })
+        .catch((reason) => observer.error(reason));
     });
 
   }
