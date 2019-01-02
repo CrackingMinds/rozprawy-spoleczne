@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, Observer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 import {
   Article,
@@ -15,7 +16,8 @@ export class FirestoreArticleService {
 
   private static collectionName: string = 'articles';
 
-  constructor(private angularFirestore: AngularFirestore) {}
+  constructor(private angularFirestore: AngularFirestore,
+              private angularFireStorage: AngularFireStorage) {}
 
   getArticle(articleId: string): Observable<UntypedArticle> {
 
@@ -63,17 +65,21 @@ export class FirestoreArticleService {
 
   }
 
-  deleteArticle(articleId: string): Observable<void> {
+  deleteArticle(article: Article): Observable<void> {
 
     return Observable.create((observer: Observer<void>) => {
-      const articleDocToBeDeleted: AngularFirestoreDocument<Article> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${articleId}`);
+      const articleDocToBeDeleted: AngularFirestoreDocument<Article> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${article.id}`);
       articleDocToBeDeleted.delete()
         .then(() => {
           observer.next(null);
           observer.complete();
         })
         .catch((reason) => observer.error(reason));
-    });
+    }).pipe(
+      switchMap(() => {
+        return this.angularFireStorage.ref(article.pdf.storagePath).delete();
+      })
+    );
 
   }
 

@@ -55,7 +55,7 @@ export class ArticleEffects {
     .pipe(
       switchMap((action: RemoveArticle) => {
         // @TODO: implement error handler
-        return this.articleEndpoint.deleteArticle(action.article.id)
+        return this.articleEndpoint.deleteArticle(action.article)
           .pipe(
             map(() => new ReloadIssue(action.article.issueId))
           )

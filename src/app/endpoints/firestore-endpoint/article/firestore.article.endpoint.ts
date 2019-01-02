@@ -42,8 +42,8 @@ export class FirestoreArticleEndpoint extends ArticleEndpoint {
    return this.articleService.postArticle(rawArticle);
   }
 
-  deleteArticle(articleId: string): Observable<void> {
-    return this.articleService.deleteArticle(articleId);
+  deleteArticle(article: Article): Observable<void> {
+    return this.articleService.deleteArticle(article);
   }
 
   private replaceTypeIdsWithTypes(untypedArticles: UntypedArticle[]): Observable<Article[]> {

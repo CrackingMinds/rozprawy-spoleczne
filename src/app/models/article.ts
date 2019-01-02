@@ -1,4 +1,4 @@
-import { ArticleFile } from 'app/models/article.file';
+import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { Author } from 'app/models/author';
 import { ArticleType } from 'app/models/article.type';
 
@@ -15,7 +15,7 @@ type ArticleBase = {
   keywords: string;
   pages: string;
   materialsAndMethods: string;
-  pdf: ArticleFile;
+  pdf: IF_ArticleFile;
   results: string;
   title: string;
 }
