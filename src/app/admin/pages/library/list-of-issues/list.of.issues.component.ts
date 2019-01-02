@@ -54,7 +54,9 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
     if (changes.issues && changes.issues.currentValue.length) {
       this.lastIssueMarkedAsCurrent = this.issues.filter((issue: Issue) => issue.isCurrent)[0];
-      this.selectIssue(this.lastIssueMarkedAsCurrent);
+
+      if (!this.selectedIssue)
+        this.selectIssue(this.lastIssueMarkedAsCurrent);
     }
 
   }

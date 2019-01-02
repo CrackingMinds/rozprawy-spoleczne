@@ -17,6 +17,7 @@ import {
 
 import { Article } from 'app/models/article';
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { ReloadIssue } from 'app/admin/pages/library/store/actions/issue.actions';
 
 @Injectable()
 export class ArticleEffects {
@@ -46,12 +47,15 @@ export class ArticleEffects {
       })
     );
 
-  @Effect({dispatch: false})
+  @Effect()
   removeArticle$ = this.actions$.ofType(REMOVE_ARTICLE)
     .pipe(
       switchMap((action: RemoveArticle) => {
         // @TODO: implement error handler
-        return this.articleEndpoint.deleteArticle(action.articleId);
+        return this.articleEndpoint.deleteArticle(action.article.id)
+          .pipe(
+            map(() => new ReloadIssue(action.article.issueId))
+          )
       })
     )
 }

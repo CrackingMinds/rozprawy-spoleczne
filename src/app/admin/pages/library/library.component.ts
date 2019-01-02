@@ -6,7 +6,7 @@ import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
-import * as libraryReducer from 'app/admin/pages/library/store/reducers/library.reducer';
+import * as librarySelectors from 'app/admin/pages/library/store/selectors/library.selectors';
 import { LibraryState } from 'app/admin/pages/library/store/reducers/library.reducer';
 
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/admin/pages/library/store/actions/issue.actions';
@@ -43,7 +43,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.pageNameService.setPageName('Zarządzanie numerami');
 
-    this.store.select(libraryReducer.getIssueEntities)
+    this.store.select(librarySelectors.getIssues)
         .pipe(
           map((issues: Issue[]) => {
             return Utils.sortIssues(issues);
@@ -52,14 +52,14 @@ export class LibraryComponent implements OnInit, OnDestroy {
         )
         .subscribe((issues: Issue[]) => this.issues = issues);
 
-    this.store.select(libraryReducer.getArticleEntities)
+    this.store.select(librarySelectors.getArticleEntities)
       .pipe(
         takeUntil(this.unsubscribe$)
       )
       .subscribe((articles: Article[]) => this.articles = articles);
 
-    this.issuesLoading$ = this.store.select(libraryReducer.getIssuesLoading);
-    this.articlesLoading$ = this.store.select(libraryReducer.getArticlesLoading);
+    this.issuesLoading$ = this.store.select(librarySelectors.getIssuesLoading);
+    this.articlesLoading$ = this.store.select(librarySelectors.getArticlesLoading);
 
     this.initMainSpinnerManager();
 
@@ -93,7 +93,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
   }
 
   onArticleDelete(article: Article): void {
-    this.store.dispatch(new RemoveArticle(article.id));
+    this.store.dispatch(new RemoveArticle(article));
   }
 
   private initMainSpinnerManager(): void {

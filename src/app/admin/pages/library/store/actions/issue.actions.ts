@@ -8,6 +8,9 @@ export const LOAD_ISSUES = `${ACTION_PREFIX} Load Issues`;
 export const LOAD_ISSUES_SUCCESS = `${ACTION_PREFIX} Load Issues Success`;
 export const LOAD_ISSUES_FAIL = `${ACTION_PREFIX} Load Issues Fail`;
 
+export const RELOAD_ISSUE = `${ACTION_PREFIX} Reload Issue`;
+export const RELOAD_ISSUE_SUCCESS = `${ACTION_PREFIX} Reload Issue Success`;
+
 export const CREATE_ISSUE = `${ACTION_PREFIX} Create Issue`;
 export const CREATE_ISSUE_FAIL = `${ACTION_PREFIX} Create Issue Fail`;
 
@@ -30,6 +33,16 @@ export class LoadIssuesSuccess implements Action {
 export class LoadIssuesFail implements Action {
   readonly type: string = LOAD_ISSUES_FAIL;
   constructor(public error: any) {}
+}
+
+export class ReloadIssue implements Action {
+  readonly type: string = RELOAD_ISSUE;
+  constructor(public issueId: string) {}
+}
+
+export class ReloadIssueSuccess implements Action {
+  readonly type: string = RELOAD_ISSUE_SUCCESS;
+  constructor(public issue: Issue) {}
 }
 
 export class CreateIssue implements Action {

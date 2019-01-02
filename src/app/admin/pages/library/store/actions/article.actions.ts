@@ -41,7 +41,7 @@ export class CreateArticleFail implements Action {
 
 export class RemoveArticle implements Action {
   readonly type: string = REMOVE_ARTICLE;
-  constructor(public articleId: string) {}
+  constructor(public article: Article) {}
 }
 
 export class RemoveArticleFail implements Action {

@@ -6,19 +6,21 @@ import {
   IssueAction,
   LOAD_ISSUES,
   LOAD_ISSUES_FAIL,
-  LOAD_ISSUES_SUCCESS, LoadIssuesSuccess,
+  LOAD_ISSUES_SUCCESS, LoadIssuesSuccess, RELOAD_ISSUE_SUCCESS, ReloadIssueSuccess,
   REMOVE_ISSUE_FAIL,
   UPDATE_ISSUE_FAIL
 } from 'app/admin/pages/library/store/actions/issue.actions';
 
+export type IssueStoreEntity = { [id: string]: Issue };
+
 export interface IssuesState {
-  entities: Issue[];
+  entities: IssueStoreEntity;
   loaded: boolean;
   loading: boolean;
 }
 
 export const initialState: IssuesState = {
-  entities: [],
+  entities: {},
   loaded: false,
   loading: true
 };
@@ -35,11 +37,21 @@ export function reducer(state = initialState, action: IssueAction): IssuesState 
     }
 
     case LOAD_ISSUES_SUCCESS: {
+
+      const issues = (action as LoadIssuesSuccess).issues;
+
+      const entities = issues.reduce((entities: IssueStoreEntity, issue: Issue) => {
+        return {
+          ...entities,
+          [issue.id]: issue
+        };
+      }, {});
+
       return {
         ...state,
         loading: false,
         loaded: true,
-        entities: (action as LoadIssuesSuccess).issues
+        entities
       }
     }
 
@@ -49,6 +61,20 @@ export function reducer(state = initialState, action: IssueAction): IssuesState 
         loading: false,
         loaded: false
       }
+    }
+
+    case RELOAD_ISSUE_SUCCESS: {
+
+      const issue: Issue = (action as ReloadIssueSuccess).issue;
+
+      const entities: IssueStoreEntity = { ...state.entities };
+      entities[issue.id] = issue;
+
+      return {
+        ...state,
+        entities
+      }
+
     }
 
     case CREATE_ISSUE: {
@@ -86,7 +112,3 @@ export function reducer(state = initialState, action: IssueAction): IssuesState 
 
   return state;
 }
-
-export const getEntities = (state: IssuesState) => state.entities;
-export const getLoading = (state: IssuesState) => state.loading;
-export const getLoaded = (state: IssuesState) => state.loaded;

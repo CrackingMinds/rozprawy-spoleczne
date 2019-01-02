@@ -4,7 +4,7 @@
 </button>
 <div class="rs-issues-list">
   <ng-container *ngFor="let issue of issues">
-    <div class="rs-issue-container" [class.rs-current]="issue.isCurrent" [class.rs-selected]="issue === selectedIssue">
+    <div class="rs-issue-container" [class.rs-current]="issue.isCurrent" [class.rs-selected]="issue.id === selectedIssue.id">
       <button [matMenuTriggerFor]="menu" class="rs-edit-issue-btn">
         <mat-icon>more_vert</mat-icon>
       </button>
