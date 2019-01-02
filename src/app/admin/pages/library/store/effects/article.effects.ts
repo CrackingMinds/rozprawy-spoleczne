@@ -38,12 +38,15 @@ export class ArticleEffects {
       })
     );
 
-  @Effect({dispatch: false})
+  @Effect()
   createArticle$ = this.actions$.ofType(CREATE_ARTICLE)
     .pipe(
       switchMap((action: CreateArticle) => {
         // @TODO: implement error handler
-        return this.articleEndpoint.postArticle(action.article);
+        return this.articleEndpoint.postArticle(action.article)
+          .pipe(
+            map(() => new ReloadIssue(action.article.issueId))
+          )
       })
     );
 
