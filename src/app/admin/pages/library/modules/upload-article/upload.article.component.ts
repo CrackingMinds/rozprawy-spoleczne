@@ -1,13 +1,20 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import { takeUntil, switchMap, map } from 'rxjs/operators';
 
 import { UploadArticleService } from 'app/admin/pages/library/modules/upload-article/upload.article.service';
 import { F_ArticleFile, IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
+import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
+import { UntypedArticle } from 'app/models/article';
+import { RoutesComposer } from 'app/routes-resolver/routes.composer';
+
+type FileExists = {
+  articleId: string;
+};
 
 @Component({
   selector: 'rs-upload-article',
@@ -35,44 +42,59 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
   file: F_ArticleFile;
 
+  fileExists: FileExists;
+
+  fileError: string;
+
+  showSpinner: boolean = false;
+
   private onChangeCallback: (file: IF_ArticleFile) => any;
 
-  private destroy$: Subject<void> = new Subject<void>();
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private articleUploadService: UploadArticleService) {}
+  constructor(private articleUploadService: UploadArticleService,
+              private articleService: FirestoreArticleService) {}
 
   ngOnDestroy() {
     this.articleUploadService.destroy();
 
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   chooseFileFromComputer(): boolean {
+    this.fileExists = null;
     this.fileInput.nativeElement.dispatchEvent(new MouseEvent('click'));
     return false;
   }
 
   onFileChosen(event): void {
-    let file = new ArticleFile(event.target.files[0]);
+
+    if (!this.checkFileChosen(event)) {
+      return;
+    }
+
+    this.showSpinner = true;
+
+    const file = new ArticleFile(event.target.files[0]);
     this.fileName = file.name;
 
-    let uploadTask: FileUploadTask = this.articleUploadService.uploadToServer(file);
+    this.checkIfFileExists(file.name)
+        .pipe(
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((exists: FileExists) => {
 
-    this.uploadProgress = uploadTask.uploadProgress;
+          if (exists) {
+            this.fileExists = exists;
+          } else {
+            this.uploadFile(file);
+          }
 
-    this.fileChosen = true;
+          this.showSpinner = false;
 
-    uploadTask.downloadUrl
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe((url: string) => {
-        this.file = new F_ArticleFile(file.name, uploadTask.storagePath, url);
-        if (this.onChangeCallback) {
-          this.onChangeCallback(this.file.value);
-        }
-      });
+        });
+
   }
 
   deleteFile(): Promise<void> {
@@ -84,7 +106,7 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
         this.deleting = true;
         this.articleUploadService.removeFromServer(this.file)
             .pipe(
-              takeUntil(this.destroy$)
+              takeUntil(this.unsubscribe$)
             )
             .subscribe(() => {
               this.deleting = false;
@@ -113,6 +135,59 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
   writeValue(value: F_ArticleFile): void {
     this.file = value;
+  }
+
+  composeArticleRouterLink(articleId: string): string[] {
+    return RoutesComposer.composeArticleRouterLink(articleId);
+  }
+
+  private checkIfFileExists(fileName: string): Observable<FileExists> {
+    return this.articleUploadService.checkIfFileExists(fileName)
+        .pipe(
+          switchMap((exists: boolean) => {
+            if (exists) {
+              return this.articleService.getArticleByFile(fileName)
+                         .pipe(
+                           map((article: UntypedArticle) => {
+
+                             if (!article) {
+                               throw Error('Plik już istnieje. Natomiast nie jest on częścią żadnego z artykułów');
+                             }
+
+                             const exists: FileExists = {
+                               articleId: article.id
+                             };
+                             return exists;
+                           })
+                         );
+            } else {
+              return of(null);
+            }
+          })
+        );
+  }
+
+  private uploadFile(file: ArticleFile): void {
+    const uploadTask: FileUploadTask = this.articleUploadService.uploadToServer(file);
+
+    this.uploadProgress = uploadTask.uploadProgress;
+
+    this.fileChosen = true;
+
+    uploadTask.downloadUrl
+              .pipe(
+                takeUntil(this.unsubscribe$)
+              )
+              .subscribe((url: string) => {
+                this.file = new F_ArticleFile(file.name, uploadTask.storagePath, url);
+                if (this.onChangeCallback) {
+                  this.onChangeCallback(this.file.value);
+                }
+              });
+  }
+
+  private checkFileChosen(event): boolean {
+    return !!event.target.files.length;
   }
 
 }

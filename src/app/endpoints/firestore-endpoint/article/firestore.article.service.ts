@@ -3,13 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 
-import {
-  Article,
-  ArticleEntity, UntypedArticle
-} from 'app/models/article';
+import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 
 @Injectable()
 export class FirestoreArticleService {
@@ -32,6 +29,11 @@ export class FirestoreArticleService {
                                  };
                                })
                              );
+  }
+
+  getArticleByFile(fileName: string): Observable<UntypedArticle> {
+    const queryFn: QueryFn = ref => ref.where('pdf.name', '==', fileName);
+    return this.getArticleByQuery(queryFn);
   }
 
   getIssueArticles(issueId: string): Observable<UntypedArticle[]> {
@@ -81,6 +83,24 @@ export class FirestoreArticleService {
       })
     );
 
+  }
+
+  private getArticleByQuery(queryFn: QueryFn): Observable<UntypedArticle> {
+    const articleCollection = this.angularFirestore.collection<ArticleEntity>(FirestoreArticleService.collectionName, queryFn);
+    return articleCollection.snapshotChanges()
+                            .pipe(
+                              map(actions => {
+                                  if (!actions.length) {
+                                    return null;
+                                  }
+
+                                  const data = actions[0].payload.doc.data() as ArticleEntity;
+                                  return {
+                                    id: actions[0].payload.doc.id,
+                                    ...data
+                                  };
+                                }
+                              ));
   }
 
 }

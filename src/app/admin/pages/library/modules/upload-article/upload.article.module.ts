@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { MatButtonModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 
@@ -17,6 +18,7 @@ const providers = [
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
 
     MatProgressSpinnerModule,
     MatIconModule,

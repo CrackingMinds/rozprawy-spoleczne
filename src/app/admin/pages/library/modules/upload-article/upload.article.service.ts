@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+
+import { Observable, Subject, of } from 'rxjs';
+import { finalize, map, takeUntil, catchError } from 'rxjs/operators';
 
 import { AngularFireStorage } from 'angularfire2/storage';
 
 import { F_ArticleFile } from 'app/models/firestore/article.file.f';
 import { FileUploadTask } from 'app/models/FileUploadTask';
 import { ArticleFile } from 'app/models/article.file';
-import { Subject, from } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
 
 const bucketPath = 'firebase-test/Issues/';
 
@@ -46,6 +46,15 @@ export class UploadArticleService {
   removeFromServer(file: F_ArticleFile): Observable<void> {
     let ref = this.angularFireStorage.ref(file.storagePath);
     return ref.delete();
+  }
+
+  checkIfFileExists(fileName: string): Observable<boolean> {
+    const filePath: string = this.generateStoragePath(fileName);
+    return this.angularFireStorage.ref(filePath).getMetadata()
+              .pipe(
+                map((metadata) => !!metadata),
+                catchError(() => of(false))
+              );
   }
 
   destroy(): void {
