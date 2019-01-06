@@ -1,50 +1,28 @@
-<div *ngIf="showSpinner" class="rs-spinner-container">
-  <mat-spinner class="rs-spinner"
-               color="primary"
-               [diameter]="70">
-  </mat-spinner>
-</div>
-
-<div [class.rs-not-visible]="showSpinner" class="rs-choose-file-box">
-
-  <span class="rs-upload-header">Plik artykułu (*.pdf)</span>
-
-  <div class="rs-file-box">
-    <div class="rs-file-view" *ngIf="fileChosen">
-      <span *ngIf="!file" class="rs-file-name">{{ fileName }}</span>
-      <a *ngIf="file" class="rs-file-name" [href]="file.downloadUrl" target="_blank">{{ fileName }}</a>
-
-      <div class="rs-file-actions">
-        <mat-progress-spinner *ngIf="!file" class="rs-progress-spinner"
-                              color="accent"
-                              [diameter]="20"
-                              [value]="(uploadProgress | async)">
-        </mat-progress-spinner>
-        <mat-progress-spinner *ngIf="deleting" class="rs-progress-spinner"
-                              mode="indeterminate"
-                              color="accent"
-                              [diameter]="20">
-        </mat-progress-spinner>
-
-        <mat-icon *ngIf="file && !deleting" color="accent" class="rs-delete-file-btn" (click)="deleteFile()">delete</mat-icon>
-      </div>
-    </div>
-
-    <div class="rs-choose-file-btn-container">
-      <button *ngIf="!fileChosen"
-              mat-raised-button color="primary"
-              class="rs-choose-file-btn" (click)="chooseFileFromComputer()">
-        Wybierz plik
-      </button>
-      <div *ngIf="fileExists" class="rs-file-exists-error">
-      <span class="rs-file-error-message">
-        Plik już istnieje w
-      </span>
-        <a [routerLink]="composeArticleRouterLink(fileExists.articleId)" target="_blank">innym</a>
-        <span> artykule</span>
-      </div>
-    </div>
+<div class="rs-field-container">
+  <div class="rs-field"
+       [class.rs-empty-field]="fieldState === FieldState.EMPTY"
+       [class.rs-disabled-field]="fieldState === FieldState.PENDING"
+       (click)="onInputClick()">
+    <span *ngIf="fieldState !== FieldState.EMPTY && !file">{{ fileName }}</span>
+    <a *ngIf="fieldState !== FieldState.EMPTY && file" [href]="file.downloadUrl" target="_blank">{{ fileName }}</a>
+    <span *ngIf="fieldState === FieldState.EMPTY" class="rs-field-placeholder">Dodaj plik artykułu</span>
   </div>
+  <button class="rs-field-submit-btn white-theme" [ngSwitch]="fieldState" (click)="onSubmit()">
+    <mat-icon *ngSwitchCase="FieldState.EMPTY">cloud_upload</mat-icon>
+    <mat-icon *ngSwitchCase="FieldState.DEFAULT">delete</mat-icon>
+    <mat-icon *ngSwitchCase="FieldState.ERROR">cloud_upload</mat-icon>
+    <mat-spinner *ngSwitchCase="FieldState.PENDING"
+                 [diameter]="20">
+    </mat-spinner>
+  </button>
+  <input #fileInput type="file" (change)="onFileChosen($event)" accept=".pdf"/>
+</div>
+<div *ngIf="fileError" class="rs-field-error" [ngSwitch]="fileError.type">
 
-  <input #fileInput type="file" (change)="onFileChosen($event)" accept=".pdf" />
+  <ng-container *ngSwitchCase="ArticleFileErrorType.FILE_EXISTS">
+    <span>Plik już istnieje w </span>
+    <a [routerLink]="composeArticleRouterLink(fileError.content.articleId)" target="_blank">innym</a>
+    <span> artykule</span>
+  </ng-container>
+
 </div>

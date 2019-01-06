@@ -11,10 +11,8 @@ import { FileUploadTask } from 'app/models/FileUploadTask';
 import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
 import { UntypedArticle } from 'app/models/article';
 import { RoutesComposer } from 'app/routes-resolver/routes.composer';
-
-type FileExists = {
-  articleId: string;
-};
+import { FieldState } from 'app/admin/pages/library/modules/field.state';
+import { ArticleFileError, ArticleFileErrorType, ArticleFileExistsError } from 'app/admin/pages/library/modules/upload-article/article.error';
 
 @Component({
   selector: 'rs-upload-article',
@@ -27,26 +25,27 @@ type FileExists = {
       multi: true
     },
     UploadArticleService
-  ]
+  ],
+  host: {
+    '[class.rs-has-error]': 'this.fileError'
+  }
 })
 export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
-  fileChosen: boolean = false;
-  uploadProgress: Observable<number>;
   fileName: string = '';
-
-  deleting: boolean = false;
 
   @ViewChild('fileInput')
   fileInput: ElementRef;
 
   file: F_ArticleFile;
 
-  fileExists: FileExists;
+  fileError: ArticleFileError;
 
-  fileError: string;
+  ArticleFileErrorType = ArticleFileErrorType;
 
-  showSpinner: boolean = false;
+  fieldState: FieldState = FieldState.EMPTY;
+
+  FieldState = FieldState;
 
   private onChangeCallback: (file: IF_ArticleFile) => any;
 
@@ -62,10 +61,35 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  chooseFileFromComputer(): boolean {
-    this.fileExists = null;
-    this.fileInput.nativeElement.dispatchEvent(new MouseEvent('click'));
-    return false;
+  onSubmit(): void {
+
+    switch (this.fieldState) {
+
+      case FieldState.EMPTY: {
+        this.chooseFileFromComputer();
+        break;
+      }
+
+      case FieldState.ERROR: {
+        this.chooseFileFromComputer();
+        break;
+      }
+
+      case FieldState.DEFAULT: {
+        this.deleteFile();
+        break;
+      }
+
+    }
+
+  }
+
+  onInputClick(): void {
+
+    if (this.fieldState !== FieldState.EMPTY)
+      return;
+
+    this.chooseFileFromComputer();
   }
 
   onFileChosen(event): void {
@@ -74,7 +98,7 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    this.showSpinner = true;
+    this.changeFieldState(FieldState.PENDING);
 
     const file = new ArticleFile(event.target.files[0]);
     this.fileName = file.name;
@@ -83,15 +107,18 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
         .pipe(
           takeUntil(this.unsubscribe$)
         )
-        .subscribe((exists: FileExists) => {
+        .subscribe((exists: ArticleFileExistsError) => {
 
           if (exists) {
-            this.fileExists = exists;
+            this.changeFieldState(FieldState.ERROR);
+            this.fileError = {
+              type: ArticleFileErrorType.FILE_EXISTS,
+              content: exists
+            };
           } else {
+            this.fileError = null;
             this.uploadFile(file);
           }
-
-          this.showSpinner = false;
 
         });
 
@@ -99,23 +126,24 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
   deleteFile(): Promise<void> {
 
+    this.changeFieldState(FieldState.PENDING);
+
     return new Promise(resolve => {
       if (!this.file) {
         resolve();
       } else {
-        this.deleting = true;
         this.articleUploadService.removeFromServer(this.file)
             .pipe(
               takeUntil(this.unsubscribe$)
             )
             .subscribe(() => {
-              this.deleting = false;
-              this.fileChosen = false;
               this.fileInput.nativeElement.value = '';
               this.file = null;
               if (this.onChangeCallback) {
                 this.onChangeCallback(null);
               }
+
+              this.changeFieldState(FieldState.EMPTY);
 
               resolve();
             });
@@ -141,7 +169,12 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
     return RoutesComposer.composeArticleRouterLink(articleId);
   }
 
-  private checkIfFileExists(fileName: string): Observable<FileExists> {
+  private chooseFileFromComputer(): boolean {
+    this.fileInput.nativeElement.dispatchEvent(new MouseEvent('click'));
+    return false;
+  }
+
+  private checkIfFileExists(fileName: string): Observable<ArticleFileExistsError> {
     return this.articleUploadService.checkIfFileExists(fileName)
         .pipe(
           switchMap((exists: boolean) => {
@@ -151,13 +184,13 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
                            map((article: UntypedArticle) => {
 
                              if (!article) {
-                               throw Error('Plik już istnieje. Natomiast nie jest on częścią żadnego z artykułów');
+                               return null;
                              }
 
-                             const exists: FileExists = {
+                             const exception: ArticleFileExistsError = {
                                articleId: article.id
                              };
-                             return exists;
+                             return exception;
                            })
                          );
             } else {
@@ -168,17 +201,14 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
   }
 
   private uploadFile(file: ArticleFile): void {
+
     const uploadTask: FileUploadTask = this.articleUploadService.uploadToServer(file);
-
-    this.uploadProgress = uploadTask.uploadProgress;
-
-    this.fileChosen = true;
-
     uploadTask.downloadUrl
               .pipe(
                 takeUntil(this.unsubscribe$)
               )
               .subscribe((url: string) => {
+                this.changeFieldState(FieldState.DEFAULT);
                 this.file = new F_ArticleFile(file.name, uploadTask.storagePath, url);
                 if (this.onChangeCallback) {
                   this.onChangeCallback(this.file.value);
@@ -188,6 +218,10 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
 
   private checkFileChosen(event): boolean {
     return !!event.target.files.length;
+  }
+
+  private changeFieldState(state: FieldState): void {
+    this.fieldState = state;
   }
 
 }

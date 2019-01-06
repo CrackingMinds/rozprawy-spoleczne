@@ -1,98 +1,94 @@
 @import "variables";
 
+$field-horizontal-padding: $universal-padding-half;
+$error-height: 20px;
+
 :host {
   display: block;
   position: relative;
+  padding-top: $error-height;
 
-  input {
-    display: none;
+  &:not(.rs-has-error) {
+    padding-bottom: $error-height;
   }
 
-  .rs-choose-file-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  &.rs-has-error {
+    padding-bottom: 0;
 
-    .rs-upload-header {
-      font-size: 1rem;
-      margin-bottom: 1rem;
+    .rs-field {
+      border-color: $red;
     }
 
-    .rs-upload-error {
-      margin-left: 10px;
-      color: $red;
+    .rs-field-submit-btn {
+      background-color: $red;
     }
-
-    .rs-file-view {
-      display: flex;
-      flex-direction: row;
-      font-size: 16px;
-
-      .rs-file-name {
-        line-height: 1.375em;
-      }
-
-      .rs-file-actions {
-        height: 1.375em;
-        margin-left: 10px;
-
-        .rs-delete-file-btn {
-          font-size: 1.4em;
-          cursor: pointer;
-        }
-
-      }
-
-    }
-
-    .rs-choose-file-btn {
-      height: 100%;
-    }
-
-    .rs-choose-file-btn-container {
-      display: flex;
-      width: 100%;
-    }
-
-    .rs-file-exists-error {
-      margin: auto auto auto $universal-padding-half;
-
-      span, a {
-        font-weight: bold;
-      }
-
-      span {
-        color: red;
-      }
-
-    }
-
-    &.rs-not-visible {
-      visibility: hidden;
-    }
-
   }
 
-  .rs-file-box {
+  .rs-field-container {
     width: 100%;
-    height: 36px;
+    height: 35px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .rs-spinner-container {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: $white;
-
-    display: flex;
-    justify-content: flex-start;
     align-items: center;
+
+    input {
+      display: none;
+    }
+
+  }
+
+  .rs-field {
+    border: 2px solid $main-green-color;
+    border-right: none;
+    border-radius: $border-radius 0 0 $border-radius;
+
+    padding: 0 $field-horizontal-padding;
+    height: 100%;
+    flex: 1;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    &.rs-empty-field {
+
+      &:hover {
+        border-color: $hover-color;
+        cursor: pointer;
+      }
+
+    }
+
+    &.rs-disabled-field {
+      background-color: rgba(128, 128, 128, 0.1);
+      color: #828282;
+    }
+  }
+
+  .rs-field-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 90px;
+    background-color: $main-green-color;
+    border-radius: 0 $border-radius $border-radius 0;
+    border: none;
+    color: $white;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+
+  }
+
+  .rs-field-error {
+    max-height: $error-height;
+    height: $error-height;
+    padding-left: $field-horizontal-padding;
+    color: $red;
+  }
+
+  .rs-field-placeholder {
+    color: #828282;
   }
 
 }
