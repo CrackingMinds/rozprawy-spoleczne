@@ -17,6 +17,9 @@
           <mat-error *ngIf="author.get('firstName').hasError('required')">
             Wpisz imię
           </mat-error>
+          <mat-error *ngIf="author.get('firstName').hasError('pattern')">
+            Wpisano niepoprawne imię
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput
@@ -25,11 +28,17 @@
           <mat-error *ngIf="author.get('lastName').hasError('required')">
             Wpisz nazwisko
           </mat-error>
+          <mat-error *ngIf="author.get('lastName').hasError('pattern')">
+            Wpisano niepoprawne nazwisko
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <input matInput
                  placeholder="Drugie imię"
                  formControlName="middleName">
+          <mat-error *ngIf="author.get('middleName').hasError('pattern')">
+            Wpisano niepoprawne drugie imię
+          </mat-error>
         </mat-form-field>
       </div>
     </div>

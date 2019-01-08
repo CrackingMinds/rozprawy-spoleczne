@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 
+const nameRegExp: RegExp = new RegExp(/^([^\u0000-\u007F]|[a-zA-Z])+$/);
+
 @Component({
   selector: 'rs-add-authors',
   templateUrl: './add.authors.component.html',
@@ -29,9 +31,17 @@ export class AddAuthorsComponent implements OnInit {
   addAuthor(): void {
     this.authorsArray.push(
       this.formBuilder.group({
-        firstName: [undefined, Validators.required],
-        lastName: [undefined, Validators.required],
-        middleName: undefined
+        firstName: [undefined, [
+          Validators.required,
+          Validators.pattern(nameRegExp)
+        ]],
+        lastName: [undefined, [
+          Validators.required,
+          Validators.pattern(nameRegExp)
+        ]],
+        middleName: [undefined, [
+          Validators.pattern(nameRegExp)
+        ]]
       })
     );
   }
