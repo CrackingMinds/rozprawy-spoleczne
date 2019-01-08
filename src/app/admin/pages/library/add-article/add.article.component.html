@@ -20,10 +20,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-add-authors
-      name="article-authors"
-      [parentForm]="form">
-    </rs-add-authors>
+    <rs-add-authors formControlName="authors"></rs-add-authors>
   </div>
 
   <div class="rs-form-field-container">
@@ -56,7 +53,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-toggle-area name="Wprowadzenie">
+    <rs-toggle-area name="Wprowadzenie" [checked]="initialArticleData.introduction">
       <mat-form-field>
         <textarea matInput
                   placeholder="Wprowadzenie"
@@ -67,7 +64,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-toggle-area name="Materiały i metody">
+    <rs-toggle-area name="Materiały i metody" [checked]="initialArticleData.materialsAndMethods">
       <mat-form-field>
         <textarea matInput
                   placeholder="Materiały i metody"
@@ -78,7 +75,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-toggle-area name="Wyniki">
+    <rs-toggle-area name="Wyniki" [checked]="initialArticleData.results">
       <mat-form-field>
         <textarea matInput
                   placeholder="Wyniki"
@@ -89,7 +86,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-toggle-area name="Wnioski">
+    <rs-toggle-area name="Wnioski" [checked]="initialArticleData.conclusions">
       <mat-form-field>
         <textarea matInput
                   placeholder="Wnioski"
@@ -100,7 +97,7 @@
   </div>
 
   <div class="rs-form-field-container">
-    <rs-toggle-area name="Słowa kluczowe">
+    <rs-toggle-area name="Słowa kluczowe" [checked]="initialArticleData.keywords">
       <mat-form-field>
         <textarea matInput
                   placeholder="Słowa kluczowe"
@@ -121,8 +118,9 @@
 
 </form>
 
-<!--<div>-->
-  <!--<pre>{{ form.value | json }}</pre>-->
-  <!--<pre>isFormValid: {{ form.valid }}</pre>-->
-  <!--<pre>issue: {{ params | json }}</pre>-->
-<!--</div>-->
+<div>
+  <pre>authors control valid: {{ form.get('authors').valid }}</pre>
+  <pre>{{ form.value | json }}</pre>
+  <pre>isFormValid: {{ form.valid }}</pre>
+  <pre>params: {{ params | json }}</pre>
+</div>

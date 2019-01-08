@@ -25,6 +25,9 @@ export class ArticleCardComponent {
   @Input()
   mode: ArticleCardDisplayMode = ArticleCardDisplayMode.VIEW;
 
+  @Output('editArticle')
+  editArticle$: EventEmitter<Article> = new EventEmitter<Article>();
+
   @Output('deleteArticle')
   deleteArticle$: EventEmitter<Article> = new EventEmitter<Article>();
 
@@ -42,6 +45,10 @@ export class ArticleCardComponent {
       `/${RoutesResolver.article}`,
       articleId
     ];
+  }
+
+  editArticle(): void {
+    this.editArticle$.emit(this.article);
   }
 
   deleteArticle(): void {

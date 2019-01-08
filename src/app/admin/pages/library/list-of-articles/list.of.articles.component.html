@@ -3,6 +3,7 @@
     [article]="article"
     [issue]="issue"
     [mode]="articleCardDisplayModes.EDIT"
+    (editArticle)="openArticleEditDialog($event)"
     (deleteArticle)="openArticleDeleteDialog($event)">
   </rs-article-card>
 </ng-container>

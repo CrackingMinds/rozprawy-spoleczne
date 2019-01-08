@@ -37,7 +37,7 @@
       </div>
 
       <div *ngIf="mode === AvailableModes.EDIT" class="rs-edit-buttons">
-        <button class="rs-button rs-edit-article-btn">
+        <button class="rs-button rs-edit-article-btn" (click)="editArticle()">
           <mat-icon>edit</mat-icon>
           <span>Edytuj</span>
         </button>

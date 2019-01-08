@@ -2,8 +2,9 @@ import { Observable } from 'rxjs';
 
 import { Issue, RawIssue } from 'app/models/issue';
 import { ArticleEntity } from 'app/models/article';
+import { ArticleCrudParams } from 'app/admin/pages/library/add-article/article.crud.params';
 
-export type ModalParams = undefined | Issue;
+export type ModalParams = undefined | Issue | ArticleCrudParams;
 export type ModalReturnData = void | boolean | Issue | RawIssue | ArticleEntity;
 
 export interface ModalContentComponent {

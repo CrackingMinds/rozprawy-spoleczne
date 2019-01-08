@@ -1,5 +1,6 @@
 <mat-select
   [disabled]="disabled"
+  [value]="selectedType"
   (selectionChange)="onSelectionChange($event)"
   (openedChange)="onOpenedChange()"
   (focus)="onFocus()"

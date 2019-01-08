@@ -1,4 +1,4 @@
-import { Component, OnInit, Optional, Self, HostBinding, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Optional, Self, HostBinding, Input, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 import { MatSelectChange, MatFormFieldControl } from '@angular/material';
@@ -19,7 +19,7 @@ import { ArticleType } from 'app/models/article.type';
     }
   ]
 })
-export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, OnDestroy {
+export class SelectArticleTypeComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnChanges, OnInit, OnDestroy {
 
   @Input()
   articleTypes: ArticleType[];
@@ -75,9 +75,21 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   private selectedType: ArticleType;
 
+  private initialArticleTypeId: string;
+
   constructor(@Optional() @Self() public ngControl: NgControl) {
 
     if (this.ngControl != null) { this.ngControl.valueAccessor = this; }
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes.articleTypes && changes.articleTypes.currentValue) {
+      this.selectedType = this.articleTypes.filter((articleType: ArticleType) => {
+        return articleType.id === this.initialArticleTypeId;
+      })[0];
+    }
 
   }
 
@@ -101,6 +113,7 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
   }
 
   writeValue(articleTypeId: string): void {
+    this.initialArticleTypeId = articleTypeId;
   }
 
   onContainerClick(event: MouseEvent): void {

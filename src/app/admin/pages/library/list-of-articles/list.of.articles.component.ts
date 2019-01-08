@@ -15,6 +15,7 @@ import { ModalComponent } from 'app/admin/pages/library/list-of-issues/modals/mo
 import { AddArticleFormComponent } from 'app/admin/pages/library/add-article/add.article.component';
 
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
+import { ArticleCrudParams } from 'app/admin/pages/library/add-article/article.crud.params';
 
 @Component({
   selector: 'rs-list-of-articles',
@@ -31,6 +32,9 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   @Output()
   createArticle: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
+
+  @Output('editArticle')
+  editArticle$: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
 
   @Output('deleteArticle')
   deleteArticle$: EventEmitter<Article> = new EventEmitter<Article>();
@@ -50,7 +54,11 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleCreationDialog(): void {
 
-    let modalData: ModalData = {
+    const articleCrudParams: ArticleCrudParams = {
+      issue: this.issue
+    };
+
+    const modalData: ModalData = {
       title: `Dodanie nowego artykułu do numeru: ${this.issueStringPipe.transform(this.issue)}`,
       content: AddArticleFormComponent,
       buttons: {
@@ -58,7 +66,7 @@ export class ListOfArticlesComponent implements OnDestroy {
           text: 'Dodaj'
         }
       },
-      otherParams: this.issue
+      otherParams: articleCrudParams
     };
 
     const dialogRef = this.dialog.open(ModalComponent, {
@@ -75,6 +83,40 @@ export class ListOfArticlesComponent implements OnDestroy {
         }
         this.createArticle.emit(newArticle);
       });
+
+  }
+
+  openArticleEditDialog(article: Article): void {
+
+    const articleCrudParams: ArticleCrudParams = {
+      article: article
+    };
+
+    const modalData: ModalData = {
+      title: `Edycja artykułu: ${article.title}`,
+      content: AddArticleFormComponent,
+      buttons: {
+        submit: {
+          text: 'Zapisz'
+        }
+      },
+      otherParams: articleCrudParams
+    };
+
+    const dialogRef = this.dialog.open(ModalComponent, {
+      disableClose: true,
+      data: modalData
+    });
+    dialogRef.afterClosed()
+             .pipe(
+               takeUntil(this.unsubscribe$)
+             )
+             .subscribe((updatedArticle: ArticleEntity) => {
+               if (!updatedArticle) {
+                 return;
+               }
+               this.editArticle$.emit(updatedArticle);
+             });
 
   }
 

@@ -1,52 +1,49 @@
-<div [formGroup]="parentForm">
-  <div formArrayName="authors">
-
-    <div *ngFor="let author of authors; let i = index;" class="rs-author-details">
-      <button [disabled]="authors.length === 1"
-              type="button"
-              class="rs-remove-author-btn"
-              mat-icon-button color="accent"
-              (click)="removeAuthor(i)">
-        <mat-icon>remove</mat-icon>
-      </button>
-      <div [formGroupName]="i" class="rs-fields">
-        <mat-form-field>
-          <input matInput
-                 placeholder="Imię"
-                 formControlName="firstName">
-          <mat-error *ngIf="author.get('firstName').hasError('required')">
-            Wpisz imię
-          </mat-error>
-          <mat-error *ngIf="author.get('firstName').hasError('pattern')">
-            Wpisano niepoprawne imię
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput
-                 placeholder="Nazwisko"
-                 formControlName="lastName">
-          <mat-error *ngIf="author.get('lastName').hasError('required')">
-            Wpisz nazwisko
-          </mat-error>
-          <mat-error *ngIf="author.get('lastName').hasError('pattern')">
-            Wpisano niepoprawne nazwisko
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput
-                 placeholder="Drugie imię"
-                 formControlName="middleName">
-          <mat-error *ngIf="author.get('middleName').hasError('pattern')">
-            Wpisano niepoprawne drugie imię
-          </mat-error>
-        </mat-form-field>
-      </div>
+<ng-container *ngFor="let author of authors; let i = index;">
+  <div [formGroup]="author" class="rs-author-details">
+    <button [disabled]="authors.length === 1"
+            type="button"
+            class="rs-remove-author-btn"
+            mat-icon-button color="accent"
+            (click)="removeAuthor(i)">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <div class="rs-fields">
+      <mat-form-field>
+        <input matInput
+               placeholder="Imię"
+               formControlName="firstName">
+        <mat-error *ngIf="author.get('firstName').hasError('required')">
+          Wpisz imię
+        </mat-error>
+        <mat-error *ngIf="author.get('firstName').hasError('pattern')">
+          Wpisano niepoprawne imię
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Nazwisko"
+               formControlName="lastName">
+        <mat-error *ngIf="author.get('lastName').hasError('required')">
+          Wpisz nazwisko
+        </mat-error>
+        <mat-error *ngIf="author.get('lastName').hasError('pattern')">
+          Wpisano niepoprawne nazwisko
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput
+               placeholder="Drugie imię"
+               formControlName="middleName">
+        <mat-error *ngIf="author.get('middleName').hasError('pattern')">
+          Wpisano niepoprawne drugie imię
+        </mat-error>
+      </mat-form-field>
     </div>
   </div>
-</div>
+</ng-container>
 
 <button type="button"
         mat-icon-button color="primary"
-        (click)="addAuthor()">
+        (click)="addEmptyAuthor()">
   <mat-icon>add</mat-icon>
 </button>

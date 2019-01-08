@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { MatSlideToggleChange } from '@angular/material';
 
@@ -7,20 +7,17 @@ import { MatSlideToggleChange } from '@angular/material';
   templateUrl: './toggle.area.component.html',
   styleUrls: ['./toggle.area.component.scss']
 })
-export class ToggleAreaComponent implements OnInit {
+export class ToggleAreaComponent {
 
   @Input()
   name: string;
 
-  contentShown: boolean = false;
+  @Input()
+  checked: boolean = false;
 
   constructor() {}
 
-  ngOnInit() {
-
-  }
-
   onToggleChange(change: MatSlideToggleChange): void {
-    this.contentShown = change.checked;
+    this.checked = change.checked;
   }
 }
