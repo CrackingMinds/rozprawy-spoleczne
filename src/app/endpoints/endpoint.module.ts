@@ -28,6 +28,9 @@ import { RestReviewersEndpoint } from 'app/endpoints/rest-endpoint/reviewers/res
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
 import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscriptions/rest.subscriptions.endpoint';
 
+import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
+import { FirestorageArticleFileEndpoint } from 'app/endpoints/firestorage-endpoint/article-file/firestorage.article.file.endpoint';
+
 const providers = [
   {
     provide: ENDPOINT_URL,
@@ -64,6 +67,10 @@ const providers = [
   {
     provide: SubscriptionsEndpoint,
     useClass: RestSubscriptionsEndpoint
+  },
+  {
+    provide: ArticleFileEndpoint,
+    useClass: FirestorageArticleFileEndpoint
   }
 ];
 

@@ -11,11 +11,15 @@ import { ArticleType } from 'app/models/article.type';
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { ArticleCreatePayload, ArticleCrudParams, ArticleCrudType, ArticleEditPayload } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 import { CustomValidators } from 'app/shared/services/custom.validators';
+import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud/article.file.repository';
 
 @Component({
   selector: 'rs-add-article',
   templateUrl: './article.crud.component.html',
   styleUrls: ['./article.crud.component.scss'],
+  providers: [
+    ArticleFileRepository
+  ],
   encapsulation: ViewEncapsulation.None
 })
 export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDestroy {
@@ -36,6 +40,7 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder,
+              private articleFileRepository: ArticleFileRepository,
               private articleTypeEndpoint: ArticleTypeEndpoint) {}
 
   ngOnInit() {
@@ -78,6 +83,8 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
     this.initFormValidityListener();
 
     this.fetchArticleTypes();
+
+    this.articleFileRepository.init(this.initialArticleData.pdf, this.params.type);
   }
 
   ngOnDestroy() {
@@ -86,9 +93,7 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
   }
 
   cancel(): void {
-    // @TODO: change this
-    this.uploadArticleComponent.deleteFile();
-    return;
+    this.articleFileRepository.cancelChanges();
   }
 
   submit(): ArticleEntity {
@@ -99,6 +104,9 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
     if (this.params.type === ArticleCrudType.CREATE) {
       this.form.value.issueId = (this.params.payload as ArticleCreatePayload).issue.id;
     }
+
+    this.articleFileRepository.submitChanges();
+
     return this.form.value;
   }
 
