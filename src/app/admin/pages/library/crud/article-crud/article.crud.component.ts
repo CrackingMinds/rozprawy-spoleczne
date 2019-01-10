@@ -4,21 +4,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { UploadArticleComponent } from 'app/admin/pages/library/modules/upload-article/upload.article.component';
-import { ModalContentComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.content.component';
+import { UploadArticleComponent } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/upload.article.component';
+import { ModalContentComponent } from 'app/admin/pages/library/modal/modal.content.component';
 import { Article, ArticleEntity } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
-import { ArticleCrudParams } from 'app/admin/pages/library/add-article/article.crud.params';
+import { ArticleCreatePayload, ArticleCrudParams, ArticleCrudType, ArticleEditPayload } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 import { CustomValidators } from 'app/shared/services/custom.validators';
 
 @Component({
   selector: 'rs-add-article',
-  templateUrl: './add.article.component.html',
-  styleUrls: ['./add.article.component.scss'],
+  templateUrl: './article.crud.component.html',
+  styleUrls: ['./article.crud.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AddArticleFormComponent implements ModalContentComponent, OnInit, OnDestroy {
+export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDestroy {
 
   @ViewChild(UploadArticleComponent)
   uploadArticleComponent: UploadArticleComponent;
@@ -55,21 +55,21 @@ export class AddArticleFormComponent implements ModalContentComponent, OnInit, O
       issueId: undefined
     };
 
-    if (this.params.article) {
-      const paramsArticle: Article = this.params.article;
+    if (this.params.type === ArticleCrudType.EDIT) {
+      const initialArticle: Article = (this.params.payload as ArticleEditPayload).article;
       this.initialArticleData = {
-        articleTypeId: paramsArticle.articleType.id,
-        title: paramsArticle.title,
-        pages: paramsArticle.pages,
-        doi: paramsArticle.doi,
-        introduction: paramsArticle.introduction,
-        materialsAndMethods: paramsArticle.materialsAndMethods,
-        results: paramsArticle.results,
-        conclusions: paramsArticle.conclusions,
-        keywords: paramsArticle.keywords,
-        pdf: paramsArticle.pdf,
-        authors: paramsArticle.authors,
-        issueId: paramsArticle.issueId
+        articleTypeId: initialArticle.articleType.id,
+        title: initialArticle.title,
+        pages: initialArticle.pages,
+        doi: initialArticle.doi,
+        introduction: initialArticle.introduction,
+        materialsAndMethods: initialArticle.materialsAndMethods,
+        results: initialArticle.results,
+        conclusions: initialArticle.conclusions,
+        keywords: initialArticle.keywords,
+        pdf: initialArticle.pdf,
+        authors: initialArticle.authors,
+        issueId: initialArticle.issueId
       }
     }
 
@@ -96,8 +96,8 @@ export class AddArticleFormComponent implements ModalContentComponent, OnInit, O
       return null;
     }
 
-    if (this.params.issue) {
-      this.form.value.issueId = this.params.issue.id;
+    if (this.params.type === ArticleCrudType.CREATE) {
+      this.form.value.issueId = (this.params.payload as ArticleCreatePayload).issue.id;
     }
     return this.form.value;
   }

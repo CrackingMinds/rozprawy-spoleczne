@@ -7,12 +7,12 @@ import { MatIconModule, MatMenuModule, MatFormFieldModule, MatCheckboxModule, Ma
 import { CustomPipesModule } from 'app/shared/pipes/custom.pipes.module';
 
 import { ListOfIssuesComponent } from 'app/admin/pages/library/list-of-issues/list.of.issues.component';
-import { IssueCRUDModalComponent } from 'app/admin/pages/library/list-of-issues/modals/create-issue/issue.crud.modal.component';
+import { IssueCrudComponent } from 'app/admin/pages/library/crud/issue-crud/issue.crud.component';
 
 const declarations = [
   ListOfIssuesComponent,
 
-  IssueCRUDModalComponent
+  IssueCrudComponent
 ];
 
 @NgModule({
@@ -32,7 +32,7 @@ const declarations = [
   declarations: declarations,
   exports: declarations,
   entryComponents: [
-    IssueCRUDModalComponent
+    IssueCrudComponent
   ]
 })
 export class ListOfIssuesModule {

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { MatButtonModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 
-import { UploadArticleComponent } from 'app/admin/pages/library/modules/upload-article/upload.article.component';
+import { UploadArticleComponent } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/upload.article.component';
 
 const declarations = [
   UploadArticleComponent

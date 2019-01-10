@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
 
-import { AddAuthorsComponent } from 'app/admin/pages/library/modules/add-authors/add.authors.component';
+import { AddAuthorsComponent } from 'app/admin/pages/library/crud/article-crud/controls/add-authors/add.authors.component';
 
 const declarations = [
   AddAuthorsComponent

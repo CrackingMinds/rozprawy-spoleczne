@@ -8,9 +8,9 @@ import { MatDialog } from '@angular/material';
 import { Issue, RawIssue } from 'app/models/issue';
 import { DialogType } from 'app/base/modal/dialog.type';
 
-import { ModalComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.component';
-import { ModalData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.data';
-import { IssueCRUDModalComponent } from 'app/admin/pages/library/list-of-issues/modals/create-issue/issue.crud.modal.component';
+import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
+import { ModalData } from 'app/admin/pages/library/modal/modal.data';
+import { IssueCrudComponent } from 'app/admin/pages/library/crud/issue-crud/issue.crud.component';
 
 @Component({
   selector: 'rs-list-of-issues',
@@ -108,7 +108,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
     const modalData: ModalData = {
       title: 'Dodanie nowego numeru',
-      content: IssueCRUDModalComponent,
+      content: IssueCrudComponent,
       buttons: {
         submit: {
           text: 'Dodaj'
@@ -143,7 +143,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
     const modalData: ModalData = {
       title: 'Edycja numeru',
-      content: IssueCRUDModalComponent,
+      content: IssueCrudComponent,
       buttons: {
         submit: {
           text: 'Zapisz'

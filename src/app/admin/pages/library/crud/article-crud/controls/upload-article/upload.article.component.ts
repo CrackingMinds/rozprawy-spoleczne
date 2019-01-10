@@ -4,15 +4,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, switchMap, map } from 'rxjs/operators';
 
-import { UploadArticleService } from 'app/admin/pages/library/modules/upload-article/upload.article.service';
+import { UploadArticleService } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/upload.article.service';
 import { F_ArticleFile, IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
 import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
 import { UntypedArticle } from 'app/models/article';
 import { RoutesComposer } from 'app/routes-resolver/routes.composer';
-import { FieldState } from 'app/admin/pages/library/modules/field.state';
-import { ArticleFileError, ArticleFileErrorType, ArticleFileExistsError } from 'app/admin/pages/library/modules/upload-article/article.error';
+import { FieldState } from 'app/admin/pages/library/crud/article-crud/controls/field.state';
+import { ArticleFileError, ArticleFileErrorType, ArticleFileExistsError } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/article.error';
 
 @Component({
   selector: 'rs-upload-article',

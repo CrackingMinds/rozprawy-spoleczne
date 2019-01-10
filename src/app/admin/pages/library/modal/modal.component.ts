@@ -17,8 +17,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { ModalData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.data';
-import { ModalContentComponent, ModalReturnData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.content.component';
+import { ModalData } from 'app/admin/pages/library/modal/modal.data';
+import { ModalContentComponent, ModalReturnData } from 'app/admin/pages/library/modal/modal.content.component';
 
 @Component({
     selector: 'rs-modal',

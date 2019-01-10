@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 
-import { SelectArticleTypeComponent } from 'app/admin/pages/library/modules/select-article-type/select.article.type.component';
+import { SelectArticleTypeComponent } from 'app/admin/pages/library/crud/article-crud/controls/select-article-type/select.article.type.component';
 
 const declarations = [
   SelectArticleTypeComponent

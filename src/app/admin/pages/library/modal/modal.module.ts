@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatProgressSpinnerModule, MatDialogModule, MatButtonModule } from '@angular/material';
 
-import { ModalComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.component';
+import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
 
 const declarations = [
   ModalComponent

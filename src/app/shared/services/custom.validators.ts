@@ -20,7 +20,7 @@ export class CustomValidators {
     );
   }
 
-  static get name(): RegExp {
+  static get personName(): RegExp {
     return new RegExp(/^([^\u0000-\u007F]|[a-zA-Z])+$/);
   }
 

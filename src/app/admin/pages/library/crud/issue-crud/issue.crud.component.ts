@@ -3,16 +3,16 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { Observable, ReplaySubject } from 'rxjs';
 
-import { ModalContentComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.content.component';
+import { ModalContentComponent } from 'app/admin/pages/library/modal/modal.content.component';
 
 import { Issue, RawIssue } from 'app/models/issue';
 import { CustomValidators } from 'app/shared/services/custom.validators';
 
 @Component({
     selector: 'rs-create-issue',
-    templateUrl: './issue.crud.modal.component.html'
+    templateUrl: './issue.crud.component.html'
 })
-export class IssueCRUDModalComponent implements ModalContentComponent, OnInit, OnDestroy {
+export class IssueCrudComponent implements ModalContentComponent, OnInit, OnDestroy {
 
   currentYear = new Date().getFullYear();
 

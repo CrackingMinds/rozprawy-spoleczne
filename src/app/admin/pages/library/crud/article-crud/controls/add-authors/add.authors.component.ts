@@ -116,7 +116,7 @@ export class AddAuthorsComponent implements ControlValueAccessor, Validator, OnI
           [
             Validators.required,
             Validators.pattern(
-              CustomValidators.fullMatch(CustomValidators.name)
+              CustomValidators.fullMatch(CustomValidators.personName)
             )
           ]
         ],
@@ -125,7 +125,7 @@ export class AddAuthorsComponent implements ControlValueAccessor, Validator, OnI
           [
             Validators.required,
             Validators.pattern(
-              CustomValidators.fullMatch(CustomValidators.name)
+              CustomValidators.fullMatch(CustomValidators.personName)
             )
           ]
         ],
@@ -133,7 +133,7 @@ export class AddAuthorsComponent implements ControlValueAccessor, Validator, OnI
           author.middleName,
           [
             Validators.pattern(
-              CustomValidators.fullMatch(CustomValidators.name)
+              CustomValidators.fullMatch(CustomValidators.personName)
             )
           ]
         ]

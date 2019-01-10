@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material';
 
 import { LibraryComponent } from 'app/admin/pages/library/library.component';
 
-import { ModalModule } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.module';
+import { ModalModule } from 'app/admin/pages/library/modal/modal.module';
 
 import { ListOfIssuesModule } from 'app/admin/pages/library/list-of-issues/list.of.issues.module';
 import { ListOfArticlesModule } from 'app/admin/pages/library/list-of-articles/list.of.articles.module';

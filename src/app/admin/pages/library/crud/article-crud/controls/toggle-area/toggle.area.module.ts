@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatSlideToggleModule } from '@angular/material';
 
-import { ToggleAreaComponent } from 'app/admin/pages/library/modules/toggle-area/toggle.area.component';
+import { ToggleAreaComponent } from 'app/admin/pages/library/crud/article-crud/controls/toggle-area/toggle.area.component';
 
 
 const declarations = [

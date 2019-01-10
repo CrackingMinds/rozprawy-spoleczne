@@ -4,14 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 
-import { AddArticleFormComponent } from 'app/admin/pages/library/add-article/add.article.component';
-import { SelectArticleTypeModule } from 'app/admin/pages/library/modules/select-article-type/select.article.type.module';
-import { AddAuthorsModule } from 'app/admin/pages/library/modules/add-authors/add.authors.module';
-import { ToggleAreaModule } from 'app/admin/pages/library/modules/toggle-area/toggle.area.module';
-import { UploadArticleModule } from 'app/admin/pages/library/modules/upload-article/upload.article.module';
+import { ArticleCrudComponent } from 'app/admin/pages/library/crud/article-crud/article.crud.component';
+import { SelectArticleTypeModule } from 'app/admin/pages/library/crud/article-crud/controls/select-article-type/select.article.type.module';
+import { AddAuthorsModule } from 'app/admin/pages/library/crud/article-crud/controls/add-authors/add.authors.module';
+import { ToggleAreaModule } from 'app/admin/pages/library/crud/article-crud/controls/toggle-area/toggle.area.module';
+import { UploadArticleModule } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/upload.article.module';
 
 const declarations = [
-  AddArticleFormComponent
+  ArticleCrudComponent
 ];
 
 const providers = [
@@ -37,14 +37,14 @@ const providers = [
     UploadArticleModule.forRoot()
   ],
   entryComponents: [
-    AddArticleFormComponent
+    ArticleCrudComponent
   ]
 })
-export class AddArticleModule {
+export class ArticleCrudModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: AddArticleModule,
+      ngModule: ArticleCrudModule,
       providers: providers
     };
   }

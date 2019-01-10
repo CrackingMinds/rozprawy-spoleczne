@@ -9,13 +9,13 @@ import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/articl
 import { Article, ArticleEntity } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
-import { ModalData } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.data';
-import { ModalComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.component';
+import { ModalData } from 'app/admin/pages/library/modal/modal.data';
+import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
 
-import { AddArticleFormComponent } from 'app/admin/pages/library/add-article/add.article.component';
+import { ArticleCrudComponent } from 'app/admin/pages/library/crud/article-crud/article.crud.component';
 
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-import { ArticleCrudParams } from 'app/admin/pages/library/add-article/article.crud.params';
+import { ArticleCreateParams, ArticleEditParams } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 
 @Component({
   selector: 'rs-list-of-articles',
@@ -54,19 +54,17 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleCreationDialog(): void {
 
-    const articleCrudParams: ArticleCrudParams = {
-      issue: this.issue
-    };
-
     const modalData: ModalData = {
       title: `Dodanie nowego artykułu do numeru: ${this.issueStringPipe.transform(this.issue)}`,
-      content: AddArticleFormComponent,
+      content: ArticleCrudComponent,
       buttons: {
         submit: {
           text: 'Dodaj'
         }
       },
-      otherParams: articleCrudParams
+      otherParams: new ArticleCreateParams({
+        issue: this.issue
+      })
     };
 
     const dialogRef = this.dialog.open(ModalComponent, {
@@ -88,19 +86,17 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleEditDialog(article: Article): void {
 
-    const articleCrudParams: ArticleCrudParams = {
-      article: article
-    };
-
     const modalData: ModalData = {
       title: `Edycja artykułu: ${article.title}`,
-      content: AddArticleFormComponent,
+      content: ArticleCrudComponent,
       buttons: {
         submit: {
           text: 'Zapisz'
         }
       },
-      otherParams: articleCrudParams
+      otherParams: new ArticleEditParams({
+        article: article
+      })
     };
 
     const dialogRef = this.dialog.open(ModalComponent, {
