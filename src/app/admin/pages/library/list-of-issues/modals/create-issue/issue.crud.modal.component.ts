@@ -6,6 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { ModalContentComponent } from 'app/admin/pages/library/list-of-issues/modals/modal/modal.content.component';
 
 import { Issue, RawIssue } from 'app/models/issue';
+import { CustomValidators } from 'app/shared/services/custom.validators';
 
 @Component({
     selector: 'rs-create-issue',
@@ -56,15 +57,21 @@ export class IssueCRUDModalComponent implements ModalContentComponent, OnInit, O
       {
         year: [initialIssue.year, [
           Validators.required,
-          Validators.pattern(/^[1-9][\d]{3}$/)
+          Validators.pattern(
+            CustomValidators.fullMatch(CustomValidators.issueYear)
+          )
         ]],
         vol: [initialIssue.vol, [
           Validators.required,
-          Validators.pattern(/^[1-9][\d]?$/)
+          Validators.pattern(
+            CustomValidators.fullMatch(CustomValidators.issueVolume)
+          )
         ]],
         number: [initialIssue.number, [
           Validators.required,
-          Validators.pattern(/^[1-9][\d]?$/)
+          Validators.pattern(
+            CustomValidators.fullMatch(CustomValidators.issueNumber)
+          )
         ]],
         isCurrent: [{
           value: initialIssue.isCurrent,

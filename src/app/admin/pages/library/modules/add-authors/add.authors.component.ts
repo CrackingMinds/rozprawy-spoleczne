@@ -5,8 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Author } from 'app/models/author';
-
-const nameRegExp: RegExp = new RegExp(/^([^\u0000-\u007F]|[a-zA-Z])+$/);
+import { CustomValidators } from 'app/shared/services/custom.validators';
 
 @Component({
   selector: 'rs-add-authors',
@@ -116,20 +115,26 @@ export class AddAuthorsComponent implements ControlValueAccessor, Validator, OnI
           author.firstName,
           [
             Validators.required,
-            Validators.pattern(nameRegExp)
+            Validators.pattern(
+              CustomValidators.fullMatch(CustomValidators.name)
+            )
           ]
         ],
         lastName: [
           author.lastName,
           [
             Validators.required,
-            Validators.pattern(nameRegExp)
+            Validators.pattern(
+              CustomValidators.fullMatch(CustomValidators.name)
+            )
           ]
         ],
         middleName: [
           author.middleName,
           [
-            Validators.pattern(nameRegExp)
+            Validators.pattern(
+              CustomValidators.fullMatch(CustomValidators.name)
+            )
           ]
         ]
       })

@@ -162,7 +162,13 @@ export class UploadArticleComponent implements ControlValueAccessor, OnDestroy {
   }
 
   writeValue(value: F_ArticleFile): void {
+
+    if (!value)
+      return;
+
     this.file = value;
+    this.fileName = value.name;
+    this.changeFieldState(FieldState.DEFAULT);
   }
 
   composeArticleRouterLink(articleId: string): string[] {

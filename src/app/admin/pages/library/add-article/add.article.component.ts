@@ -10,6 +10,7 @@ import { Article, ArticleEntity } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { ArticleCrudParams } from 'app/admin/pages/library/add-article/article.crud.params';
+import { CustomValidators } from 'app/shared/services/custom.validators';
 
 @Component({
   selector: 'rs-add-article',
@@ -21,8 +22,6 @@ export class AddArticleFormComponent implements ModalContentComponent, OnInit, O
 
   @ViewChild(UploadArticleComponent)
   uploadArticleComponent: UploadArticleComponent;
-
-  yearOfIssue: string;
 
   form: FormGroup;
 
@@ -40,12 +39,6 @@ export class AddArticleFormComponent implements ModalContentComponent, OnInit, O
               private articleTypeEndpoint: ArticleTypeEndpoint) {}
 
   ngOnInit() {
-
-
-
-    if (this.params.issue) {
-      this.yearOfIssue = this.params.issue.year;
-    }
 
     this.initialArticleData = {
       articleTypeId: undefined,
@@ -158,13 +151,21 @@ export class AddArticleFormComponent implements ModalContentComponent, OnInit, O
         ],
         pages: [
           this.initialArticleData.pages,
-          [Validators.required, Validators.pattern(/^\d+(-\d+)?$/)]
+          [
+            Validators.required,
+            Validators.pattern(
+              CustomValidators.fullMatch(CustomValidators.pagesInIssue)
+            )
+          ]
         ],
         doi: [
           this.initialArticleData.doi,
-          [Validators.required, Validators.pattern(
-            new RegExp(`^https://doi.org/\\d*[.]?\\d*/rs.${this.yearOfIssue}[.]\\d+$`)
-          )]
+          [
+            Validators.required,
+            Validators.pattern(
+              CustomValidators.fullMatch(CustomValidators.doi)
+            )
+          ]
         ],
         introduction: this.initialArticleData.introduction,
         materialsAndMethods: this.initialArticleData.materialsAndMethods,

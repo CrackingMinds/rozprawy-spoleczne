@@ -9,13 +9,12 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { PageNameService } from 'app/shared/services/page.name.service';
 import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
 import { SignInRepository } from 'app/auth/signin/signin.repository';
+import { CustomValidators } from 'app/shared/services/custom.validators';
 
 enum LoginErrorType {
   EMAIL,
   PASSWORD
 }
-
-const emailRegExp: RegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
 @Component({
   selector: 'rs-sign-in',
@@ -27,7 +26,9 @@ export class SigninComponent implements OnInit, OnDestroy {
   form: FormGroup = this.formBuilder.group({
     email: [undefined, [
       Validators.required,
-      Validators.pattern(emailRegExp)
+      Validators.pattern(
+        CustomValidators.fullMatch(CustomValidators.email)
+      )
     ]],
     password: [undefined, Validators.required]
   });
