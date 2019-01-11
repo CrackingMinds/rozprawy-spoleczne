@@ -10,9 +10,9 @@ import * as librarySelectors from 'app/admin/pages/library/store/selectors/libra
 import { LibraryState } from 'app/admin/pages/library/store/reducers/library.reducer';
 
 import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/admin/pages/library/store/actions/issue.actions';
-import { CreateArticle, LoadArticles, RemoveArticle } from 'app/admin/pages/library/store/actions/article.actions';
+import { CreateArticle, LoadArticles, RemoveArticle, UpdateArticle } from 'app/admin/pages/library/store/actions/article.actions';
 
-import { Article, ArticleEntity } from 'app/models/article';
+import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
@@ -88,8 +88,12 @@ export class LibraryComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RemoveIssue(issue.id));
   }
 
-  onCreateArticle(newArticle: ArticleEntity) {
+  onCreateArticle(newArticle: ArticleEntity): void {
     this.store.dispatch(new CreateArticle(newArticle));
+  }
+
+  onEditArticle(updatedArticle: UntypedArticle): void {
+    this.store.dispatch(new UpdateArticle(updatedArticle));
   }
 
   onArticleDelete(article: Article): void {

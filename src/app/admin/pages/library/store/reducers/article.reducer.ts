@@ -6,7 +6,7 @@ import {
   CREATE_ARTICLE_FAIL,
   LOAD_ARTICLES,
   LOAD_ARTICLES_FAIL,
-  LOAD_ARTICLES_SUCCESS, LoadArticlesSuccess, REMOVE_ARTICLE
+  LOAD_ARTICLES_SUCCESS, LoadArticlesSuccess, REMOVE_ARTICLE, UPDATE_ARTICLE, UPDATE_ARTICLE_FAIL
 } from 'app/admin/pages/library/store/actions/article.actions';
 
 export interface ArticlesState {
@@ -57,6 +57,21 @@ export function reducer(state = initialState, action: ArticleAction): ArticlesSt
     }
 
     case CREATE_ARTICLE_FAIL: {
+      return {
+        ...state,
+        loading: false,
+        loaded: false
+      }
+    }
+
+    case UPDATE_ARTICLE: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+
+    case UPDATE_ARTICLE_FAIL: {
       return {
         ...state,
         loading: false,

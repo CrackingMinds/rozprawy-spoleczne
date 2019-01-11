@@ -6,7 +6,7 @@ import { catchError, map, finalize } from 'rxjs/operators';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
-import { F_ArticleFile } from 'app/models/firestore/article.file.f';
+import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
 
@@ -26,7 +26,7 @@ export class FirestorageArticleFileEndpoint extends ArticleFileEndpoint {
                );
   }
 
-  remove(file: F_ArticleFile): Observable<void> {
+  remove(file: IF_ArticleFile): Observable<void> {
     const ref = this.angularFireStorage.ref(file.storagePath);
     return ref.delete();
   }

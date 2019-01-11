@@ -42,6 +42,10 @@ export class FirestoreArticleEndpoint extends ArticleEndpoint {
    return this.articleService.postArticle(rawArticle);
   }
 
+  updateArticle(updatedArticle: UntypedArticle): Observable<void> {
+    return this.articleService.updateArticle(updatedArticle);
+  }
+
   deleteArticle(article: Article): Observable<void> {
     return this.articleService.deleteArticle(article);
   }

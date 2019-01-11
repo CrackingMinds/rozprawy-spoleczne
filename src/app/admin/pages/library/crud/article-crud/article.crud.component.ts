@@ -105,6 +105,11 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
       this.form.value.issueId = (this.params.payload as ArticleCreatePayload).issue.id;
     }
 
+    if (this.params.type === ArticleCrudType.EDIT) {
+      this.form.value.id = (this.params.payload as ArticleEditPayload).article.id;
+      this.form.value.issueId = (this.params.payload as ArticleEditPayload).article.issueId;
+    }
+
     this.articleFileRepository.submitChanges();
 
     return this.form.value;

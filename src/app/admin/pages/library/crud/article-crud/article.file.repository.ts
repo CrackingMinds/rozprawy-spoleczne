@@ -4,7 +4,7 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
-import { F_ArticleFile, IF_ArticleFile } from 'app/models/firestore/article.file.f';
+import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { ArticleCrudType } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
@@ -103,7 +103,11 @@ export class ArticleFileRepository {
     const downloadUrl$ = uploadTask.downloadUrl;
     downloadUrl$
       .subscribe((url: string) => {
-        this.currentFile = new F_ArticleFile(file.name, uploadTask.storagePath, url);
+        this.currentFile = {
+          name: file.name,
+          storagePath: uploadTask.storagePath,
+          downloadUrl: url
+        };
       });
 
     return downloadUrl$

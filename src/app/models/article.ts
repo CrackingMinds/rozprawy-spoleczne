@@ -3,8 +3,8 @@ import { Author } from 'app/models/author';
 import { ArticleType } from 'app/models/article.type';
 
 export type Article = ArticleBase & WithId & WithArticleType;
-export type UntypedArticle = ArticleBase & WithId & WithArticleTypeId;
 export type ArticleEntity = ArticleBase & WithArticleTypeId;
+export type UntypedArticle = ArticleEntity & WithId;
 
 type ArticleBase = {
   authors: Author[];

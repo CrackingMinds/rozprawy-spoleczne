@@ -67,6 +67,35 @@ export class FirestoreArticleService {
 
   }
 
+  updateArticle(updatedArticle: UntypedArticle): Observable<void> {
+
+    const persistedArticle: ArticleEntity = {
+      issueId: updatedArticle.issueId,
+      authors: updatedArticle.authors,
+      pdf: updatedArticle.pdf,
+      keywords: updatedArticle.keywords,
+      conclusions: updatedArticle.conclusions,
+      results: updatedArticle.results,
+      materialsAndMethods: updatedArticle.materialsAndMethods,
+      introduction: updatedArticle.introduction,
+      doi: updatedArticle.doi,
+      pages: updatedArticle.pages,
+      title: updatedArticle.title,
+      articleTypeId: updatedArticle.articleTypeId
+    };
+
+    return Observable.create((observer: Observer<void>) => {
+      const articleDocToBeUpdated: AngularFirestoreDocument<ArticleEntity> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${updatedArticle.id}`);
+      articleDocToBeUpdated.update(persistedArticle)
+        .then(() => {
+          observer.next(null);
+          observer.complete();
+        })
+        .catch(reason => observer.error(reason));
+    });
+
+  }
+
   deleteArticle(article: Article): Observable<void> {
 
     return Observable.create((observer: Observer<void>) => {

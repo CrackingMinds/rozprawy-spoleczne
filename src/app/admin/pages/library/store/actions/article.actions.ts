@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Article, ArticleEntity } from 'app/models/article';
+import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 
 import { ACTION_PREFIX } from 'app/admin/pages/library/store/actions/action.prefix';
 
@@ -10,6 +10,9 @@ export const LOAD_ARTICLES_FAIL = `${ACTION_PREFIX} Load Articles Fail`;
 
 export const CREATE_ARTICLE = `${ACTION_PREFIX} Create Article`;
 export const CREATE_ARTICLE_FAIL = `${ACTION_PREFIX} Create Article Fail`;
+
+export const UPDATE_ARTICLE = `${ACTION_PREFIX} Update Article`;
+export const UPDATE_ARTICLE_FAIL = `${ACTION_PREFIX} Update Article Fail`;
 
 export const REMOVE_ARTICLE = `${ACTION_PREFIX} Remove Article`;
 export const REMOVE_ARTICLE_FAIL = `${ACTION_PREFIX} Remove Article Fail`;
@@ -36,6 +39,16 @@ export class CreateArticle implements Action {
 
 export class CreateArticleFail implements Action {
   readonly type: string = CREATE_ARTICLE_FAIL;
+  constructor(public error: any) {}
+}
+
+export class UpdateArticle implements Action {
+  readonly type: string = UPDATE_ARTICLE;
+  constructor(public updatedArticle: UntypedArticle) {}
+}
+
+export class UpdateArticleFail implements Action {
+  readonly type: string = UPDATE_ARTICLE_FAIL;
   constructor(public error: any) {}
 }
 

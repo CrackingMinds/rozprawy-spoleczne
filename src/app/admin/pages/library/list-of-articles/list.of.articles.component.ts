@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
-import { Article, ArticleEntity } from 'app/models/article';
+import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
@@ -34,7 +34,7 @@ export class ListOfArticlesComponent implements OnDestroy {
   createArticle: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
 
   @Output('editArticle')
-  editArticle$: EventEmitter<ArticleEntity> = new EventEmitter<ArticleEntity>();
+  editArticle$: EventEmitter<UntypedArticle> = new EventEmitter<UntypedArticle>();
 
   @Output('deleteArticle')
   deleteArticle$: EventEmitter<Article> = new EventEmitter<Article>();
@@ -107,7 +107,7 @@ export class ListOfArticlesComponent implements OnDestroy {
              .pipe(
                takeUntil(this.unsubscribe$)
              )
-             .subscribe((updatedArticle: ArticleEntity) => {
+             .subscribe((updatedArticle: UntypedArticle) => {
                if (!updatedArticle) {
                  return;
                }
