@@ -10,7 +10,7 @@ import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
 
-const bucketPath: string = 'firebase-test/Issues/';
+const bucketPath: string = 'article-files/';
 
 @Injectable()
 export class FirestorageArticleFileEndpoint extends ArticleFileEndpoint {

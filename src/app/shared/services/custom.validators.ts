@@ -21,7 +21,13 @@ export class CustomValidators {
   }
 
   static get personName(): RegExp {
-    return new RegExp(/^([^\u0000-\u007F]|[a-zA-Z])+$/);
+    return new RegExp(/([^\u0000-\u007F]|[a-zA-Z])+/);
+  }
+
+  static get personSurname(): RegExp {
+    return new RegExp(
+      CustomValidators.personName.source + '(-' + CustomValidators.personName.source + ')?'
+    );
   }
 
   static get pagesInIssue(): RegExp {

@@ -12,7 +12,7 @@
       </a>
       <div class="rs-article-data rs-article-authors">
         <ng-container *ngFor="let author of article.authors; let last = last;">
-          <span class="rs-author">{{ author | author }}</span><span *ngIf="!last">,</span>
+          <span class="rs-author">{{ author | author }}</span><span *ngIf="!last">, </span>
         </ng-container>
       </div>
       <p class="rs-article-data rs-location-in-issue">{{ getLocationInIssue() }}</p>
@@ -24,13 +24,13 @@
 
       <div *ngIf="mode === AvailableModes.VIEW" class="rs-view-buttons">
         <ng-container *ngIf="!withoutAbstractBtn">
-          <a [routerLink]="composeArticleRouterLink(article.id)" target="_blank" class="rs-button">
+          <a [routerLink]="composeArticleRouterLink(article.id)" target="_blank" class="rs-button rs-preview-btn">
             <mat-icon>subject</mat-icon>
             <span>Streszczenie</span>
           </a>
           <div class="rs-separator"></div>
         </ng-container>
-        <a href="{{ article.pdf.downloadUrl }}" target="_blank" class="rs-button">
+        <a href="{{ article.pdf.downloadUrl }}" target="_blank" class="rs-button rs-full-content-btn">
           <mat-icon>library_books</mat-icon>
           <span>Pełna treść artykułu</span>
         </a>

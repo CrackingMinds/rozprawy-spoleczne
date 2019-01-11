@@ -41,7 +41,7 @@ const providers = [
 
     MatProgressSpinnerModule,
 
-    ModalModule,
+    ModalModule.forRoot(),
 
     ListOfIssuesModule,
     ListOfArticlesModule

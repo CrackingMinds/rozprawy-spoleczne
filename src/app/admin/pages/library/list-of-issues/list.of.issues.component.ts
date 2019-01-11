@@ -3,13 +3,12 @@ import { Component, EventEmitter, Input, OnDestroy, OnChanges, Output, SimpleCha
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { MatDialog } from '@angular/material';
-
 import { Issue, RawIssue } from 'app/models/issue';
 import { DialogType } from 'app/base/modal/dialog.type';
 
-import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
+import { ModalService } from 'app/admin/pages/library/modal/modal.service';
+
 import { IssueCrudComponent } from 'app/admin/pages/library/crud/issue-crud/issue.crud.component';
 
 @Component({
@@ -47,8 +46,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private dialog: MatDialog) {
-  }
+  constructor(private modal: ModalService) {}
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -117,11 +115,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
       otherParams: undefined
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
-
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
@@ -152,11 +146,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
       otherParams: issue
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
-
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
@@ -187,11 +177,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
       otherParams: undefined
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
-
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
@@ -223,11 +209,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
       otherParams: undefined
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
-
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)

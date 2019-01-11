@@ -25,6 +25,10 @@ html {
   }
 }
 
+.rs-modal-panel {
+  max-width: 680px !important;
+}
+
 @import "partials/page_header";
 @import "partials/footer";
 @import "partials/menu";

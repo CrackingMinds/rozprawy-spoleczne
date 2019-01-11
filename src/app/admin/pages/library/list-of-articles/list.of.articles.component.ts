@@ -3,14 +3,12 @@ import { Component, Input, EventEmitter, Output, OnDestroy } from '@angular/core
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { MatDialog } from '@angular/material';
-
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
-import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
+import { ModalService } from 'app/admin/pages/library/modal/modal.service';
 
 import { ArticleCrudComponent } from 'app/admin/pages/library/crud/article-crud/article.crud.component';
 
@@ -44,8 +42,7 @@ export class ListOfArticlesComponent implements OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private issueStringPipe: IssueStringPipe,
-              private dialog: MatDialog) {
-  }
+              private modal: ModalService) {}
 
   ngOnDestroy() {
     this.unsubscribe$.next();
@@ -67,10 +64,7 @@ export class ListOfArticlesComponent implements OnDestroy {
       })
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
@@ -99,10 +93,7 @@ export class ListOfArticlesComponent implements OnDestroy {
       })
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
@@ -129,11 +120,7 @@ export class ListOfArticlesComponent implements OnDestroy {
       otherParams: undefined
     };
 
-    const dialogRef = this.dialog.open(ModalComponent, {
-      disableClose: true,
-      data: modalData
-    });
-
+    const dialogRef = this.modal.open(modalData);
     dialogRef.afterClosed()
              .pipe(
                takeUntil(this.unsubscribe$)
