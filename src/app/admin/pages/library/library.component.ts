@@ -16,7 +16,7 @@ import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { Utils } from 'app/shared/services/utils';
+import { Utils } from 'app/shared/utils';
 
 @Component({
   selector: 'rs-library-editorial',

@@ -7,7 +7,7 @@ import { AuthModule } from 'app/auth/auth.module';
 import { RoutingModule } from 'app/routing.module';
 import { FirebaseConfigModule } from 'app/firebase.config.module';
 
-import { ServicesModule } from 'app/services/services.module';
+import { ServicesModule } from 'app/shared/services/services.module';
 
 import { EndpointModule } from 'app/endpoints/endpoint.module';
 

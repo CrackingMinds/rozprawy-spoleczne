@@ -7,9 +7,9 @@ import { Subject } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
-import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
+import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 import { SignInRepository } from 'app/auth/signin/signin.repository';
-import { CustomValidators } from 'app/shared/services/custom.validators';
+import { CustomValidators } from 'app/shared/custom.validators';
 
 enum LoginErrorType {
   EMAIL,

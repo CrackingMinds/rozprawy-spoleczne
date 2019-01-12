@@ -1,4 +1,4 @@
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 
 export class RoutesComposer {
 

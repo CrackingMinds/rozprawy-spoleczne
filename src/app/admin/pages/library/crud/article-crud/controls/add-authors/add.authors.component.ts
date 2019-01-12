@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Author } from 'app/models/author';
-import { CustomValidators } from 'app/shared/services/custom.validators';
+import { CustomValidators } from 'app/shared/custom.validators';
 
 @Component({
   selector: 'rs-add-authors',

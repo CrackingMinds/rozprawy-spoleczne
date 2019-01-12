@@ -7,7 +7,7 @@ import { first, map } from 'rxjs/operators';
 import { User } from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
+import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 
 @Injectable()
 export class SigninGuard implements CanActivate {

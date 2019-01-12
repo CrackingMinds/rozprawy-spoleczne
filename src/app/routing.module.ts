@@ -6,8 +6,8 @@ import { SigninGuard } from 'app/guards/signin.guard';
 
 import { SigninComponent } from 'app/auth/signin/signin.component';
 
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
-import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
+import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 
 const appRoutes: Routes = [
   {

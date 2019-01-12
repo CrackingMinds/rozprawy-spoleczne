@@ -9,7 +9,7 @@ import { Issue, IssueEntity, IssueEntityWithId, IssuesByYear, RawIssue } from 'a
 
 import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/article/firestore.article.service';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
-import { Utils } from 'app/shared/services/utils';
+import { Utils } from 'app/shared/utils';
 
 @Injectable()
 export class FirestoreIssueEndpoint extends IssueEndpoint {

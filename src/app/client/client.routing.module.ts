@@ -15,7 +15,7 @@ import { ContactDataComponent } from 'app/client/pages/contact-data/contact.data
 import { EthicalStandardsComponent } from 'app/client/pages/ethical-standards/ethical.standards.component';
 import { EditorialScientificBoardComponent } from 'app/client/pages/editorial-scientific-board/editorial.scientific.board.component';
 
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { PageRoute } from 'app/client/page.route';
 
 const clientRoutes: PageRoute[] = [

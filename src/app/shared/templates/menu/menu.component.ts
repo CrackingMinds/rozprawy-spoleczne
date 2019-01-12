@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { IContactInfo } from 'app/models/contact-info';
 
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 
 import { AsyncComponent } from 'app/client/pages/async.component';

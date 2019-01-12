@@ -10,7 +10,7 @@ import { Article, ArticleEntity } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { ArticleCreatePayload, ArticleCrudParams, ArticleCrudType, ArticleEditPayload } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
-import { CustomValidators } from 'app/shared/services/custom.validators';
+import { CustomValidators } from 'app/shared/custom.validators';
 import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud/article.file.repository';
 
 @Component({

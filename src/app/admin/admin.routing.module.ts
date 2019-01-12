@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminRoutesResolver } from 'app/routes-resolver/admin.routes.resolver';
+import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 import { AdminComponent } from 'app/admin/admin.component';
 
 const childRoutes: Routes = [

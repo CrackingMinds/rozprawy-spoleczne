@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 
 @Component({
   selector: 'rs-admin',

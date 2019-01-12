@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { ModalContentComponent } from 'app/admin/pages/library/modal/modal.content.component';
 
 import { Issue, RawIssue } from 'app/models/issue';
-import { CustomValidators } from 'app/shared/services/custom.validators';
+import { CustomValidators } from 'app/shared/custom.validators';
 
 @Component({
     selector: 'rs-create-issue',

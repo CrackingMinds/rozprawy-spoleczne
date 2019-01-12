@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
-import { RoutesComposer } from 'app/routes-resolver/routes.composer';
+import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 import { FieldState } from 'app/admin/pages/library/crud/article-crud/controls/field.state';
 import { ArticleFileError, ArticleFileErrorType, ArticleFileExistsError } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/article.error';
 import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud/article.file.repository';

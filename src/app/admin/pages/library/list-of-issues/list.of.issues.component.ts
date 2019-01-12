@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { Issue, RawIssue } from 'app/models/issue';
-import { DialogType } from 'app/base/modal/dialog.type';
+import { DialogType } from 'app/models/dialog.type';
 
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
 import { ModalService } from 'app/admin/pages/library/modal/modal.service';

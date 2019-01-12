@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { PageLoadSpinnerComponent } from 'app/page-load-spinner/page.load.spinner.component';
+import { PageLoadSpinnerComponent } from 'app/shared/templates/page-load-spinner/page.load.spinner.component';
 
 const declarations = [
   PageLoadSpinnerComponent

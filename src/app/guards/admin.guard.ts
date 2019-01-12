@@ -8,7 +8,7 @@ import { User } from 'firebase';
 import { AngularFireAuth} from 'angularfire2/auth';
 
 import { SignInRepository } from 'app/auth/signin/signin.repository';
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 
 @Injectable()
 export class AdminGuard implements CanActivate {

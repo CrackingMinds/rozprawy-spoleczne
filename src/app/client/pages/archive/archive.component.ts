@@ -4,7 +4,7 @@ import { Observable, Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { IssuesByYear } from 'app/models/issue';
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 import { Page } from 'app/client/pages/page';

@@ -4,7 +4,7 @@ import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 import { ArticleCardDisplayMode } from 'app/shared/templates/article-card/article.card.display.mode';
 
-import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
+import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 
 @Component({
   selector: 'rs-article-card',
