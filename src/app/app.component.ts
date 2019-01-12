@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {SpinnerService} from "./services/spinner/spinner.service";
 
 @Component({
     selector: 'app-root',
