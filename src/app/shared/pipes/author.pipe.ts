@@ -8,7 +8,16 @@ import { Author } from 'app/models/author';
 export class AuthorPipe implements PipeTransform {
 
   transform(author: Author): string {
-    return `${author.firstName} ${author.lastName}`;
+
+    let result = `${author.firstName} `;
+
+    if (author.middleName) {
+      result += `${author.middleName} `;
+    }
+
+    result += author.lastName;
+
+    return result;
   }
 
 }
