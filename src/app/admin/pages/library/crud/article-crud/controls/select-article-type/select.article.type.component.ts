@@ -63,6 +63,8 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   focused: boolean;
 
+  selectedType: ArticleType;
+
   private _stateChange$ = new Subject<void>();
   private _required: boolean;
   private _disabled: boolean;
@@ -72,8 +74,6 @@ export class SelectArticleTypeComponent implements ControlValueAccessor, MatForm
 
   private onChange: (articleTypeId: string) => any;
   private onTouched: () => any;
-
-  private selectedType: ArticleType;
 
   private initialArticleTypeId: string;
 
