@@ -65,6 +65,8 @@ $border: 2px solid $main-green-color;
   .rs-buttons-container {
     display: flex;
     flex-direction: row;
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
 
     .rs-view-buttons, .rs-edit-buttons {
       display: flex;
@@ -96,14 +98,6 @@ $border: 2px solid $main-green-color;
         font-size: 18px;
         margin-right: 5px;
       }
-    }
-
-    .rs-preview-btn, .rs-edit-article-btn {
-      border-radius: 0 0 0 $border-radius;
-    }
-
-    .rs-full-content-btn, .rs-delete-article-btn {
-      border-radius: 0 0 $border-radius 0;
     }
 
     .rs-separator {
