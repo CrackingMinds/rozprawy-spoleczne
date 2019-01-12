@@ -9,7 +9,7 @@ import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
 import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 
-import { AsyncComponent } from 'app/pages/async.component';
+import { AsyncComponent } from 'app/client/pages/async.component';
 
 @Component({
   selector: 'rs-menu',

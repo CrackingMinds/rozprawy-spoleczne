@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
-import { AsyncComponent } from 'app/pages/async.component';
+import { AsyncComponent } from 'app/client/pages/async.component';
 
 @Component({
   selector: 'rs-header',

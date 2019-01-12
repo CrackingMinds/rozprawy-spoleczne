@@ -3,17 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ClientComponent } from 'app/client/client.component';
 
-import { AboutComponent } from 'app/pages/about/about.component';
-import { ReviewersComponent } from 'app/pages/reviewers/reviewers.component';
-import { ArchiveComponent } from 'app/pages/archive/archive.component';
-import { AuthorRequirementsComponent } from 'app/pages/author-requirements/author.requirements.component';
+import { AboutComponent } from 'app/client/pages/about/about.component';
+import { ReviewersComponent } from 'app/client/pages/reviewers/reviewers.component';
+import { ArchiveComponent } from 'app/client/pages/archive/archive.component';
+import { AuthorRequirementsComponent } from 'app/client/pages/author-requirements/author.requirements.component';
 import { IssueComponent } from 'app/client/pages/issue/issue.component';
-import { ArticleComponent } from 'app/pages/article/article.component';
-import { IndexingComponent } from 'app/pages/indexing/indexing.component';
-import { SubscriptionsComponent } from 'app/pages/subscriptions/subscriptions.component';
-import { ContactDataComponent } from 'app/pages/contact-data/contact.data.component';
-import { EthicalStandardsComponent } from 'app/pages/ethical-standards/ethical.standards.component';
-import { EditorialScientificBoardComponent } from 'app/pages/editorial-scientific-board/editorial.scientific.board.component';
+import { ArticleComponent } from 'app/client/pages/article/article.component';
+import { IndexingComponent } from 'app/client/pages/indexing/indexing.component';
+import { SubscriptionsComponent } from 'app/client/pages/subscriptions/subscriptions.component';
+import { ContactDataComponent } from 'app/client/pages/contact-data/contact.data.component';
+import { EthicalStandardsComponent } from 'app/client/pages/ethical-standards/ethical.standards.component';
+import { EditorialScientificBoardComponent } from 'app/client/pages/editorial-scientific-board/editorial.scientific.board.component';
 
 import { RoutesResolver } from 'app/routes-resolver/routes.resolver';
 import { PageRoute } from 'app/client/page.route';

@@ -5,10 +5,10 @@ import { first, map, takeUntil } from 'rxjs/operators';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 
-import { Page } from 'app/pages/page';
+import { Page } from 'app/client/pages/page';
 import { MenuComponent } from 'app/shared/templates/menu/menu.component';
 import { HeaderComponent } from 'app/shared/templates/header/header.component';
-import { AsyncComponent } from 'app/pages/async.component';
+import { AsyncComponent } from 'app/client/pages/async.component';
 
 @Component({
   selector: 'rs-client',

@@ -7,7 +7,7 @@ import { takeUntil, map } from 'rxjs/operators';
 import { Issue } from 'app/models/issue';
 import { Article } from 'app/models/article';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-import { Page } from 'app/pages/page';
+import { Page } from 'app/client/pages/page';
 
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
