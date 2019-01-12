@@ -15,12 +15,12 @@ const appRoutes: Routes = [
     loadChildren: 'app/client/client.module#ClientModule'
   },
   {
-    path: AdminRoutesResolver.admin,
+    path: AdminRoutesResolver.admin(),
     loadChildren: 'app/admin/admin.module#AdminModule',
     canActivate: [AdminGuard]
   },
   {
-    path: RoutesResolver.signIn,
+    path: RoutesResolver.signIn(),
     component: SigninComponent,
     canActivate: [SigninGuard]
   },

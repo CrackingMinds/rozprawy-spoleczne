@@ -1,14 +1,14 @@
 export class AdminRoutesResolver {
 
-  static get admin(): string {
+  static admin(): string {
     return 'admin';
   }
 
-  static get dashboard(): string {
+  static dashboard(): string {
     return 'dashboard';
   }
 
-  static get library(): string {
+  static library(): string {
     return 'library';
   }
 

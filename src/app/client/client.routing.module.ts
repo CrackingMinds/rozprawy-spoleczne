@@ -20,51 +20,51 @@ import { PageRoute } from 'app/client/page.route';
 
 const clientRoutes: PageRoute[] = [
   {
-    path: RoutesResolver.archive,
+    path: RoutesResolver.archive(),
     component: ArchiveComponent
   },
   {
-    path: RoutesResolver.reviewers,
+    path: RoutesResolver.reviewers(),
     component: ReviewersComponent
   },
   {
-    path: RoutesResolver.indexing,
+    path: RoutesResolver.indexing(),
     component: IndexingComponent
   },
   {
-    path: RoutesResolver.subscriptions,
+    path: RoutesResolver.subscriptions(),
     component: SubscriptionsComponent
   },
   {
-    path: RoutesResolver.contact,
+    path: RoutesResolver.contact(),
     component: ContactDataComponent
   },
   {
-    path: RoutesResolver.requirements,
+    path: RoutesResolver.requirements(),
     component: AuthorRequirementsComponent
   },
   {
-    path: RoutesResolver.ethicsStatement,
+    path: RoutesResolver.ethicsStatement(),
     component: EthicalStandardsComponent
   },
   {
-    path: RoutesResolver.currentIssue,
+    path: RoutesResolver.currentIssue(),
     component: IssueComponent
   },
   {
-    path: `${RoutesResolver.issue}/:issueId`,
+    path: `${RoutesResolver.issue()}/:issueId`,
     component: IssueComponent
   },
   {
-    path: `${RoutesResolver.article}/:articleId`,
+    path: `${RoutesResolver.article()}/:articleId`,
     component: ArticleComponent
   },
   {
-    path: RoutesResolver.about,
+    path: RoutesResolver.about(),
     component: AboutComponent
   },
   {
-    path: RoutesResolver.editorialAndScientificBoard,
+    path: RoutesResolver.editorialAndScientificBoard(),
     component: EditorialScientificBoardComponent
   }
 ];
@@ -77,7 +77,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: RoutesResolver.about
+        redirectTo: RoutesResolver.about()
       },
       ...clientRoutes
     ]

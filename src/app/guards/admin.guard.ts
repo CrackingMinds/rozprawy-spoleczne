@@ -36,6 +36,6 @@ export class AdminGuard implements CanActivate {
 
   private redirectToSignIn(): void {
     this.signInRepository.redirectedFrom = window.location.pathname;
-    this.router.navigateByUrl(`/${RoutesResolver.signIn}`);
+    this.router.navigateByUrl(`/${RoutesResolver.signIn()}`);
   }
 }

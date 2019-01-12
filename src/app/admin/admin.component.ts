@@ -22,6 +22,6 @@ export class AdminComponent {
 
   logOut(): void {
     this.firebaseAuth.auth.signOut();
-    this.router.navigateByUrl(`/${RoutesResolver.signIn}`);
+    this.router.navigateByUrl(`/${RoutesResolver.signIn()}`);
   }
 }

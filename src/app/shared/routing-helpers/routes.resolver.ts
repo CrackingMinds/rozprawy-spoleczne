@@ -1,54 +1,54 @@
 export class RoutesResolver {
 
-  static get article(): string {
+  static article(): string {
     return 'articles';
   }
 
-  static get issue(): string {
+  static issue(): string {
     return 'issues';
   }
 
-  static get currentIssue(): string {
-    return `${RoutesResolver.issue}/current`;
+  static currentIssue(): string {
+    return `${RoutesResolver.issue()}/current`;
   }
 
-  static get archive(): string {
+  static archive(): string {
     return 'archive';
   }
 
-  static get about(): string {
+  static about(): string {
     return 'about';
   }
 
-  static get editorialAndScientificBoard(): string {
+  static editorialAndScientificBoard(): string {
     return 'editorial-scientific-board';
   }
 
-  static get reviewers(): string {
+  static reviewers(): string {
     return 'reviewers';
   }
 
-  static get indexing(): string {
+  static indexing(): string {
     return 'indexing';
   }
 
-  static get subscriptions(): string {
+  static subscriptions(): string {
     return 'subscriptions';
   }
 
-  static get contact(): string {
+  static contact(): string {
     return 'contact';
   }
 
-  static get requirements(): string {
+  static requirements(): string {
     return 'requirements';
   }
 
-  static get ethicsStatement(): string {
+  static ethicsStatement(): string {
     return 'ethics-statement';
   }
 
-  static get signIn(): string {
+  static signIn(): string {
     return 'sign-in';
   }
 

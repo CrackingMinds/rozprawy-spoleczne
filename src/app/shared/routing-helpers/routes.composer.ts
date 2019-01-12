@@ -4,7 +4,7 @@ export class RoutesComposer {
 
   static composeArticleRouterLink(articleId: string): string[] {
     return [
-      `/${RoutesResolver.article}`,
+      `/${RoutesResolver.article()}`,
       articleId
     ];
   }

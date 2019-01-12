@@ -33,7 +33,7 @@ export class SigninGuard implements CanActivate {
   }
 
   private redirectToAdminPage(): void {
-    this.router.navigateByUrl(`/${AdminRoutesResolver.admin}`);
+    this.router.navigateByUrl(`/${AdminRoutesResolver.admin()}`);
   }
 
 }

@@ -129,7 +129,7 @@ export class SigninComponent implements OnInit, OnDestroy {
   }
 
   private redirectToAdminPage(): void {
-    this.router.navigateByUrl(`/${AdminRoutesResolver.admin}`);
+    this.router.navigateByUrl(`/${AdminRoutesResolver.admin()}`);
   }
 
 }

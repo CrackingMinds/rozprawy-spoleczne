@@ -65,7 +65,7 @@ export class ArchiveComponent extends Page implements OnInit, OnDestroy {
 
   composeIssueRouterLink(issueId: string): string[] {
     return [
-      `/${RoutesResolver.issue}`,
+      `/${RoutesResolver.issue()}`,
       issueId
     ];
   }

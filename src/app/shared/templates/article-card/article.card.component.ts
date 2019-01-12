@@ -42,7 +42,7 @@ export class ArticleCardComponent {
 
   composeArticleRouterLink(articleId: string): string[] {
     return [
-      `/${RoutesResolver.article}`,
+      `/${RoutesResolver.article()}`,
       articleId
     ];
   }
