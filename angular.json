@@ -28,7 +28,8 @@
                 "src/assets/scss/helpers"
               ]
             },
-            "scripts": []
+            "scripts": [],
+            "deleteOutputPath": false
           },
           "configurations": {
             "production": {
