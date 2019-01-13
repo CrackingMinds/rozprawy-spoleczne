@@ -11,6 +11,7 @@ import { Page } from 'app/client/pages/page';
 
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { Utils } from 'app/shared/utils';
 
 @Component({
     selector: 'rs-issue',
@@ -97,7 +98,12 @@ export class IssueComponent extends Page implements OnInit, OnDestroy {
 
   private fetchArticles(issueId: string): void {
     this.articleEndpoint.getIssueArticles(issueId)
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(
+          map((articles: Article[]) => {
+            return Utils.sortArticles(articles);
+          }),
+          takeUntil(this.unsubscribe$)
+        )
         .subscribe((articles: Article[]) => {
           this.issueArticles = articles;
           this.issueArticlesLoaded$.next();

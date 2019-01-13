@@ -1,4 +1,5 @@
 import { Issue } from 'app/models/issue';
+import { Article } from 'app/models/article';
 
 export class Utils {
 
@@ -26,6 +27,20 @@ export class Utils {
     });
 
     return updatedIssues;
+  }
+
+  static sortArticles(articles: Article[]): Article[] {
+    let updatedArticles = [...articles];
+    updatedArticles.sort((a: Article, b: Article) => {
+      return -1 * Utils.sortByValue(this.getPageInIssue(a), this.getPageInIssue(b));
+    });
+
+    return updatedArticles;
+  }
+
+  private static getPageInIssue(article: Article): number {
+    const startingPage: string = article.pages.split('-')[0];
+    return parseInt(startingPage);
   }
 
   static sortByValue(a, b) {

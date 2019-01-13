@@ -54,6 +54,9 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
     this.store.select(librarySelectors.getArticleEntities)
       .pipe(
+        map((articles: Article[]) => {
+          return Utils.sortArticles(articles);
+        }),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((articles: Article[]) => this.articles = articles);
