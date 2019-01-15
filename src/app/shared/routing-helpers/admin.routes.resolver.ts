@@ -12,4 +12,8 @@ export class AdminRoutesResolver {
     return 'library';
   }
 
+  static editorialAndScientificBoardEdit(): string {
+    return 'editorial-scientific-board-edit';
+  }
+
 }
