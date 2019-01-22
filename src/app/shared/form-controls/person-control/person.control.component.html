@@ -1,0 +1,32 @@
+<div [formGroup]="person" class="rs-person-details">
+  <mat-form-field>
+    <input matInput
+           placeholder="Imię"
+           formControlName="firstName">
+    <mat-error *ngIf="firstName.hasError('required')">
+      Imię jest wymagane
+    </mat-error>
+    <mat-error *ngIf="firstName.hasError('pattern')">
+      Wpisano niepoprawne imię
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput
+           placeholder="Nazwisko"
+           formControlName="lastName">
+    <mat-error *ngIf="lastName.hasError('required')">
+      Nazwisko jest wymagane
+    </mat-error>
+    <mat-error *ngIf="lastName.hasError('pattern')">
+      Wpisano niepoprawne nazwisko
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput
+           placeholder="Drugie imię"
+           formControlName="middleName">
+    <mat-error *ngIf="middleName.hasError('pattern')">
+      Wpisano niepoprawne drugie imię
+    </mat-error>
+  </mat-form-field>
+</div>
