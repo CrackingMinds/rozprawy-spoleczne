@@ -1,0 +1,14 @@
+<div [formGroup]="boardMember" class="rs-board-member-details">
+  <mat-form-field class="rs-member-position">
+    <input matInput
+           placeholder="Stanowisko"
+           formControlName="position">
+    <mat-error *ngIf="position.hasError('required')">
+      Stanowisko jest wymagane
+    </mat-error>
+    <mat-error *ngIf="position.hasError('pattern')">
+      Wpisano niepoprawne stanowisko
+    </mat-error>
+  </mat-form-field>
+  <rs-person-control formControlName="person"></rs-person-control>
+</div>

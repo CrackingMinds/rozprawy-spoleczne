@@ -30,6 +30,10 @@ export class CustomValidators {
     );
   }
 
+  static get editorialBoardMemberPosition(): RegExp {
+    return new RegExp(/([a-zA-z]( )*)+/);
+  }
+
   static get pagesInIssue(): RegExp {
     return new RegExp(/\d+(-\d+)?/);
   }
