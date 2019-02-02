@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
 
 import { Subject } from 'rxjs';
@@ -8,6 +8,8 @@ import { EditorialBoardMember, RawEditorialBoardMember } from 'app/models/editor
 
 import { Person } from 'app/models/person';
 import { CustomValidators } from 'app/shared/custom.validators';
+
+import { ListOfControlsControl } from 'app/shared/form-controls/list-of-controls/list.of.controls';
 
 @Component({
 	selector: 'rs-editorial-board-member-control',
@@ -24,10 +26,9 @@ import { CustomValidators } from 'app/shared/custom.validators';
       useExisting: EditorialBoardMemberControlComponent,
       multi: true
     }
-  ],
-	changeDetection: ChangeDetectionStrategy.OnPush
+  ]
 })
-export class EditorialBoardMemberControlComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
+export class EditorialBoardMemberControlComponent implements ListOfControlsControl, ControlValueAccessor, Validator, OnInit, OnDestroy {
 
   @Input()
   memberData: EditorialBoardMember;
