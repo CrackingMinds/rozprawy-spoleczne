@@ -1,0 +1,20 @@
+@import "variables";
+
+:host {
+
+  .rs-control {
+    display: flex;
+    margin: 10px 0;
+  }
+
+  .rs-remove-control-btn {
+    margin: auto 0;
+  }
+
+  .rs-control-wrapper {
+    border-radius: $border-radius;
+    border: 2px solid $main-green-color;
+    padding: 10px;
+  }
+
+}

@@ -8,9 +8,11 @@
               (click)="removeControl(i)">
         <mat-icon>remove</mat-icon>
       </button>
-      <ng-container rs-control-factory [control]="controlType" [data]="initialData"
-                    [formControlName]="i">
-      </ng-container>
+      <div class="rs-control-wrapper">
+        <ng-container rs-control-factory [control]="controlType"
+                      [formControlName]="i">
+        </ng-container>
+      </div>
     </div>
   </ng-container>
 </ng-container>
@@ -20,10 +22,3 @@
         (click)="addEmptyControl()">
   <mat-icon>add</mat-icon>
 </button>
-
-<pre>
-  {{ listOfControls.value | json }}
-</pre>
-<pre>
-  {{ listOfControls.valid | json }}
-</pre>

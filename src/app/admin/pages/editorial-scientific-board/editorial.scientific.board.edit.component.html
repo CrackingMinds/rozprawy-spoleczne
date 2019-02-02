@@ -1,28 +1,30 @@
+<rs-list-of-controls [control]="control"></rs-list-of-controls>
+
 <h1>Editorial and scientific board edit</h1>
-<div [formGroup]="form" class="rs-editorial-board-members">
-  <div formArrayName="editorialBoardMembers">
-    <div *ngFor="let boardMemberControl of editorialBoardMembers.controls; let i = index;">
-      <button [disabled]="editorialBoardMembers.controls.length === 1"
-              type="button"
-              class="rs-remove-author-btn"
-              mat-icon-button color="accent"
-              (click)="removeEditorialBoardMember(i)">
-        <mat-icon>remove</mat-icon>
-      </button>
-      <rs-editorial-board-member-control [formControlName]="i"></rs-editorial-board-member-control>
-    </div>
-  </div>
-</div>
+<!--<div [formGroup]="form" class="rs-editorial-board-members">-->
+  <!--<div formArrayName="editorialBoardMembers">-->
+    <!--<div *ngFor="let boardMemberControl of editorialBoardMembers.controls; let i = index;">-->
+      <!--<button [disabled]="editorialBoardMembers.controls.length === 1"-->
+              <!--type="button"-->
+              <!--class="rs-remove-author-btn"-->
+              <!--mat-icon-button color="accent"-->
+              <!--(click)="removeEditorialBoardMember(i)">-->
+        <!--<mat-icon>remove</mat-icon>-->
+      <!--</button>-->
+      <!--<rs-editorial-board-member-control [formControlName]="i"></rs-editorial-board-member-control>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
-<button type="button"
-        mat-icon-button color="primary"
-        (click)="addEmptyEditorialBoardMemberControl()">
-  <mat-icon>add</mat-icon>
-</button>
+<!--<button type="button"-->
+        <!--mat-icon-button color="primary"-->
+        <!--(click)="addEmptyEditorialBoardMemberControl()">-->
+  <!--<mat-icon>add</mat-icon>-->
+<!--</button>-->
 
-<pre>
-  {{ form.value | json }}
-</pre>
-<pre>
-  {{ form.valid | json }}
-</pre>
+<!--<pre>-->
+  <!--{{ form.value | json }}-->
+<!--</pre>-->
+<!--<pre>-->
+  <!--{{ form.valid | json }}-->
+<!--</pre>-->

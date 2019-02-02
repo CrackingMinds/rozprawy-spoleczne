@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material';
 
 import { EditorialScientificBoardEditComponent } from 'app/admin/pages/editorial-scientific-board/editorial.scientific.board.edit.component';
+
+import { ListOfControlsModule } from 'app/shared/form-controls/list-of-controls/list.of.controls.module';
 import { EditorialBoardMemberControlModule } from 'app/shared/form-controls/editorial-board-member/editorial.board.member.control.module';
 
 const declarations = [
@@ -23,6 +25,7 @@ const declarations = [
 
     MatIconModule,
 
+    ListOfControlsModule,
     EditorialBoardMemberControlModule
 	],
 	declarations: declarations,

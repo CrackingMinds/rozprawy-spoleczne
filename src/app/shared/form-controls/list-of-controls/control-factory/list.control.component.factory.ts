@@ -23,9 +23,6 @@ export class ListControlComponentFactory implements ControlValueAccessor, Valida
   @Input()
   control: Type<ListOfControlsControl>;
 
-  @Input('data')
-  controlData: ListOfControlsData;
-
   private componentRef: ComponentRef<ListOfControlsControl>;
 
 	constructor(private componentFactoryResolver: ComponentFactoryResolver,
@@ -64,8 +61,8 @@ export class ListControlComponentFactory implements ControlValueAccessor, Valida
     return this.componentRef.instance.validate(control);
   }
 
-  writeValue(obj: any): void {
-    this.componentRef.instance.writeValue(obj);
+  writeValue(data: ListOfControlsData): void {
+    this.componentRef.instance.writeValue(data);
   }
 
   private createControlComponent(): void {
