@@ -79,6 +79,11 @@
             "styles": [
               "src/styles.css"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/scss/helpers"
+              ]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico"
