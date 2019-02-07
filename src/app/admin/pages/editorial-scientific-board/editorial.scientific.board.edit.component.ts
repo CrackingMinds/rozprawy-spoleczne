@@ -18,7 +18,10 @@ export class EditorialScientificBoardEditComponent implements OnInit, OnDestroy 
   control: Type<ListOfControlsControl> = EditorialBoardMemberControlComponent;
 
   form: FormGroup = this.formBuilder.group({
-    editorialBoardMembers: this.formBuilder.array([])
+    editorialBoardMembers: [
+      null,
+      Validators.required
+    ]
   });
 
   get editorialBoardMembers(): FormArray {
@@ -30,36 +33,35 @@ export class EditorialScientificBoardEditComponent implements OnInit, OnDestroy 
   constructor(private formBuilder: FormBuilder) {}
 
 	ngOnInit() {
-    this.addEmptyEditorialBoardMemberControl();
+
+    const initialData: Array<EditorialBoardMember> = [
+        {
+          firstName: 'test',
+          lastName: 'test-last',
+          position: 'test-position',
+          id: null
+        },
+        {
+          firstName: 'test2',
+          lastName: 'test2-last',
+          position: 'test2-position',
+          id: null
+        },
+        {
+          firstName: 'test3',
+          lastName: 'test3-last',
+          position: 'test3-position',
+          id: null
+        }
+    ];
+
+    this.editorialBoardMembers.setValue(initialData);
+
 	}
 
 	ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-	addEmptyEditorialBoardMemberControl(): void {
-    const boardMember: EditorialBoardMember = {
-      id: undefined,
-      position: undefined,
-      firstName: undefined,
-      lastName: undefined,
-      middleName: undefined
-    };
-
-    this.addEditorialBoardMemberControl(boardMember);
-  }
-
-	addEditorialBoardMemberControl(boardMember: EditorialBoardMember): void {
-    this.editorialBoardMembers.push(
-      this.formBuilder.control(boardMember, [
-        Validators.required
-      ])
-    );
-  }
-
-  removeEditorialBoardMember(index: number): void {
-    this.editorialBoardMembers.removeAt(index);
   }
 
 }
