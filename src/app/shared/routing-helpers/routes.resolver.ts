@@ -48,6 +48,10 @@ export class RoutesResolver {
     return 'ethics-statement';
   }
 
+  static rodo(): string {
+    return 'rodo';
+  }
+
   static signIn(): string {
     return 'sign-in';
   }

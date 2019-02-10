@@ -29,6 +29,7 @@ export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
     .withPage({ title: 'Kontakt', url: RoutesResolver.contact() })
     .withPage({ title: 'Zasady publikacji prac', url: RoutesResolver.requirements() })
     .withPage({ title: 'Standardy etyczne', url: RoutesResolver.ethicsStatement() })
+    .withPage({ title: 'RODO', url: RoutesResolver.rodo() })
     .items;
 
   private contentLoaded$: Subject<void> = new Subject<void>();

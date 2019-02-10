@@ -13,6 +13,10 @@
 .main-wrapper {
   position: relative;
 
+  .page-header-wrapper, .page-header-title, .page-footer-wrapper {
+    width: 100%;
+  }
+
   .page-header-title {
     text-align: center;
     background-color: $hover-color;
@@ -28,6 +32,9 @@
 
   .content-wrapper {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     @media (max-width: 1366px) {
       .container {
@@ -38,6 +45,10 @@
     &.show {
       display: flex;
     }
+  }
+
+  .page-footer-wrapper {
+    margin-top: auto;
   }
 
 }

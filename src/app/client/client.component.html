@@ -6,8 +6,8 @@
       </mat-sidenav>
       <mat-sidenav-content class="main-wrapper">
         <div class="content-wrapper">
-          <div class="container-fluid">
-            <div class="row page-header-wrapper">
+          <div class="container-fluid page-header-wrapper">
+            <div class="row">
               <button mat-icon-button (click)="sidenav.toggle()" id="menu-toggle">
                 <mat-icon>menu</mat-icon>
               </button>
@@ -27,7 +27,7 @@
               </router-outlet>
             </div>
           </div>
-          <div class="container-fluid">
+          <div class="container-fluid page-footer-wrapper">
             <div class="row page-footer">
               <img src="../../assets/images/logo_wydawnictwa_blue_168x91.png">
               <a class="developed-by" target="_blank" href="{{ linkedInProfileLink }}">Developed by Viacheslav Guselnykov</a>

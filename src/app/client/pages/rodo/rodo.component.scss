@@ -1,0 +1,22 @@
+@import "variables";
+
+:host {
+  font-size: 1rem;
+  line-height: 1.7rem;
+  font-family: 'Open Sans', sans-serif;
+
+  a {
+    color: $main-blue-color;
+  }
+
+}
+
+.rs-attachment {
+  display: flex;
+  flex-direction: row;
+
+  .icon {
+    color: $main-blue-color;
+    margin-right: 5px;
+  }
+}

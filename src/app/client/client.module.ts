@@ -13,6 +13,7 @@ import { SubscriptionsModule } from 'app/client/pages/subscriptions/subscription
 import { ContactDataModule } from 'app/client/pages/contact-data/contact.data.module';
 import { AuthorRequirementsModule } from 'app/client/pages/author-requirements/author.requirements.module';
 import { EthicalStandardsModule } from 'app/client/pages/ethical-standards/ethical.standards.module';
+import { RODOModule } from 'app/client/pages/rodo/rodo.module';
 import { IssueModule } from 'app/client/pages/issue/issue.module';
 import { ArticleModule } from 'app/client/pages/article/article.module';
 import { AboutModule } from 'app/client/pages/about/about.module';
@@ -49,6 +50,7 @@ const providers = [
     ContactDataModule,
     AuthorRequirementsModule,
     EthicalStandardsModule,
+    RODOModule,
     IssueModule,
     ArticleModule,
     AboutModule,

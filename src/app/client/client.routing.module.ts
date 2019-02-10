@@ -13,6 +13,7 @@ import { IndexingComponent } from 'app/client/pages/indexing/indexing.component'
 import { SubscriptionsComponent } from 'app/client/pages/subscriptions/subscriptions.component';
 import { ContactDataComponent } from 'app/client/pages/contact-data/contact.data.component';
 import { EthicalStandardsComponent } from 'app/client/pages/ethical-standards/ethical.standards.component';
+import { RODOComponent } from 'app/client/pages/rodo/rodo.component';
 import { EditorialScientificBoardComponent } from 'app/client/pages/editorial-scientific-board/editorial.scientific.board.component';
 
 import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
@@ -46,6 +47,10 @@ const clientRoutes: PageRoute[] = [
   {
     path: RoutesResolver.ethicsStatement(),
     component: EthicalStandardsComponent
+  },
+  {
+    path: RoutesResolver.rodo(),
+    component: RODOComponent
   },
   {
     path: RoutesResolver.currentIssue(),
