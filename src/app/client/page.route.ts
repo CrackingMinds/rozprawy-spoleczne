@@ -1,11 +1,11 @@
 import { Route, LoadChildren } from '@angular/router';
 import { Type } from '@angular/core';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 export class PageRoute implements Route {
 
   path: string;
-  component: Type<Page>;
+  component: Type<PageComponent>;
 
 }

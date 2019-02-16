@@ -3,17 +3,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
 
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-indexing',
   templateUrl: './indexing.component.html'
 })
-export class IndexingComponent extends Page implements OnInit, OnDestroy {
+export class IndexingComponent extends PageComponent implements OnInit, OnDestroy {
 
   indexingData: IIndexingInfo[];
   indexingDataToShow: IIndexingInfo[];
@@ -51,7 +52,7 @@ export class IndexingComponent extends Page implements OnInit, OnDestroy {
   }
 
   observePageName(): Observable<string> {
-    return of('Bazy indeksacyjne');
+    return of(ClientPageNamesResolver.indexing());
   }
 
 }

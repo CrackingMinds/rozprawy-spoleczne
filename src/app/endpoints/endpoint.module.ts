@@ -31,6 +31,9 @@ import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscript
 import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
 import { FirestorageArticleFileEndpoint } from 'app/endpoints/firestorage-endpoint/article-file/firestorage.article.file.endpoint';
 
+import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
+import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
+
 const providers = [
   {
     provide: ENDPOINT_URL,
@@ -71,6 +74,10 @@ const providers = [
   {
     provide: ArticleFileEndpoint,
     useClass: FirestorageArticleFileEndpoint
+  },
+  {
+    provide: EditorialBoardEndpoint,
+    useClass: FirestoreEditorialBoardEndpoint
   }
 ];
 

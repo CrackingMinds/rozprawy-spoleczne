@@ -7,13 +7,14 @@ import { IssuesByYear } from 'app/models/issue';
 import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-archive',
   templateUrl: './archive.component.html'
 })
-export class ArchiveComponent extends Page implements OnInit, OnDestroy {
+export class ArchiveComponent extends PageComponent implements OnInit, OnDestroy {
 
   years: string[];
   issuesByYear: IssuesByYear;
@@ -60,7 +61,7 @@ export class ArchiveComponent extends Page implements OnInit, OnDestroy {
   }
 
   observePageName(): Observable<string> {
-    return of('Archiwum');
+    return of(ClientPageNamesResolver.archive());
   }
 
   composeIssueRouterLink(issueId: string): string[] {

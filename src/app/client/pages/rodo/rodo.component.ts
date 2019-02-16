@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
 	selector: 'rs-rodo',
 	templateUrl: `./rodo.component.html`,
   styleUrls: ['./rodo.component.scss']
 })
-export class RODOComponent extends Page {
+export class RODOComponent extends PageComponent {
 
 	constructor() { super(); }
 
@@ -18,7 +19,7 @@ export class RODOComponent extends Page {
   }
 
   observePageName(): Observable<string> {
-    return of('RODO');
+    return of(ClientPageNamesResolver.rodo());
   }
 
 }

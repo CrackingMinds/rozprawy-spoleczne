@@ -4,7 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, Subject, zip } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
@@ -15,7 +15,7 @@ import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
   selector: 'rs-article',
   templateUrl: './article.component.html'
 })
-export class ArticleComponent extends Page implements OnInit, OnDestroy {
+export class ArticleComponent extends PageComponent implements OnInit, OnDestroy {
 
   issue: Issue;
   article: Article;

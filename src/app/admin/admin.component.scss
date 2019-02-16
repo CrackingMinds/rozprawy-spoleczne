@@ -1,3 +1,5 @@
+@import "variables";
+
 :host {
   display: flex;
   flex-direction: column;
@@ -7,11 +9,24 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 10px;
+    padding: $universal-padding-half;
     background-color: #f7f7f7;
 
     button {
       color: white;
+    }
+  }
+
+  .rs-page-header {
+    background-color: $secondary-color;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $universal-padding-half $universal-padding;
+
+    .rs-page-title {
+      margin: 0;
     }
   }
 

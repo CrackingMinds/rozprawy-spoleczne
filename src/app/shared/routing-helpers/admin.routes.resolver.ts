@@ -1,3 +1,5 @@
+import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
+
 export class AdminRoutesResolver {
 
   static admin(): string {
@@ -5,15 +7,15 @@ export class AdminRoutesResolver {
   }
 
   static dashboard(): string {
-    return 'dashboard';
+    return AdminPagesResolver.dashboard().url;
   }
 
   static library(): string {
-    return 'library';
+    return AdminPagesResolver.library().url;
   }
 
-  static editorialAndScientificBoardEdit(): string {
-    return 'editorial-scientific-board-edit';
+  static editorialBoardEdit(): string {
+    return AdminPagesResolver.editorialBoardEdit().url;
   }
 
 }

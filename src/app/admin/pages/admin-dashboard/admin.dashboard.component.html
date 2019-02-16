@@ -1,0 +1,7 @@
+<ng-container *ngFor="let menuItem of menuItems">
+  <a class="rs-page-link" [routerLink]="composeLink(menuItem.url)">
+    <mat-card>
+      {{ menuItem.title }}
+    </mat-card>
+  </a>
+</ng-container>

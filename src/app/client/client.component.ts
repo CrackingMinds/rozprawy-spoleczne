@@ -5,7 +5,7 @@ import { first, map, takeUntil } from 'rxjs/operators';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 import { MenuComponent } from 'app/shared/templates/menu/menu.component';
 import { HeaderComponent } from 'app/shared/templates/header/header.component';
 import { AsyncComponent } from 'app/client/pages/async.component';
@@ -55,7 +55,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  onActivate(page: Page): void {
+  onActivate(page: PageComponent): void {
     page.observePageName()
         .pipe(first())
         .subscribe((name: string) => {
@@ -70,7 +70,7 @@ export class ClientComponent implements OnInit, OnDestroy {
       });
   }
 
-  onDeactivate(page: Page): void {
+  onDeactivate(page: PageComponent): void {
     this.pageContentLoaded$.next(false);
   }
 

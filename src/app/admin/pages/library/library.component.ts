@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subject, zip } from 'rxjs';
+import { Observable, Subject, zip, of } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
@@ -15,15 +15,16 @@ import { CreateArticle, LoadArticles, RemoveArticle, UpdateArticle } from 'app/a
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
-import { PageNameService } from 'app/shared/services/page.name.service';
 import { Utils } from 'app/shared/utils';
+import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 
 @Component({
   selector: 'rs-library-editorial',
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss']
 })
-export class LibraryComponent implements OnInit, OnDestroy {
+export class LibraryComponent implements PageComponent, OnInit, OnDestroy {
   issues: Issue[];
   articles: Article[];
 
@@ -36,12 +37,10 @@ export class LibraryComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
-              private pageNameService: PageNameService,
               private store: Store<LibraryState>) {
   }
 
   ngOnInit() {
-    this.pageNameService.setPageName('Zarządzanie numerami');
 
     this.store.select(librarySelectors.getIssues)
         .pipe(
@@ -72,6 +71,14 @@ export class LibraryComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  observeContentLoaded(): Observable<void> {
+    return of(null);
+  }
+
+  observePageName(): Observable<string> {
+    return of(AdminPagesResolver.library().title);
   }
 
   onIssueSelect(issue: Issue): void {

@@ -3,18 +3,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-contact-data',
   templateUrl: './contact.data.component.html',
   styles: []
 })
-export class ContactDataComponent extends Page implements OnInit, OnDestroy {
+export class ContactDataComponent extends PageComponent implements OnInit, OnDestroy {
 
   contactInfo: IContactInfo = new ContactInfo();
 
@@ -45,7 +46,7 @@ export class ContactDataComponent extends Page implements OnInit, OnDestroy {
   }
 
   observePageName(): Observable<string> {
-    return of('Kontakt');
+    return of(ClientPageNamesResolver.contact());
   }
 
 

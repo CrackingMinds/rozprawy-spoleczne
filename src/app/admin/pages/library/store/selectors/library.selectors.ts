@@ -1,11 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
+import { libraryStoreFeatureName } from 'app/admin/pages/library/store/store.feature.name';
+
 import { LibraryState } from 'app/admin/pages/library/store/reducers/library.reducer';
 
 import * as issueSelectors from 'app/admin/pages/library/store/selectors/issues.selectors';
 import * as articleReducer from 'app/admin/pages/library/store/reducers/article.reducer';
 
-const getLibraryState = createFeatureSelector<LibraryState>('library');
+const getLibraryState = createFeatureSelector<LibraryState>(libraryStoreFeatureName);
 
 const getIssuesState = createSelector(getLibraryState, (state: LibraryState) => state.issues);
 export const getIssues = createSelector(getIssuesState, issueSelectors.getIssues);

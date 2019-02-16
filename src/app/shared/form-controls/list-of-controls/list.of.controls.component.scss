@@ -1,6 +1,11 @@
 @import "variables";
 
 :host {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  padding: 20px;
+  background-color: #f7f7f7;
 
   .rs-control {
     display: flex;
@@ -11,10 +16,78 @@
     margin: auto 0;
   }
 
-  .rs-control-wrapper {
-    border-radius: $border-radius;
-    border: 2px solid $main-green-color;
-    padding: 10px;
+  .rs-divider-horizontal {
+    height: 2px;
+    width: 100%;
+    background-color: $white;
+  }
+
+  .rs-divider-vertical {
+    height: 100%;
+    width: 2px;
+    background-color: $white;
+  }
+
+  .rs-submit-buttons-container, .rs-order-change-buttons {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    button {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      border: none;
+      color: $white;
+      background-color: $main-green-color;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $hover-color;
+      }
+
+    }
+
+    .rs-move-up-btn, .rs-cancel {
+      border-top-right-radius: $border-radius;
+    }
+
+    .rs-move-down-btn, .rs-submit {
+      border-bottom-right-radius: $border-radius;
+    }
+
+  }
+
+  mat-card.rs-control-with-buttons-container {
+    display: flex;
+    padding: 0;
+    border-left: 5px solid $main-green-color;
+
+    &.rs-modified {
+      border-color: $main-blue-color;
+    }
+
+    &.rs-invalid {
+      border-color: $red;
+    }
+
+    .rs-control-container {
+      padding: $universal-padding-half;
+    }
+
+  }
+
+  .rs-order-change-buttons {
+
+    .rs-move-up-btn, .rs-move-down-btn {
+
+      &[disabled] {
+        cursor: not-allowed;
+        background-color: $disable-color;
+      }
+
+    }
+
   }
 
 }

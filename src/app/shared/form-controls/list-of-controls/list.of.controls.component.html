@@ -1,24 +1,56 @@
 <ng-container [formGroup]="listOfControls">
   <ng-container formArrayName="{{controlsArrayName}}">
     <div class="rs-control" *ngFor="let control of controls.controls; let i = index;">
-      <button [disabled]="controls.controls.length === 1"
-              type="button"
+      <button type="button"
               class="rs-remove-control-btn"
               mat-icon-button color="accent"
-              (click)="removeControl(i)">
+              [disabled]="controls.controls.length === 1"
+              (click)="remove(i)">
         <mat-icon>remove</mat-icon>
       </button>
-      <div class="rs-control-wrapper">
-        <ng-container rs-control-factory [control]="controlType"
-                      [formControlName]="i">
-        </ng-container>
-      </div>
+      <mat-card class="rs-control-with-buttons-container"
+                [class.rs-invalid]="checkInvalid(i)"
+                [class.rs-modified]="checkModified(i)">
+        <div class="rs-control-container">
+          <ng-container rs-control-factory [control]="controlType"
+                        [formControlName]="i">
+          </ng-container>
+        </div>
+        <div class="rs-buttons-container">
+          <div *ngIf="checkModified(i)" class="rs-submit-buttons-container">
+            <button class="rs-cancel" (click)="cancelControlValue(i)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <div class="rs-divider-horizontal"></div>
+            <button class="rs-submit"
+                    [disabled]="checkInvalid(i)"
+                    (click)="submitControlValue(i)">
+              <mat-icon>check</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="!checkModified(i)" class="rs-order-change-buttons">
+            <button type="button"
+                    class="rs-move-up-btn"
+                    [disabled]="checkMoveUpDisabled(i)"
+                    (click)="moveUp(i)">
+              <mat-icon>arrow_upward</mat-icon>
+            </button>
+            <div class="rs-divider-horizontal"></div>
+            <button type="button"
+                    class="rs-move-down-btn"
+                    [disabled]="checkMoveDownDisabled(i)"
+                    (click)="moveDown(i)">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card>
     </div>
   </ng-container>
 </ng-container>
 
 <button type="button"
         mat-icon-button color="primary"
-        (click)="addEmptyControl()">
+        (click)="add()">
   <mat-icon>add</mat-icon>
 </button>

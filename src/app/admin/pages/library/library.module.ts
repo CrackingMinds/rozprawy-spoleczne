@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { libraryStoreFeatureName } from 'app/admin/pages/library/store/store.feature.name';
 import { libraryReducers } from 'app/admin/pages/library/store/reducers/library.reducer';
 import { libraryEffects } from 'app/admin/pages/library/store/effects/library.effects';
 
@@ -16,7 +17,6 @@ import { ModalModule } from 'app/admin/pages/library/modal/modal.module';
 
 import { ListOfIssuesModule } from 'app/admin/pages/library/list-of-issues/list.of.issues.module';
 import { ListOfArticlesModule } from 'app/admin/pages/library/list-of-articles/list.of.articles.module';
-
 
 const declarations = [
   LibraryComponent
@@ -36,7 +36,7 @@ const providers = [
       component: LibraryComponent
     }]),
 
-    StoreModule.forFeature('library', libraryReducers),
+    StoreModule.forFeature(libraryStoreFeatureName, libraryReducers),
     EffectsModule.forFeature(libraryEffects),
 
     MatProgressSpinnerModule,

@@ -31,7 +31,9 @@ export class CustomValidators {
   }
 
   static get editorialBoardMemberPosition(): RegExp {
-    return new RegExp(/([a-zA-z]( )*)+/);
+    return new RegExp(
+      `((${CustomValidators.lettersAndUnicode().source})[ ]?)+`
+    );
   }
 
   static get pagesInIssue(): RegExp {
@@ -46,6 +48,10 @@ export class CustomValidators {
     const start: RegExp = new RegExp(/^/);
     const end: RegExp = new RegExp(/$/);
     return new RegExp(start.source + pattern.source + end.source);
+  }
+
+  private static lettersAndUnicode(): RegExp {
+    return new RegExp(/([^\u0000-\u007F]|[a-zA-Z])+/);
   }
 
 }

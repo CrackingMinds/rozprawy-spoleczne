@@ -2,14 +2,15 @@ import { Component } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-ethical-standards',
   templateUrl: './ethical.standards.component.html',
   styleUrls: ['./ethical.standards.component.scss']
 })
-export class EthicalStandardsComponent extends Page {
+export class EthicalStandardsComponent extends PageComponent {
 
   constructor() { super(); }
 
@@ -18,7 +19,7 @@ export class EthicalStandardsComponent extends Page {
   }
 
   observePageName(): Observable<string> {
-    return of('Standardy etyczne');
+    return of(ClientPageNamesResolver.ethicsStatement());
   }
 
 }

@@ -3,17 +3,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { IReviewer } from 'app/models/reviewer';
 
 import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-reviewers',
   templateUrl: './reviewers.component.html'
 })
-export class ReviewersComponent extends Page implements OnInit, OnDestroy {
+export class ReviewersComponent extends PageComponent implements OnInit, OnDestroy {
 
   reviewersData: IReviewer[];
 
@@ -47,7 +48,7 @@ export class ReviewersComponent extends Page implements OnInit, OnDestroy {
   }
 
   observePageName(): Observable<string> {
-    return of('Recenzenci');
+    return of(ClientPageNamesResolver.reviewers());
   }
 
 }

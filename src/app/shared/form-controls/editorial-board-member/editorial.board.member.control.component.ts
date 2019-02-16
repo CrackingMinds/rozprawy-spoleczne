@@ -4,7 +4,7 @@ import { FormGroup, AbstractControl, FormBuilder, Validators, NG_VALUE_ACCESSOR,
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { EditorialBoardMember, RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import { EditorialBoardMember, EditorialBoardMemberPosition, RawEditorialBoardMember } from 'app/models/editorial-board-member';
 
 import { Person } from 'app/models/person';
 import { CustomValidators } from 'app/shared/custom.validators';
@@ -30,9 +30,6 @@ import { ListOfControlsControl } from 'app/shared/form-controls/list-of-controls
 })
 export class EditorialBoardMemberControlComponent implements ListOfControlsControl, ControlValueAccessor, Validator, OnInit, OnDestroy {
 
-  @Input()
-  memberData: EditorialBoardMember;
-
   boardMember: FormGroup;
 
   get position(): AbstractControl {
@@ -51,33 +48,19 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
 
 	ngOnInit() {
 
-    let initialMemberData: RawEditorialBoardMember;
-
-    if (this.memberData) {
-      initialMemberData = {
-        firstName: this.memberData.firstName,
-        lastName: this.memberData.lastName,
-        middleName: this.memberData.middleName,
-        position: this.memberData.position
-      };
-    } else {
-      initialMemberData = {
-        firstName: undefined,
-        lastName: undefined,
-        middleName: undefined,
-        position: undefined
-      };
-    }
-
-    const initialPersonData: Person = {
-      firstName: initialMemberData.firstName,
-      lastName: initialMemberData.lastName,
-      middleName: initialMemberData.middleName
+    let initialMemberData: RawEditorialBoardMember = {
+      person: {
+        firstName: null,
+        lastName: null,
+        middleName: null
+      },
+      position: null,
+      index: null
     };
 
     this.boardMember = this.formBuilder.group({
       person: [
-        initialPersonData,
+        initialMemberData.person,
         [
           Validators.required
         ]
@@ -96,7 +79,7 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
     this.boardMember.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((boardMember: EditorialBoardMember) => {
-        this.onChangeCallback && this.onChangeCallback(boardMember);
+        this.reportValueChange(boardMember);
       });
 
 	}
@@ -115,13 +98,7 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
 	  if (!boardMember)
 	    return;
 
-	  this.position.setValue(boardMember.position);
-	  const person: Person = {
-	    firstName: boardMember.firstName,
-      lastName: boardMember.lastName,
-      middleName: boardMember.middleName
-    };
-	  this.person.setValue(person);
+	  this.setControlValue(boardMember);
 
   }
 
@@ -144,6 +121,36 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
   }
 
   setDisabledState(isDisabled: boolean): void {
+  }
+
+  private setControlValue(data: EditorialBoardMember): void {
+    this.person.setValue(data.person);
+    this.position.setValue(data.position);
+  }
+
+  private reportValueChange(member: EditorialBoardMember): void {
+	  const newValue = this.processValue(member);
+    this.onChangeCallback && this.onChangeCallback(newValue);
+  }
+
+  private processValue(member: EditorialBoardMember): EditorialBoardMember {
+	  return {
+      ...member,
+	    person: this.processPerson(member.person),
+      position: this.processPosition(member.position)
+    };
+  }
+
+  private processPerson(person: Person): Person {
+	  return {
+	    firstName: person.firstName === "" ? null : person.firstName,
+      lastName: person.lastName === "" ? null : person.lastName,
+      middleName: person.middleName === "" ? null : person.middleName
+    };
+  }
+
+  private processPosition(position: EditorialBoardMemberPosition): EditorialBoardMemberPosition {
+	  return position === "" ? null : position;
   }
 
 }

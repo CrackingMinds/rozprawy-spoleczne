@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-about',
   templateUrl: './about.component.html'
 })
-export class AboutComponent extends Page {
+export class AboutComponent extends PageComponent {
 
   constructor() { super(); }
 
@@ -17,7 +18,7 @@ export class AboutComponent extends Page {
   }
 
   observePageName(): Observable<string> {
-    return of('O czasopiśmie');
+    return of(ClientPageNamesResolver.about());
   }
 
 }

@@ -55,4 +55,44 @@ export class Utils {
     }
   }
 
+  static areObjectsEqual(objA: {}, objB: {}): boolean {
+
+    const propertiesOfB = Object.keys(objB);
+
+    let areEqual: boolean = true;
+
+    propertiesOfB.forEach((propertyKey: string) => {
+      const propertyInA = objA[propertyKey];
+      const propertyInB = objB[propertyKey];
+
+      if (propertyInA === undefined) {
+
+        if (!propertyInB) {
+          return;
+        }
+
+      }
+
+      let arePropertiesEqual: boolean;
+
+      if (this.isObject(propertyInA)) {
+        arePropertiesEqual = this.areObjectsEqual(propertyInA, propertyInB);
+      } else {
+        arePropertiesEqual = propertyInA === propertyInB;
+      }
+
+      if (!arePropertiesEqual) {
+        areEqual = false;
+        return;
+      }
+
+    });
+
+    return areEqual;
+  }
+
+  static isObject(item: any) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
+
 }

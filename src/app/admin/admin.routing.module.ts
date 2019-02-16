@@ -4,8 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 import { AdminComponent } from 'app/admin/admin.component';
 
-import { EditorialScientificBoardEditModule } from 'app/admin/pages/editorial-scientific-board/editorial.scientific.board.edit.module';
-
 const childRoutes: Routes = [
   {
     path: AdminRoutesResolver.dashboard(),
@@ -16,8 +14,8 @@ const childRoutes: Routes = [
     loadChildren: 'app/admin/pages/library/library.module#LibraryModule'
   },
   {
-    path: AdminRoutesResolver.editorialAndScientificBoardEdit(),
-    loadChildren: () => EditorialScientificBoardEditModule
+    path: AdminRoutesResolver.editorialBoardEdit(),
+    loadChildren: 'app/admin/pages/editorial-board/editorial.board.edit.module#EditorialBoardEditModule'
   }
 ];
 
@@ -29,7 +27,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: AdminRoutesResolver.library()
+        redirectTo: AdminRoutesResolver.dashboard()
       },
       ...childRoutes
     ]

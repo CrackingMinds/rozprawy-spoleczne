@@ -3,18 +3,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
 
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-author-requirements',
   templateUrl: './author.requirements.component.html',
   styles: []
 })
-export class AuthorRequirementsComponent extends Page implements OnInit, OnDestroy {
+export class AuthorRequirementsComponent extends PageComponent implements OnInit, OnDestroy {
 
   contactInfo: IContactInfo = new ContactInfo();
 
@@ -45,7 +46,7 @@ export class AuthorRequirementsComponent extends Page implements OnInit, OnDestr
   }
 
   observePageName(): Observable<string> {
-    return of('Zasady publikacji prac');
+    return of(ClientPageNamesResolver.requirements());
   }
 
 

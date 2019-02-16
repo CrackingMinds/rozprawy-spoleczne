@@ -14,12 +14,18 @@ import { AdminComponent } from 'app/admin/admin.component';
 import { AdminRoutingModule } from 'app/admin/admin.routing.module';
 import { MatButtonModule } from '@angular/material';
 
+import { PageNameService } from 'app/shared/services/page.name.service';
+import { AdminPageNameService } from 'app/admin/admin.page.name.service';
+
 const declarations = [
   AdminComponent
 ];
 
 const providers = [
-
+  {
+    provide: PageNameService,
+    useClass: AdminPageNameService
+  }
 ];
 
 const devOnlyModules = [

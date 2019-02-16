@@ -1,0 +1,27 @@
+@import "variables";
+
+:host {
+  display: flex;
+  padding: 20px;
+
+  .rs-page-link {
+    margin: 10px;
+    text-decoration: none;
+    font-size: 20px;
+
+    &:hover {
+
+      mat-card {
+        background-color: $hover-color;
+      }
+
+    }
+
+    mat-card {
+      background-color: $main-green-color;
+      color: $white;
+    }
+
+  }
+
+}

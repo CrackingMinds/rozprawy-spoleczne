@@ -7,7 +7,7 @@ import { takeUntil, map } from 'rxjs/operators';
 import { Issue } from 'app/models/issue';
 import { Article } from 'app/models/article';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
@@ -18,7 +18,7 @@ import { Utils } from 'app/shared/utils';
     templateUrl: './issue.component.html',
     styleUrls: ['./issue.component.scss']
 })
-export class IssueComponent extends Page implements OnInit, OnDestroy {
+export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
 
   issue: Issue;
   issueArticles: Article[];

@@ -3,17 +3,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
 
 import { ISubsriptionsInfo } from 'app/models/subscriptions';
 
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-subscriptions',
   templateUrl: './subscriptions.component.html'
 })
-export class SubscriptionsComponent extends Page implements OnInit, OnDestroy {
+export class SubscriptionsComponent extends PageComponent implements OnInit, OnDestroy {
 
   subscriptionsInfo: ISubsriptionsInfo;
 
@@ -47,7 +48,7 @@ export class SubscriptionsComponent extends Page implements OnInit, OnDestroy {
   }
 
   observePageName(): Observable<string> {
-    return of('Prenumerata');
+    return of(ClientPageNamesResolver.subscriptions());
   }
 
 }

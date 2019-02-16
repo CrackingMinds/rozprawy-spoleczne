@@ -10,6 +10,7 @@ import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 
 import { AsyncComponent } from 'app/client/pages/async.component';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-menu',
@@ -19,17 +20,17 @@ export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
 
   contactInfo: IContactInfo;
   menuItems: MenuItems = new Menu()
-    .withPage({ title: 'Bieżący numer', url: RoutesResolver.currentIssue() })
-    .withPage({ title: 'Archiwum', url: RoutesResolver.archive() })
-    .withPage({ title: 'O czasopiśmie', url: RoutesResolver.about() })
-    .withPage({ title: 'Rada Redakcyjna i Rada Naukowa', url: RoutesResolver.editorialAndScientificBoard() })
-    .withPage({ title: 'Recenzenci', url: RoutesResolver.reviewers() })
-    .withPage({ title: 'Bazy indeksacyjne', url: RoutesResolver.indexing() })
-    .withPage({ title: 'Prenumerata', url: RoutesResolver.subscriptions() })
-    .withPage({ title: 'Kontakt', url: RoutesResolver.contact() })
-    .withPage({ title: 'Zasady publikacji prac', url: RoutesResolver.requirements() })
-    .withPage({ title: 'Standardy etyczne', url: RoutesResolver.ethicsStatement() })
-    .withPage({ title: 'RODO', url: RoutesResolver.rodo() })
+    .withPage({ title: ClientPageNamesResolver.currentIssue(), url: RoutesResolver.currentIssue() })
+    .withPage({ title: ClientPageNamesResolver.archive(), url: RoutesResolver.archive() })
+    .withPage({ title: ClientPageNamesResolver.about(), url: RoutesResolver.about() })
+    .withPage({ title: ClientPageNamesResolver.editorialAndScientificBoard(), url: RoutesResolver.editorialAndScientificBoard() })
+    .withPage({ title: ClientPageNamesResolver.reviewers(), url: RoutesResolver.reviewers() })
+    .withPage({ title: ClientPageNamesResolver.indexing(), url: RoutesResolver.indexing() })
+    .withPage({ title: ClientPageNamesResolver.subscriptions(), url: RoutesResolver.subscriptions() })
+    .withPage({ title: ClientPageNamesResolver.contact(), url: RoutesResolver.contact() })
+    .withPage({ title: ClientPageNamesResolver.requirements(), url: RoutesResolver.requirements() })
+    .withPage({ title: ClientPageNamesResolver.ethicsStatement(), url: RoutesResolver.ethicsStatement() })
+    .withPage({ title: ClientPageNamesResolver.rodo(), url: RoutesResolver.rodo() })
     .items;
 
   private contentLoaded$: Subject<void> = new Subject<void>();

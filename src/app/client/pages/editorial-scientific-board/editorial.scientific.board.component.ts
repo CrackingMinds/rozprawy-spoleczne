@@ -3,20 +3,23 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, zip, Observable, of } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
-import { Page } from 'app/client/pages/page';
+import { PageComponent } from 'app/client/pages/page.component';
+import { CustomSorting } from 'app/shared/custom.sorting';
 
-import { EditorialBoardMember } from 'app/models/editorial-board-member';
+import { EditorialBoard } from 'app/models/editorial.board';
 import { ScientificBoardMember } from 'app/models/scientific-board-member';
 
 import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
+import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
+import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
   selector: 'rs-editorial-scientific-board',
   templateUrl: './editorial.scientific.board.component.html'
 })
-export class EditorialScientificBoardComponent extends Page implements OnInit, OnDestroy {
+export class EditorialScientificBoardComponent extends PageComponent implements OnInit, OnDestroy {
 
-  editorialBoard: EditorialBoardMember[];
+  editorialBoard: EditorialBoard;
   scientificBoard: ScientificBoardMember[];
 
   editorialBoardLoaded$: Subject<void> = new Subject<void>();
@@ -24,15 +27,21 @@ export class EditorialScientificBoardComponent extends Page implements OnInit, O
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint) {
+  constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint,
+              private editorialBoardEndpoint: EditorialBoardEndpoint) {
     super();
   }
 
   ngOnInit() {
 
-    this.editorialScientificBoardEndpoint.getEditorialBoardMembers()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: EditorialBoardMember[]) => {
+    this.editorialBoardEndpoint.getEditorialBoard()
+        .pipe(
+          map((board: EditorialBoard) => {
+            return [...board].sort(CustomSorting.byCustomOrder);
+          }),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((data: EditorialBoard) => {
           this.editorialBoard = data;
           this.editorialBoardLoaded$.next();
         });
@@ -65,7 +74,7 @@ export class EditorialScientificBoardComponent extends Page implements OnInit, O
   }
 
   observePageName(): Observable<string> {
-    return of('Rada Redakcyjna i Rada Naukowa');
+    return of(ClientPageNamesResolver.editorialAndScientificBoard());
   }
 
 }
