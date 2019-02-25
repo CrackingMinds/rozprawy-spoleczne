@@ -19,7 +19,7 @@ export class AdminDashboardComponent implements PageComponent {
 
   readonly menuItems: MenuItems = new Menu()
     .withPage({ title: AdminPagesResolver.library().title, url: AdminRoutesResolver.library() })
-    .withPage({ title: AdminPagesResolver.editorialBoardEdit().title, url: AdminRoutesResolver.editorialBoardEdit() })
+    .withPage({ title: AdminPagesResolver.editorialBoard().title, url: AdminRoutesResolver.editorialBoard() })
     .items;
 
   observeContentLoaded(): Observable<void> {

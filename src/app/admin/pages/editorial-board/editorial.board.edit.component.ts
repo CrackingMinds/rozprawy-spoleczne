@@ -87,7 +87,7 @@ export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDes
   }
 
   observePageName(): Observable<string> {
-    return of(AdminPagesResolver.editorialBoardEdit().title);
+    return of(AdminPagesResolver.editorialBoard().title);
   }
 
   onEditorialBoardMemberUpdate(event: ListOfControlsValueUpdate): void {

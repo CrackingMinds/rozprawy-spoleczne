@@ -19,7 +19,7 @@ export class AdminPagesResolver {
     };
   }
 
-  static editorialBoardEdit(): AdminPage {
+  static editorialBoard(): AdminPage {
     return {
       title: 'Rada Redakcyjna',
       url: 'editorial-board'

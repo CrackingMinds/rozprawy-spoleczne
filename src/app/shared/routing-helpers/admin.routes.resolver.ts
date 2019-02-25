@@ -14,8 +14,8 @@ export class AdminRoutesResolver {
     return AdminPagesResolver.library().url;
   }
 
-  static editorialBoardEdit(): string {
-    return AdminPagesResolver.editorialBoardEdit().url;
+  static editorialBoard(): string {
+    return AdminPagesResolver.editorialBoard().url;
   }
 
 }

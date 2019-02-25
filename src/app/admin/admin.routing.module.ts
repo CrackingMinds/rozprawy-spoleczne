@@ -14,7 +14,7 @@ const childRoutes: Routes = [
     loadChildren: 'app/admin/pages/library/library.module#LibraryModule'
   },
   {
-    path: AdminRoutesResolver.editorialBoardEdit(),
+    path: AdminRoutesResolver.editorialBoard(),
     loadChildren: 'app/admin/pages/editorial-board/editorial.board.edit.module#EditorialBoardEditModule'
   }
 ];
