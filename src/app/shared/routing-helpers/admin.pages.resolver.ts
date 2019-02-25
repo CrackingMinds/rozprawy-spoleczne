@@ -26,4 +26,11 @@ export class AdminPagesResolver {
     };
   }
 
+  static scientificBoard(): AdminPage {
+    return {
+      title: 'Rada Naukowa',
+      url: 'scientific-board'
+    };
+  }
+
 }

@@ -24,7 +24,7 @@ import {
 } from 'app/shared/form-controls/list-of-controls/list.of.controls';
 import { EditorialBoardMemberControlComponent } from 'app/shared/form-controls/editorial-board-member/editorial.board.member.control.component';
 import { EditorialBoard } from 'app/models/editorial.board';
-import { EditorialBoardMember, RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import { EditorialBoardMember, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
 import { PageComponent } from 'app/client/pages/page.component';
 import { CustomSorting } from 'app/shared/custom.sorting';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
@@ -90,7 +90,7 @@ export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDes
     return of(AdminPagesResolver.editorialBoard().title);
   }
 
-  onEditorialBoardMemberUpdate(event: ListOfControlsValueUpdate): void {
+  onEditorialBoardMemberUpdate(event: ListOfControlsValueUpdate<UpdatedEditorialBoardMember>): void {
 
     const member = this.getMemberByIndex(event.controlIndex);
     const newMemberData = event.controlValue;
@@ -104,9 +104,9 @@ export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDes
 
   }
 
-  onEditorialBoardMemberCreate(event: ListOfControlsValueCreate): void {
+  onEditorialBoardMemberCreate(event: ListOfControlsValueCreate<NewEditorialBoardMember>): void {
 
-    const newMemberData: RawEditorialBoardMember = {
+    const newMemberData: NewEditorialBoardMember = {
       ...event.controlValue,
       index: event.controlIndex
     };

@@ -66,10 +66,10 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
   confirmDelete: boolean = true;
 
   @Output('valueUpdate')
-  controlValueUpdate$: EventEmitter<ListOfControlsValueUpdate> = new EventEmitter<ListOfControlsValueUpdate>();
+  controlValueUpdate$: EventEmitter<ListOfControlsValueUpdate<any>> = new EventEmitter<ListOfControlsValueUpdate<any>>();
 
   @Output('valueCreate')
-  controlValueCreate$: EventEmitter<ListOfControlsValueCreate> = new EventEmitter<ListOfControlsValueCreate>();
+  controlValueCreate$: EventEmitter<ListOfControlsValueCreate<any>> = new EventEmitter<ListOfControlsValueCreate<any>>();
 
   @Output('valueRemove')
   controlValueRemove$: EventEmitter<ListOfControlsValueRemove> = new EventEmitter<ListOfControlsValueRemove>();

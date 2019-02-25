@@ -1,0 +1,16 @@
+<div *ngIf="contentLoading" class="rs-spinner-wrapper rs-content-spinner">
+  <mat-progress-spinner class="rs-progress-spinner"
+                        mode="indeterminate"
+                        color="primary"
+                        [diameter]="100">
+  </mat-progress-spinner>
+</div>
+<ng-container [formGroup]="form">
+  <rs-list-of-controls
+    formControlName="scientificBoardMembers"
+    (valueUpdate)="onMemberUpdate($event)"
+    (valueCreate)="onMemberCreate($event)"
+    (valueRemove)="onMemberRemove($event)"
+    [controlType]="control">
+  </rs-list-of-controls>
+</ng-container>

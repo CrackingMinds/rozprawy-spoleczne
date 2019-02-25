@@ -34,6 +34,9 @@ import { FirestorageArticleFileEndpoint } from 'app/endpoints/firestorage-endpoi
 import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
 
+import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+import { FirestoreScientificBoardEndpoint } from 'app/endpoints/firestore-endpoint/scientific-board/firestore.scientific.board.endpoint';
+
 const providers = [
   {
     provide: ENDPOINT_URL,
@@ -78,6 +81,10 @@ const providers = [
   {
     provide: EditorialBoardEndpoint,
     useClass: FirestoreEditorialBoardEndpoint
+  },
+  {
+    provide: ScientificBoardEndpoint,
+    useClass: FirestoreScientificBoardEndpoint
   }
 ];
 

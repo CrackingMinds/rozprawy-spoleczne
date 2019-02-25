@@ -18,4 +18,8 @@ export class AdminRoutesResolver {
     return AdminPagesResolver.editorialBoard().url;
   }
 
+  static scientificBoard(): string {
+    return AdminPagesResolver.scientificBoard().url;
+  }
+
 }

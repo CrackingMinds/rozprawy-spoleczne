@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 
 import { PageComponent } from 'app/client/pages/page.component';
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
-import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.resolver';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 
@@ -15,11 +14,12 @@ import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 })
 export class AdminDashboardComponent implements PageComponent {
 
-  constructor() { }
+  constructor() {}
 
   readonly menuItems: MenuItems = new Menu()
-    .withPage({ title: AdminPagesResolver.library().title, url: AdminRoutesResolver.library() })
-    .withPage({ title: AdminPagesResolver.editorialBoard().title, url: AdminRoutesResolver.editorialBoard() })
+    .withPage(AdminPagesResolver.library())
+    .withPage(AdminPagesResolver.editorialBoard())
+    .withPage(AdminPagesResolver.scientificBoard())
     .items;
 
   observeContentLoaded(): Observable<void> {

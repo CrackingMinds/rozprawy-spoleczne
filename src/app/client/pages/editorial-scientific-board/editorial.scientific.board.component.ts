@@ -7,10 +7,11 @@ import { PageComponent } from 'app/client/pages/page.component';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
 import { EditorialBoard } from 'app/models/editorial.board';
-import { ScientificBoardMember } from 'app/models/scientific-board-member';
+import { ScientificBoard } from 'app/models/scientific.board';
 
-import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
 import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
+import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
@@ -20,17 +21,15 @@ import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.
 export class EditorialScientificBoardComponent extends PageComponent implements OnInit, OnDestroy {
 
   editorialBoard: EditorialBoard;
-  scientificBoard: ScientificBoardMember[];
+  scientificBoard: ScientificBoard;
 
   editorialBoardLoaded$: Subject<void> = new Subject<void>();
   scientificBoardLoaded$: Subject<void> = new Subject<void>();
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private editorialScientificBoardEndpoint: EditorialScientificBoardEndpoint,
-              private editorialBoardEndpoint: EditorialBoardEndpoint) {
-    super();
-  }
+  constructor(private scientificBoardEndpoint: ScientificBoardEndpoint,
+              private editorialBoardEndpoint: EditorialBoardEndpoint) { super(); }
 
   ngOnInit() {
 
@@ -46,17 +45,21 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
           this.editorialBoardLoaded$.next();
         });
 
-    this.editorialScientificBoardEndpoint.getScientificBoardMembers()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: ScientificBoardMember[]) => {
-          this.scientificBoard = data;
-          this.scientificBoardLoaded$.next();
-        });
+    this.scientificBoardEndpoint.getScientificBoard()
+      .pipe(
+        map((board: ScientificBoard) => {
+          return [...board].sort(CustomSorting.byCustomOrder);
+        }),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((data: ScientificBoard) => {
+        this.scientificBoard = data;
+        this.scientificBoardLoaded$.next();
+      });
 
   }
 
   ngOnDestroy() {
-
     this.editorialBoardLoaded$.complete();
     this.scientificBoardLoaded$.complete();
 

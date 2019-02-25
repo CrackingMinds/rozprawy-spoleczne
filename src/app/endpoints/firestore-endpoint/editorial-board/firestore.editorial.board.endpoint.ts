@@ -8,7 +8,11 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 
 import { EditorialBoard } from 'app/models/editorial.board';
-import { EditorialBoardMember, EditorialBoardMemberEntity, RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import {
+  EditorialBoardMemberEntity,
+  NewEditorialBoardMember,
+  UpdatedEditorialBoardMember
+} from 'app/models/editorial-board-member';
 
 @Injectable()
 export class FirestoreEditorialBoardEndpoint extends EditorialBoardEndpoint {
@@ -47,7 +51,7 @@ export class FirestoreEditorialBoardEndpoint extends EditorialBoardEndpoint {
 
   }
 
-  postEditorialBoardMember(rawMemberData: RawEditorialBoardMember): Observable<void> {
+  postEditorialBoardMember(rawMemberData: NewEditorialBoardMember): Observable<void> {
 
     return Observable.create((observer: Observer<void>) => {
       this.angularFirestore.collection<EditorialBoardMemberEntity>(FirestoreEditorialBoardEndpoint.collectionName).add(rawMemberData)
@@ -60,7 +64,7 @@ export class FirestoreEditorialBoardEndpoint extends EditorialBoardEndpoint {
 
   }
 
-  updateEditorialBoardMember(memberData: EditorialBoardMember): Observable<void> {
+  updateEditorialBoardMember(memberData: UpdatedEditorialBoardMember): Observable<void> {
 
     const persistedEditorialBoardMember: EditorialBoardMemberEntity = {
       person: memberData.person,

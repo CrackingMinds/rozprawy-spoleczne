@@ -1,0 +1,27 @@
+<div [formGroup]="formGroup" class="rs-board-member-details">
+  <rs-person-control formControlName="person"></rs-person-control>
+  <div [formGroup]="institute" class="rs-board-member-institute">
+    <mat-form-field class="rs-member-institute-name">
+      <input matInput
+             placeholder="Zakład"
+             formControlName="name">
+      <mat-error *ngIf="instituteName.hasError('required')">
+        Nazwa zakładu jest wymagana
+      </mat-error>
+      <mat-error *ngIf="instituteName.hasError('pattern')">
+        Wpisano niepoprawną nazwę
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="rs-member-institute-location">
+      <input matInput
+             placeholder="Kraj"
+             formControlName="location">
+      <mat-error *ngIf="instituteLocation.hasError('required')">
+        Kraj zakładu jest wymagany
+      </mat-error>
+      <mat-error *ngIf="instituteLocation.hasError('pattern')">
+        Wpisano niepoprawny kraj
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>

@@ -21,19 +21,29 @@ export class CustomValidators {
   }
 
   static get personName(): RegExp {
-    return new RegExp(/([^\u0000-\u007F]|[a-zA-Z])+/);
+    return new RegExp(
+      '(' + CustomValidators.lettersAndUnicode().source + ')(-' + CustomValidators.lettersAndUnicode().source + ')?'
+    );
   }
 
   static get personSurname(): RegExp {
     return new RegExp(
-      CustomValidators.personName.source + '(-' + CustomValidators.personName.source + ')?'
+      CustomValidators.personName.source + '((-|[ ])' + CustomValidators.personName.source + ')?'
     );
   }
 
   static get editorialBoardMemberPosition(): RegExp {
+    return CustomValidators.lettersAndUnicodeWithSpaces();
+  }
+
+  static get scientificBoardMemberInstituteName(): RegExp {
     return new RegExp(
-      `((${CustomValidators.lettersAndUnicode().source})[ ]?)+`
+      `((${CustomValidators.lettersAndUnicode().source})[-]?|([.]?)[ ]?)+`
     );
+  }
+
+  static get scientificBoardMemberInstituteLocation(): RegExp {
+    return CustomValidators.lettersAndUnicodeWithSpaces();
   }
 
   static get pagesInIssue(): RegExp {
@@ -52,6 +62,12 @@ export class CustomValidators {
 
   private static lettersAndUnicode(): RegExp {
     return new RegExp(/([^\u0000-\u007F]|[a-zA-Z])+/);
+  }
+
+  private static lettersAndUnicodeWithSpaces(): RegExp {
+    return new RegExp(
+      `((${CustomValidators.lettersAndUnicode().source})[ ]?)+`
+    );
   }
 
 }

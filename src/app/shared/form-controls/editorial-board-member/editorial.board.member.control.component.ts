@@ -1,15 +1,13 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, AbstractControl, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Cast } from 'app/shared/cast';
 
-import { EditorialBoardMember, EditorialBoardMemberPosition, RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import { EditorialBoardMemberPosition, RawEditorialBoardMember } from 'app/models/editorial-board-member';
 
-import { Person } from 'app/models/person';
 import { CustomValidators } from 'app/shared/custom.validators';
 
-import { ListOfControlsControl } from 'app/shared/form-controls/list-of-controls/list.of.controls';
+import { ControlComponent } from 'app/shared/form-controls/control-component/control.component';
 
 @Component({
 	selector: 'rs-editorial-board-member-control',
@@ -28,23 +26,17 @@ import { ListOfControlsControl } from 'app/shared/form-controls/list-of-controls
     }
   ]
 })
-export class EditorialBoardMemberControlComponent implements ListOfControlsControl, ControlValueAccessor, Validator, OnInit, OnDestroy {
-
-  boardMember: FormGroup;
+export class EditorialBoardMemberControlComponent extends ControlComponent<RawEditorialBoardMember> implements OnInit, OnDestroy {
 
   get position(): AbstractControl {
-    return this.boardMember.get('position');
+    return this.formGroup.get('position');
   }
 
   get person(): AbstractControl {
-    return this.boardMember.get('person');
+    return this.formGroup.get('person');
   }
 
-  private onChangeCallback: (boardMember: EditorialBoardMember) => any;
-
-  private unsubscribe$: Subject<void> = new Subject<void>();
-
-	constructor(private formBuilder: FormBuilder) {}
+	constructor(private formBuilder: FormBuilder) { super(formBuilder); }
 
 	ngOnInit() {
 
@@ -54,11 +46,10 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
         lastName: null,
         middleName: null
       },
-      position: null,
-      index: null
+      position: null
     };
 
-    this.boardMember = this.formBuilder.group({
+    const controlsConfig = {
       person: [
         initialMemberData.person,
         [
@@ -74,82 +65,33 @@ export class EditorialBoardMemberControlComponent implements ListOfControlsContr
           )
         ]
       ]
-    });
+    };
 
-    this.boardMember.valueChanges
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((boardMember: EditorialBoardMember) => {
-        this.reportValueChange(boardMember);
-      });
+    super.init(controlsConfig);
 
 	}
 
 	ngOnDestroy() {
-	  this.unsubscribe$.next();
-	  this.unsubscribe$.complete();
+	  super.destroy();
   }
 
-  registerOnChange(fn: any): void {
-    this.onChangeCallback = fn;
-  }
+  protected setControlValue(data: any): void {
 
-  writeValue(boardMember: EditorialBoardMember): void {
+    data = this.castFormValue(data);
 
-	  if (!boardMember)
-	    return;
-
-	  this.setControlValue(boardMember);
-
-  }
-
-  validate(control: AbstractControl): ValidationErrors | null {
-
-    if (this.boardMember.invalid) {
-      return {
-        invalid: true
-      };
-    } else {
-      return null;
-    }
-
-  }
-
-  registerOnTouched(fn: any): void {
-  }
-
-  registerOnValidatorChange(fn: () => void): void {
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-  }
-
-  private setControlValue(data: EditorialBoardMember): void {
     this.person.setValue(data.person);
     this.position.setValue(data.position);
   }
 
-  private reportValueChange(member: EditorialBoardMember): void {
-	  const newValue = this.processValue(member);
-    this.onChangeCallback && this.onChangeCallback(newValue);
-  }
-
-  private processValue(member: EditorialBoardMember): EditorialBoardMember {
+  protected castFormValue(member: any): RawEditorialBoardMember {
 	  return {
       ...member,
-	    person: this.processPerson(member.person),
-      position: this.processPosition(member.position)
+	    person: Cast.toPerson(member.person),
+      position: this.castPosition(member.position)
     };
   }
 
-  private processPerson(person: Person): Person {
-	  return {
-	    firstName: person.firstName === "" ? null : person.firstName,
-      lastName: person.lastName === "" ? null : person.lastName,
-      middleName: person.middleName === "" ? null : person.middleName
-    };
-  }
-
-  private processPosition(position: EditorialBoardMemberPosition): EditorialBoardMemberPosition {
+  private castPosition(position: EditorialBoardMemberPosition): EditorialBoardMemberPosition {
 	  return position === "" ? null : position;
   }
 

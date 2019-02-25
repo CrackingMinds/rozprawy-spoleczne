@@ -4,16 +4,14 @@ import { RawEditorialBoardMember } from 'app/models/editorial-board-member';
 
 export type ListOfControlsControl = ControlValueAccessor & Validator;
 
-export type ListOfControlsData = {} | RawEditorialBoardMember;
-
-export type ListOfControlsValueUpdate = {
+export type ListOfControlsValueUpdate<T> = {
   controlIndex: number;
-  controlValue: any;
+  controlValue: T;
 };
 
-export type ListOfControlsValueCreate = {
+export type ListOfControlsValueCreate<T> = {
   controlIndex: number;
-  controlValue: any;
+  controlValue: T;
 }
 
 export type ListOfControlsValueRemove = {

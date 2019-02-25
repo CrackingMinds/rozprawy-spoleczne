@@ -16,6 +16,10 @@ const childRoutes: Routes = [
   {
     path: AdminRoutesResolver.editorialBoard(),
     loadChildren: 'app/admin/pages/editorial-board/editorial.board.edit.module#EditorialBoardEditModule'
+  },
+  {
+    path: AdminRoutesResolver.scientificBoard(),
+    loadChildren: 'app/admin/pages/scientific-board/scientific.board.edit.module#ScientificBoardEditModule'
   }
 ];
 

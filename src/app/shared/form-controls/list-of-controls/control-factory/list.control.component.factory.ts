@@ -1,7 +1,7 @@
 import { Directive, OnInit, ComponentRef, Input, Type, ViewContainerRef, ComponentFactoryResolver, Injector, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator, AbstractControl, ValidationErrors } from '@angular/forms';
 
-import { ListOfControlsControl, ListOfControlsData } from 'app/shared/form-controls/list-of-controls/list.of.controls';
+import { ListOfControlsControl } from 'app/shared/form-controls/list-of-controls/list.of.controls';
 
 @Directive({
 	selector: '[rs-control-factory]',
@@ -61,7 +61,7 @@ export class ListControlComponentFactory implements ControlValueAccessor, Valida
     return this.componentRef.instance.validate(control);
   }
 
-  writeValue(data: ListOfControlsData): void {
+  writeValue(data: any): void {
     this.componentRef.instance.writeValue(data);
   }
 

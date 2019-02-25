@@ -16,8 +16,13 @@
     </h3>
     <ul>
       <li *ngFor="let member of scientificBoard" class="member">
-        <span class="name-surname bold">{{ member.name }} {{ member.surname }}, </span>
-        <span class="institute">{{ member.institute }}</span>
+        <span class="name-surname bold">{{ member.person | person }}</span>
+        <span>, </span>
+        <span class="rs-institute">
+          <span class="rs-institute-name">{{ member.institute.name }}</span>
+          <span>, </span>
+          <span class="rs-institute-location">{{ member.institute.location }}</span>
+        </span>
       </li>
     </ul>
   </div>

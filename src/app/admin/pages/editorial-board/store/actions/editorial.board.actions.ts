@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { ACTION_PREFIX } from 'app/admin/pages/editorial-board/store/actions/action.prefix';
-import { EditorialBoardMember, RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import { EditorialBoardMember, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
 
 const createActionName = 'Add Editorial Board Member';
 export const ADD_EDITORIAL_BOARD_MEMBER = `${ACTION_PREFIX} ${createActionName}`;
@@ -22,7 +22,7 @@ export const REMOVE_EDITORIAL_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${deleteActi
 
 export class AddEditorialBoardMember implements Action {
   readonly type: string = ADD_EDITORIAL_BOARD_MEMBER;
-  constructor(public readonly memberData: RawEditorialBoardMember) {}
+  constructor(public readonly memberData: NewEditorialBoardMember) {}
 }
 
 export class AddEditorialBoardMemberFail implements Action {
@@ -47,7 +47,7 @@ export class LoadEditorialBoardFail implements Action {
 
 export class UpdateEditorialBoardMember implements Action {
   readonly type: string = UPDATE_EDITORIAL_BOARD_MEMBER;
-  constructor(public readonly memberData: EditorialBoardMember) {}
+  constructor(public readonly memberData: UpdatedEditorialBoardMember) {}
 }
 
 export class UpdateEditorialBoardMemberFail implements Action {

@@ -3,10 +3,12 @@ import { Sortable } from 'app/models/sortable';
 
 export type EditorialBoardMemberPosition = string;
 
-type EditorialBoardMemberBase = {
+type EditorialBoardMemberBase = RawEditorialBoardMember & Sortable;
+
+export type RawEditorialBoardMember = {
   person: Person;
   position: EditorialBoardMemberPosition;
-} & Sortable;
+};
 
 export type EditorialBoardMemberEntity = EditorialBoardMemberBase;
 
@@ -14,4 +16,6 @@ export type EditorialBoardMember = EditorialBoardMemberBase & {
   id: string;
 }
 
-export type RawEditorialBoardMember = EditorialBoardMemberBase;
+export type NewEditorialBoardMember = EditorialBoardMemberBase;
+
+export type UpdatedEditorialBoardMember = EditorialBoardMember;
