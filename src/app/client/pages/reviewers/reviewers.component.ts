@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subject, Observable, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 
@@ -9,6 +9,11 @@ import { IReviewer } from 'app/models/reviewer';
 
 import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
+
+type ReviewersDataType = {
+  year: number;
+  reviewers: IReviewer[];
+};
 
 @Component({
   selector: 'rs-reviewers',
@@ -29,7 +34,25 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
   ngOnInit() {
 
     this.reviewersEndpoint.getReviewers()
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(
+          map((data: any) => {
+            return [...data].sort((a: ReviewersDataType, b: ReviewersDataType) => {
+
+              const aYear = a.year;
+              const bYear = b.year;
+
+              if (aYear < bYear) {
+                return 1;
+              } else if (aYear > bYear) {
+                return -1;
+              } else {
+                return 0;
+              }
+
+            });
+          }),
+          takeUntil(this.unsubscribe$)
+        )
         .subscribe((data: IReviewer[]) => {
           this.reviewersData = data;
           this.reviewersLoaded$.next();
