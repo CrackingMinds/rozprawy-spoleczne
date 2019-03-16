@@ -1,3 +1,5 @@
+@import "variables";
+
 #menu-container {
   border: none;
   display: flex;
@@ -44,7 +46,9 @@
       font-size: 1rem;
       display: flex;
       flex-direction: column;
-      padding: 0 $universal-padding;
+      margin: 0 $universal-padding;
+      border: 2px solid $white;
+      border-radius: $border-radius;
 
       .large-label {
         font-size: 1.5em;
@@ -58,8 +62,6 @@
       }
 
       .info {
-        border: 2px solid #fff;
-        border-top: none;
         text-align: center;
         display: flex;
         flex-direction: column;
