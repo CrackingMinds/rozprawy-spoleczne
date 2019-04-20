@@ -33,4 +33,11 @@ export class AdminPagesResolver {
     };
   }
 
+  static reviewers(): AdminPage {
+    return {
+      title: 'Recenzenci',
+      url: 'reviewers'
+    };
+  }
+
 }

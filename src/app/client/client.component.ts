@@ -23,17 +23,19 @@ export class ClientComponent implements OnInit, OnDestroy {
   @ViewChild(HeaderComponent)
   headerComponentRef: HeaderComponent;
 
-  linkedInProfileLink = 'https://www.linkedin.com/in/viacheslav-guselnykov-13b25b15a/';
+  readonly linkedInProfileLink = 'https://www.linkedin.com/in/viacheslav-guselnykov-13b25b15a/';
 
   pageName: string;
 
-  private headerLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private menuLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private pageContentLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly headerLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private readonly menuLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private readonly pageContentLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  private pageLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private readonly pageLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly pageChange$: Subject<void> = new Subject();
+
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private pageNameService: PageNameService) {}
 
@@ -45,11 +47,11 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.headerLoaded$.complete();
-    this.menuLoaded$.complete();
-    this.pageContentLoaded$.complete();
+    this.headerLoading$.complete();
+    this.menuLoading$.complete();
+    this.pageContentLoading$.complete();
 
-    this.pageLoaded$.complete();
+    this.pageLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -63,56 +65,49 @@ export class ClientComponent implements OnInit, OnDestroy {
           this.pageNameService.setPageName(this.pageName);
         });
 
-    page.observeContentLoaded()
-      .pipe(first())
-      .subscribe(() => {
-        this.pageContentLoaded$.next(true);
-      });
+    page.observeContentLoading()
+      .pipe(takeUntil(this.pageChange$))
+      .subscribe((contentLoading: boolean) => this.pageContentLoading$.next(contentLoading));
   }
 
   onDeactivate(page: PageComponent): void {
-    this.pageContentLoaded$.next(false);
+    this.pageContentLoading$.next(true);
+    this.pageChange$.next();
   }
 
   getSpinnerVisibility(): Observable<boolean> {
-    return this.pageLoaded$.asObservable()
-      .pipe(
-        map((value: boolean) => !value)
-      );
+    return this.pageLoading$.asObservable();
   }
 
   private observeMenuContentLoading(): void {
     const menuComponent: AsyncComponent = this.menuComponentRef;
-    menuComponent.observeContentLoaded()
-                 .pipe(first())
-                 .subscribe(() => this.menuLoaded$.next(true));
+    menuComponent.observeContentLoading()
+                 .subscribe((contentLoading: boolean) => this.menuLoading$.next(contentLoading));
   }
 
   private observeHeaderContentLoading(): void {
     const headerComponent: AsyncComponent = this.headerComponentRef;
-    headerComponent.observeContentLoaded()
-                   .pipe(first())
-                   .subscribe(() => this.headerLoaded$.next(true));
+    headerComponent.observeContentLoading()
+                   .subscribe((contentLoading: boolean) => this.headerLoading$.next(contentLoading));
   }
 
   private initPageSpinnerManager(): void {
-
-    this.headerLoaded$
+    this.headerLoading$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((loaded: boolean) => {
-        this.pageLoaded$.next(loaded && this.menuLoaded$.getValue() && this.pageContentLoaded$.getValue());
+      .subscribe((loading: boolean) => {
+        this.pageLoading$.next(loading || this.menuLoading$.getValue() || this.pageContentLoading$.getValue());
       });
 
-    this.menuLoaded$
+    this.menuLoading$
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((loaded: boolean) => {
-          this.pageLoaded$.next(loaded && this.headerLoaded$.getValue() && this.pageContentLoaded$.getValue());
+        .subscribe((loading: boolean) => {
+          this.pageLoading$.next(loading || this.headerLoading$.getValue() || this.pageContentLoading$.getValue());
         });
 
-    this.pageContentLoaded$
+    this.pageContentLoading$
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((loaded: boolean) => {
-          this.pageLoaded$.next(loaded && this.headerLoaded$.getValue() && this.menuLoaded$.getValue());
+        .subscribe((loading: boolean) => {
+          this.pageLoading$.next(loading || this.headerLoading$.getValue() || this.menuLoading$.getValue());
         });
   }
 

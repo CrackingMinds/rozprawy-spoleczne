@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 import { Cast } from 'app/shared/cast';
@@ -6,7 +6,7 @@ import { Cast } from 'app/shared/cast';
 import { RawScientificBoardMember, ScientificBoardMemberInstitute } from 'app/models/scientific-board-member';
 
 import { CustomValidators } from 'app/shared/custom.validators';
-import { ControlComponent, ControlsConfig } from 'app/shared/form-controls/control-component/control.component';
+import { ControlComponent } from 'app/shared/form-controls/control-component/control.component';
 
 @Component({
 	selector: 'rs-scientific-board-member-control',
@@ -25,7 +25,7 @@ import { ControlComponent, ControlsConfig } from 'app/shared/form-controls/contr
     }
   ]
 })
-export class ScientificBoardMemberControlComponent extends ControlComponent<RawScientificBoardMember> implements OnInit, OnDestroy {
+export class ScientificBoardMemberControlComponent extends ControlComponent<RawScientificBoardMember> implements OnDestroy {
 
   get person(): AbstractControl {
     return this.formGroup.get('person');
@@ -43,32 +43,17 @@ export class ScientificBoardMemberControlComponent extends ControlComponent<RawS
     return this.institute.get('location');
   }
 
-  constructor(private formBuilder: FormBuilder) { super(formBuilder); }
-
-	ngOnInit() {
-
-    const initialMemberData: RawScientificBoardMember = {
-      person: {
-        firstName: null,
-        lastName: null,
-        middleName: null
-      },
-      institute: {
-        name: null,
-        location: null
-      }
-    };
-
-    const controlsConfig: ControlsConfig = {
+  constructor(formBuilder: FormBuilder) {
+    super(formBuilder, {
       person: [
-        initialMemberData.person,
+        null,
         [
           Validators.required
         ]
       ],
-      institute: this.formBuilder.group({
+      institute: formBuilder.group({
         name: [
-          initialMemberData.institute.name,
+          null,
           [
             Validators.required,
             Validators.pattern(
@@ -77,7 +62,7 @@ export class ScientificBoardMemberControlComponent extends ControlComponent<RawS
           ]
         ],
         location: [
-          initialMemberData.institute.location,
+          null,
           [
             Validators.required,
             Validators.pattern(
@@ -86,11 +71,8 @@ export class ScientificBoardMemberControlComponent extends ControlComponent<RawS
           ]
         ]
       })
-    };
-
-    super.init(controlsConfig);
-
-	}
+    });
+  }
 
   ngOnDestroy() {
     super.destroy();

@@ -73,8 +73,8 @@ export class LibraryComponent implements PageComponent, OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return of(null);
+  observeContentLoading(): Observable<boolean> {
+    return of(false);
   }
 
   observePageName(): Observable<string> {

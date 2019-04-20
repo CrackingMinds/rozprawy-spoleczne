@@ -1,17 +1,18 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { UploadArticleComponent } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/upload.article.component';
-import { ModalContentComponent } from 'app/admin/pages/library/modal/modal.content.component';
 import { Article, ArticleEntity } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { ArticleCreatePayload, ArticleCrudParams, ArticleCrudType, ArticleEditPayload } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 import { CustomValidators } from 'app/shared/custom.validators';
 import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud/article.file.repository';
+
+import { ModalContentComponent } from 'app/admin/pages/library/modal/content/modal.content.component';
 
 @Component({
   selector: 'rs-add-article',
@@ -22,26 +23,22 @@ import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDestroy {
+export class ArticleCrudComponent extends ModalContentComponent<ArticleCrudParams, ArticleEntity> implements OnInit, OnDestroy {
 
   @ViewChild(UploadArticleComponent)
   uploadArticleComponent: UploadArticleComponent;
 
   form: FormGroup;
 
-  params: ArticleCrudParams;
-
   articleTypes: ArticleType[];
 
   initialArticleData: ArticleEntity;
-
-  private canSubmit$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder,
               private articleFileRepository: ArticleFileRepository,
-              private articleTypeEndpoint: ArticleTypeEndpoint) {}
+              private articleTypeEndpoint: ArticleTypeEndpoint) { super(); }
 
   ngOnInit() {
 
@@ -115,25 +112,27 @@ export class ArticleCrudComponent implements ModalContentComponent, OnInit, OnDe
     return this.form.value;
   }
 
-  canSubmit(): Observable<boolean> {
-    return this.canSubmit$.asObservable();
-  }
-
   private initFormValidityListener(): void {
-    this.canSubmit$.next(this.form.valid);
+
+    if (this.form.valid) {
+      this.enableSubmit();
+    } else {
+      this.disableSubmit();
+    }
 
     this.form.statusChanges
-        .subscribe((value: string) => {
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((formStatus: string) => {
 
-          switch (value) {
+          switch (formStatus) {
 
             case 'INVALID': {
-              this.canSubmit$.next(false);
+              this.disableSubmit();
               break;
             }
 
             case 'VALID': {
-              this.canSubmit$.next(true);
+              this.enableSubmit();
               break;
             }
           }

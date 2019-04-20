@@ -1,6 +1,6 @@
 export class CustomValidators {
 
-  static get issueYear(): RegExp {
+  static get year(): RegExp {
     return new RegExp(/[1-9][\d]{3}/);
   }
 
@@ -15,7 +15,7 @@ export class CustomValidators {
   static get doi(): RegExp {
     return new RegExp(
       new RegExp(/https:[/][/]doi.org[/]\d*[.]?\d*[/]rs./).source +
-      CustomValidators.issueYear.source +
+      CustomValidators.year.source +
       new RegExp(/[.]\d+/).source
     );
   }

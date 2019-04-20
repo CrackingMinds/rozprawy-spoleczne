@@ -1,0 +1,15 @@
+<button mat-raised-button color="primary"
+        class="rs-remove-year"
+        [disabled]="!canRemoveYear()"
+        (click)="removeYear()">
+  Usuń rok
+</button>
+<ng-container [formGroup]="form">
+  <rs-list-of-controls class="rs-list-of-controls"
+    formControlName="reviewersArray"
+    (valueUpdate)="onReviewerUpdate($event)"
+    (valueCreate)="onReviewerCreate($event)"
+    (valueRemove)="onReviewerRemove($event)"
+    [controlType]="control">
+  </rs-list-of-controls>
+</ng-container>

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, Subject, zip } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
@@ -20,11 +20,12 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
   issue: Issue;
   article: Article;
 
-  private pageName$: Subject<string> = new Subject<string>();
-  private issueLoaded$: Subject<void> = new Subject<void>();
-  private articleLoaded$: Subject<void> = new Subject<void>();
+  private readonly pageName$: Subject<string> = new Subject<string>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly issueLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private readonly articleLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
               private issueEndpoint: IssueEndpoint,
@@ -42,22 +43,26 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
   }
 
   ngOnDestroy() {
-
     this.pageName$.complete();
-    this.issueLoaded$.complete();
-    this.articleLoaded$.complete();
+
+    this.issueLoading$.complete();
+    this.articleLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-
-    return zip(
-      this.issueLoaded$,
-      this.articleLoaded$
+  observeContentLoading(): Observable<boolean> {
+    return combineLatest(
+      this.issueLoading$,
+      this.articleLoading$
     ).pipe(
-      map(() => null)
+      map((data: Array<boolean>) => {
+        const issueLoading = data[0];
+        const articleLoading = data[1];
+
+        return issueLoading || articleLoading;
+      })
     );
   }
 
@@ -72,7 +77,7 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
         this.pageName$.next(article.title);
 
         this.article = article;
-        this.articleLoaded$.next();
+        this.articleLoading$.next(false);
 
         this.fetchIssue(article.issueId);
       });
@@ -83,7 +88,7 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((issue: Issue) => {
         this.issue = issue;
-        this.issueLoaded$.next();
+        this.issueLoading$.next(false);
       });
   }
 

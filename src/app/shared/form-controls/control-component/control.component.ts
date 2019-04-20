@@ -11,25 +11,22 @@ export type ControlsConfig = {
 
 export abstract class ControlComponent<T> implements ListOfControlsControl {
 
-  formGroup: FormGroup;
+  readonly formGroup: FormGroup;
 
   private onChangeCallback: (value: T) => any;
 
   protected readonly destroy$: Subject<void> = new Subject<void>();
 
-  protected constructor(private formBuilderInstance: FormBuilder) {}
-
-  init(controlsConfig: ControlsConfig): void {
+  protected constructor(private formBuilderInstance: FormBuilder,
+                        controlsConfig: ControlsConfig) {
 
     this.formGroup = this.formBuilderInstance.group(controlsConfig);
-
     this.formGroup.valueChanges
         .pipe(takeUntil(this.destroy$))
         .subscribe((value: any) => this.reportValueChanges(value));
-
   }
 
-  destroy(): void {
+  protected destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -69,7 +66,7 @@ export abstract class ControlComponent<T> implements ListOfControlsControl {
     this.onChangeCallback && this.onChangeCallback(this.castFormValue(value));
   }
 
-  protected abstract setControlValue(value: T): void;
+  protected abstract setControlValue(value: any): void;
 
   protected abstract castFormValue(value: any): T;
 

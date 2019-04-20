@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subject, zip, Observable, of } from 'rxjs';
+import { Subject, Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
@@ -23,10 +23,10 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
   editorialBoard: EditorialBoard;
   scientificBoard: ScientificBoard;
 
-  editorialBoardLoaded$: Subject<void> = new Subject<void>();
-  scientificBoardLoaded$: Subject<void> = new Subject<void>();
+  private readonly editorialBoardLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly scientificBoardLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private scientificBoardEndpoint: ScientificBoardEndpoint,
               private editorialBoardEndpoint: EditorialBoardEndpoint) { super(); }
@@ -42,7 +42,7 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
         )
         .subscribe((data: EditorialBoard) => {
           this.editorialBoard = data;
-          this.editorialBoardLoaded$.next();
+          this.editorialBoardLoading$.next(false);
         });
 
     this.scientificBoardEndpoint.getScientificBoard()
@@ -54,25 +54,30 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
       )
       .subscribe((data: ScientificBoard) => {
         this.scientificBoard = data;
-        this.scientificBoardLoaded$.next();
+        this.scientificBoardLoading$.next(false);
       });
 
   }
 
   ngOnDestroy() {
-    this.editorialBoardLoaded$.complete();
-    this.scientificBoardLoaded$.complete();
+    this.editorialBoardLoading$.complete();
+    this.scientificBoardLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return zip(
-      this.editorialBoardLoaded$.asObservable(),
-      this.scientificBoardLoaded$.asObservable()
+  observeContentLoading(): Observable<boolean> {
+    return combineLatest(
+      this.editorialBoardLoading$.asObservable(),
+      this.scientificBoardLoading$.asObservable()
     ).pipe(
-      map(() => null)
+      map((data: Array<boolean>) => {
+        const editorialBoardLoading: boolean = data[0];
+        const scientificBoardLoading: boolean = data[1];
+
+        return editorialBoardLoading || scientificBoardLoading;
+      })
     );
   }
 

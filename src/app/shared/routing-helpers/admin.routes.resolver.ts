@@ -22,4 +22,8 @@ export class AdminRoutesResolver {
     return AdminPagesResolver.scientificBoard().url;
   }
 
+  static reviewers(): string {
+    return AdminPagesResolver.reviewers().url;
+  }
+
 }

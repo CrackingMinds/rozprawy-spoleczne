@@ -6,8 +6,6 @@ export type ScientificBoardMemberInstitute = {
   location: string;
 };
 
-type ScientificBoardMemberBase = RawScientificBoardMember & Sortable;
-
 export type RawScientificBoardMember = {
   person: Person;
   institute: ScientificBoardMemberInstitute;
@@ -22,3 +20,5 @@ export type ScientificBoardMember = ScientificBoardMemberBase & {
 export type NewScientificBoardMember = ScientificBoardMemberBase;
 
 export type UpdatedScientificBoardMember = ScientificBoardMember;
+
+type ScientificBoardMemberBase = RawScientificBoardMember & Sortable;

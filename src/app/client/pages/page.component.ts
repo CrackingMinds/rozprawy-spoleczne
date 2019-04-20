@@ -4,7 +4,7 @@ import { AsyncComponent } from 'app/client/pages/async.component';
 
 export abstract class PageComponent implements AsyncComponent {
 
-  abstract observeContentLoaded(): Observable<void>;
+  abstract observeContentLoading(): Observable<boolean>;
   abstract observePageName(): Observable<string>;
 
 }

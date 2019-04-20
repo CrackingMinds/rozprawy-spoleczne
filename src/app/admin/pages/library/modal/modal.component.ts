@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
-import { ModalContentComponent, ModalReturnData } from 'app/admin/pages/library/modal/modal.content.component';
+import { ModalContent } from 'app/admin/pages/library/modal/content/modal.content';
 
 @Component({
     selector: 'rs-modal',
@@ -30,7 +30,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     @ViewChild('dynamicContentContainer', { read: ViewContainerRef })
     dynamicComponentContainer: ViewContainerRef;
 
-    nestedComponentRef: ComponentRef<ModalContentComponent>;
+    nestedComponentRef: ComponentRef<ModalContent<any, any>>;
 
     modalMessage: string;
 
@@ -41,7 +41,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
     constructor(public dialogRef: MatDialogRef<ModalComponent>,
-                @Inject(MAT_DIALOG_DATA) public modalData: ModalData,
+                @Inject(MAT_DIALOG_DATA) public modalData: ModalData<any>,
                 private componentFactoryResolver: ComponentFactoryResolver,
                 private appRef: ApplicationRef,
                 private injector: Injector) {
@@ -55,14 +55,14 @@ export class ModalComponent implements OnInit, OnDestroy {
       }
 
       const componentFactory = this.componentFactoryResolver
-                                 .resolveComponentFactory(this.modalData.content as Type<ModalContentComponent>);
+                                 .resolveComponentFactory(this.modalData.content as Type<ModalContent<any, any>>);
       this.nestedComponentRef = componentFactory.create(this.injector);
       this.nestedComponentRef.instance.params = this.modalData.otherParams;
       this.dynamicComponentContainer.insert(this.nestedComponentRef.hostView);
 
       this.nestedComponentRef.changeDetectorRef.detectChanges();
 
-      this.nestedComponentRef.instance.canSubmit()
+      this.nestedComponentRef.instance.observeSubmitPossibility()
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe((canSubmit: boolean) => this.canSubmit = canSubmit);
     }
@@ -78,7 +78,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
 
     submit() {
-      let returnedData: ModalReturnData;
+      let returnedData: any;
       if (this.hasStringContent()) {
         returnedData = true;
       } else {
@@ -94,7 +94,7 @@ export class ModalComponent implements OnInit, OnDestroy {
       this.closeDialog();
     }
 
-    private closeDialog(data?: ModalReturnData) {
+    private closeDialog(data?: any) {
         this.dialogRef.close(data);
     }
 

@@ -1,11 +1,11 @@
 import { Type } from '@angular/core';
 
-import { ModalContentComponent, ModalParams } from 'app/admin/pages/library/modal/modal.content.component';
+import { ModalContent } from 'app/admin/pages/library/modal/content/modal.content';
 import { ModalButtons } from 'app/admin/pages/library/modal/modal.buttons';
 
-export interface ModalData {
+export interface ModalData<I> {
   title: string | null;
-  content: Type<ModalContentComponent> | string;
+  content: Type<ModalContent<I, any>> | string;
   buttons: ModalButtons;
-  otherParams: ModalParams;
+  otherParams: I;
 }

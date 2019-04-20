@@ -20,10 +20,11 @@ export class AdminDashboardComponent implements PageComponent {
     .withPage(AdminPagesResolver.library())
     .withPage(AdminPagesResolver.editorialBoard())
     .withPage(AdminPagesResolver.scientificBoard())
+    .withPage(AdminPagesResolver.reviewers())
     .items;
 
-  observeContentLoaded(): Observable<void> {
-    return of(null);
+  observeContentLoading(): Observable<boolean> {
+    return of(false);
   }
 
   observePageName(): Observable<string> {

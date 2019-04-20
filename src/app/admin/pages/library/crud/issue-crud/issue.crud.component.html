@@ -1,14 +1,7 @@
 <div id="create-edit-issue" class="custom-modal">
     <form [formGroup]="form" class="create-issue-form">
         <div class="issue-data">
-            <mat-form-field color="accent">
-                <input matInput type="text"
-                       placeholder="Rok"
-                       formControlName="year">
-                <mat-error *ngIf="form.get('year').hasError('required') || form.get('year').hasError('pattern')">
-                    Wpisz rok np.: {{currentYear}}
-                </mat-error>
-            </mat-form-field>
+            <rs-year-control formControlName="year"></rs-year-control>
             <mat-form-field color="accent">
                 <input matInput
                        type="number"

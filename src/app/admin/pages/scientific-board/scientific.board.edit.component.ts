@@ -82,8 +82,8 @@ export class ScientificBoardEditComponent implements PageComponent, OnInit {
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return of();
+  observeContentLoading(): Observable<boolean> {
+    return of(false);
   }
 
   observePageName(): Observable<string> {

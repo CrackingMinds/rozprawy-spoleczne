@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { IssuesByYear } from 'app/models/issue';
@@ -19,9 +19,9 @@ export class ArchiveComponent extends PageComponent implements OnInit, OnDestroy
   years: string[];
   issuesByYear: IssuesByYear;
 
-  private pageLoaded$: Subject<void> = new Subject<void>();
+  private readonly pageLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private issueEndpoint: IssueEndpoint) { super(); }
 
@@ -45,19 +45,19 @@ export class ArchiveComponent extends PageComponent implements OnInit, OnDestroy
           }
 
         });
-        this.pageLoaded$.next();
+        this.pageLoading$.next(false);
       });
   }
 
   ngOnDestroy() {
-    this.pageLoaded$.complete();
+    this.pageLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return this.pageLoaded$.asObservable();
+  observeContentLoading(): Observable<boolean> {
+    return this.pageLoading$.asObservable();
   }
 
   observePageName(): Observable<string> {

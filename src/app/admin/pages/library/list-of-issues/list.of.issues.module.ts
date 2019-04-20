@@ -8,6 +8,7 @@ import { CustomPipesModule } from 'app/shared/pipes/custom.pipes.module';
 
 import { ListOfIssuesComponent } from 'app/admin/pages/library/list-of-issues/list.of.issues.component';
 import { IssueCrudComponent } from 'app/admin/pages/library/crud/issue-crud/issue.crud.component';
+import { YearControlModule } from 'app/shared/form-controls/basic/year/year.control.module';
 
 const declarations = [
   ListOfIssuesComponent,
@@ -27,7 +28,9 @@ const declarations = [
     MatMenuModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+
+    YearControlModule
   ],
   declarations: declarations,
   exports: declarations,

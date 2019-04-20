@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { IIndexingInfo } from 'app/models/indexing-info';
@@ -15,9 +15,9 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
   indexingInfo: IIndexingInfo[];
 
-  private contentLoaded$: Subject<void> = new Subject<void>();
+  private readonly contentLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) {}
 
@@ -26,19 +26,19 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((data: IIndexingInfo[]) => {
           this.indexingInfo = data;
-          this.contentLoaded$.next();
+          this.contentLoading$.next(false);
         });
   }
 
   ngOnDestroy() {
-    this.contentLoaded$.complete();
+    this.contentLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return this.contentLoaded$.asObservable();
+  observeContentLoading(): Observable<boolean> {
+    return this.contentLoading$.asObservable();
   }
 
 }

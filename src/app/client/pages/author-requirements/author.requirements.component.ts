@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
@@ -19,9 +19,9 @@ export class AuthorRequirementsComponent extends PageComponent implements OnInit
 
   contactInfo: IContactInfo = new ContactInfo();
 
-  private contactInfoLoaded$: Subject<void> = new Subject<void>();
+  private readonly contactInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private contactInfoEndpoint: ContactInfoEndpoint) { super(); }
 
@@ -30,19 +30,19 @@ export class AuthorRequirementsComponent extends PageComponent implements OnInit
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((data: IContactInfo) => {
           this.contactInfo = data;
-          this.contactInfoLoaded$.next();
+          this.contactInfoLoading$.next(false);
         });
   }
 
   ngOnDestroy() {
-    this.contactInfoLoaded$.complete();
+    this.contactInfoLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return this.contactInfoLoaded$.asObservable();
+  observeContentLoading(): Observable<boolean> {
+    return this.contactInfoLoading$.asObservable();
   }
 
   observePageName(): Observable<string> {

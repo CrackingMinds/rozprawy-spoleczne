@@ -125,7 +125,7 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
 
     if (!isNewlyCreated && this.confirmDelete) {
 
-      const modalData: ModalData = {
+      const modalData: ModalData<void> = {
         title: undefined,
         content: 'Czy napewno chcesz usunąć tą osobę?',
         buttons: {

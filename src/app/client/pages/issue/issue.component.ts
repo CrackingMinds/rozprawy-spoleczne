@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, Subject, zip } from 'rxjs';
+import { Observable, Subject, ReplaySubject, combineLatest } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
 import { Issue } from 'app/models/issue';
@@ -23,12 +23,12 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
   issue: Issue;
   issueArticles: Article[];
 
-  private pageName$: Subject<string> = new Subject<string>();
+  private readonly pageName$: Subject<string> = new Subject<string>();
 
-  private issueLoaded$: Subject<void> = new Subject<void>();
-  private issueArticlesLoaded$: Subject<void> = new Subject<void>();
+  private readonly issueLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly issueArticlesLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
               private issueEndpoint: IssueEndpoint,
@@ -51,17 +51,20 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
 
     this.pageName$.complete();
 
-    this.issueLoaded$.complete();
-    this.issueArticlesLoaded$.complete();
+    this.issueLoading$.complete();
+    this.issueArticlesLoading$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-
-    return zip(
-      this.issueLoaded$,
-      this.issueArticlesLoaded$
+  observeContentLoading(): Observable<boolean> {
+    return combineLatest(
+      this.issueLoading$,
+      this.issueArticlesLoading$
     ).pipe(
-      map(() => null)
+      map((data: Array<boolean>) => {
+        const issueLoading = data[0];
+        const issueArticlesLoading = data[1];
+        return issueLoading || issueArticlesLoading;
+      })
     );
   }
 
@@ -90,7 +93,7 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
           this.pageName$.next(pageName);
 
           this.issue = issue;
-          this.issueLoaded$.next();
+          this.issueLoading$.next(false);
 
           this.fetchArticles(issue.id);
         });
@@ -106,7 +109,7 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
         )
         .subscribe((articles: Article[]) => {
           this.issueArticles = articles;
-          this.issueArticlesLoaded$.next();
+          this.issueArticlesLoading$.next(false);
         });
   }
 

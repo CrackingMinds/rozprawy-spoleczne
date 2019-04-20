@@ -4,12 +4,12 @@
   height: 100%;
   width: 100%;
   overflow: auto;
-  padding: 20px;
+  padding: $universal-padding-half;
   background-color: #f7f7f7;
 
   .rs-control {
     display: flex;
-    margin: 10px 0;
+    margin: $universal-padding-half 0;
   }
 
   .rs-remove-control-btn {

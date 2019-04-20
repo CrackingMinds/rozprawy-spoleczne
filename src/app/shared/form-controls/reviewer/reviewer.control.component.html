@@ -1,0 +1,16 @@
+<div [formGroup]="formGroup" class="rs-reviewer-details">
+  <rs-person-control formControlName="person"></rs-person-control>
+  <mat-form-field class="rs-reviewer-title">
+    <input matInput
+           placeholder="Tytuł zawodowy"
+           formControlName="title">
+    <mat-error *ngIf="title.hasError('required')">
+      Tytuł zawodowy jest wymagany
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="rs-reviewer-additional-info">
+    <input matInput
+           placeholder="Dodatkowe informacje"
+           formControlName="additionalInfo">
+  </mat-form-field>
+</div>

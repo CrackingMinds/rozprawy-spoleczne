@@ -8,7 +8,7 @@ export class ModalService {
 
 	constructor(private dialog: MatDialog) {}
 
-	open(data: ModalData, customCssClass?: string): MatDialogRef<any> {
+	open(data: ModalData<any>, customCssClass?: string): MatDialogRef<any> {
 
 	  let dialogCssClass: string;
 	  const defaultCssClass: string = 'rs-modal-panel';

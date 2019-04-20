@@ -23,7 +23,10 @@ import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { FirestoreIssueEndpoint } from 'app/endpoints/firestore-endpoint/issue/firestore.issue.endpoint';
 
 import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
-import { RestReviewersEndpoint } from 'app/endpoints/rest-endpoint/reviewers/rest.reviewers.endpoint';
+import { FirestoreReviewersEndpoint } from 'app/endpoints/firestore-endpoint/reviewers/firestore.reviewers.endpoint';
+
+import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
+import { FirestoreReviewerYearsEndpoint } from 'app/endpoints/firestore-endpoint/reviewer-years/firestore.reviewer.years.endpoint';
 
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
 import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscriptions/rest.subscriptions.endpoint';
@@ -68,7 +71,11 @@ const providers = [
   },
   {
     provide: ReviewersEndpoint,
-    useClass: RestReviewersEndpoint
+    useClass: FirestoreReviewersEndpoint
+  },
+  {
+    provide: ReviewerYearsEndpoint,
+    useClass: FirestoreReviewerYearsEndpoint
   },
   {
     provide: SubscriptionsEndpoint,

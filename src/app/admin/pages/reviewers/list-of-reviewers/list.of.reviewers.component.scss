@@ -1,0 +1,19 @@
+@import "variables";
+
+:host {
+  padding-top: $universal-padding-half;
+  background-color: #f7f7f7;
+
+  .rs-remove-year {
+    color: $white;
+    margin: 0 auto 0 $universal-padding-half;
+  }
+
+  .rs-list-of-controls {
+    margin-top: $universal-padding-half;
+    border: 2px solid $main-green-color;
+    border-left: none;
+    border-right: none;
+  }
+
+}

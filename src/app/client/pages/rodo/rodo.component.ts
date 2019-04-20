@@ -14,8 +14,8 @@ export class RODOComponent extends PageComponent {
 
 	constructor() { super(); }
 
-  observeContentLoaded(): Observable<void> {
-    return of(null);
+  observeContentLoading(): Observable<boolean> {
+    return of(false);
   }
 
   observePageName(): Observable<string> {

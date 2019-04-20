@@ -1,0 +1,36 @@
+<div *ngIf="contentLoading$ | async" class="rs-spinner-wrapper rs-content-spinner">
+  <mat-progress-spinner class="rs-progress-spinner"
+                        mode="indeterminate"
+                        color="primary"
+                        [diameter]="100">
+  </mat-progress-spinner>
+</div>
+
+<div class="rs-list-of-years-container">
+  <div *ngIf="reviewerYearsLoading$ | async" class="rs-spinner-wrapper">
+    <mat-progress-spinner class="rs-progress-spinner"
+                          mode="indeterminate"
+                          color="primary"
+                          [diameter]="100">
+    </mat-progress-spinner>
+  </div>
+  <rs-list-of-years class="rs-years"
+                    [years]="years"
+                    (yearEvent)="onYearEvent($event)">
+  </rs-list-of-years>
+</div>
+<div class="rs-list-of-reviewers-container">
+  <div *ngIf="reviewersLoading$ | async" class="rs-spinner-wrapper">
+    <mat-progress-spinner class="rs-progress-spinner"
+                          mode="indeterminate"
+                          color="primary"
+                          [diameter]="100">
+    </mat-progress-spinner>
+  </div>
+  <rs-list-of-reviewers class="rs-reviewers-for-year"
+                        [yearId]="selectedYearId"
+                        [reviewers]="reviewers"
+                        (reviewerEvent)="onReviewerEvent($event)"
+                        (yearEvent)="onYearEvent($event)">
+  </rs-list-of-reviewers>
+</div>

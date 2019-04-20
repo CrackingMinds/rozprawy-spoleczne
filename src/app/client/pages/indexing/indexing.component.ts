@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
@@ -19,9 +19,9 @@ export class IndexingComponent extends PageComponent implements OnInit, OnDestro
   indexingData: IIndexingInfo[];
   indexingDataToShow: IIndexingInfo[];
 
-  private indexingInfoLoaded$: Subject<void> = new Subject<void>();
+  private readonly indexingInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
 
@@ -36,19 +36,19 @@ export class IndexingComponent extends PageComponent implements OnInit, OnDestro
             return data.name !== 'ISSN';
           });
 
-          this.indexingInfoLoaded$.next();
+          this.indexingInfoLoading$.next(false);
         });
   }
 
   ngOnDestroy() {
-    this.indexingInfoLoaded$.complete();
+    this.indexingInfoLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return this.indexingInfoLoaded$.asObservable();
+  observeContentLoading(): Observable<boolean> {
+    return this.indexingInfoLoading$.asObservable();
   }
 
   observePageName(): Observable<string> {

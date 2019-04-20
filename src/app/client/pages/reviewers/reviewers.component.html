@@ -3,22 +3,29 @@
     <h3 class="page-heading">Lista recenzentów Czasopisma „Rozprawy Społeczne"</h3>
   </div>
   <mat-accordion class="years-list">
-    <mat-expansion-panel *ngFor="let year of reviewersData; first as isFirst"
-                         class="year"
-                         [expanded]="isFirst">
+    <mat-expansion-panel *ngFor="let year of getReviewerYears()"
+                         [expanded]="checkIfYearExpanded(year.id)"
+                         (opened)="onYearExpanded(year.id)"
+                         class="year">
       <mat-expansion-panel-header>
         <mat-panel-title class="year-number">
-          {{year.year}}
+          {{ year.value }}
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ul class="reviewers-list">
-        <li *ngFor="let reviewer of year.reviewers" class="reviewer">
-          <span>{{ reviewer.title }} </span>
-          <span>{{ reviewer.name }} </span>
-          <span>{{ reviewer.surname }}</span>
-          <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
-        </li>
-      </ul>
+
+      <p *ngIf="!checkIfReviewersForYearExist(year.id); else reviewersList">Brak recenzentów w wybranym roku</p>
+
+      <ng-template #reviewersList>
+        <ul class="reviewers-list">
+          <li *ngFor="let reviewer of getReviewersForYear(year.id)" class="reviewer">
+            <span>{{ reviewer.title }} </span>
+            <span>{{ reviewer.person.firstName }} </span>
+            <span>{{ reviewer.person.lastName }}</span>
+            <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
+          </li>
+        </ul>
+      </ng-template>
+
     </mat-expansion-panel>
   </mat-accordion>
 </div>

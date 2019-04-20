@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 import { Cast } from 'app/shared/cast';
@@ -26,7 +26,7 @@ import { ControlComponent } from 'app/shared/form-controls/control-component/con
     }
   ]
 })
-export class EditorialBoardMemberControlComponent extends ControlComponent<RawEditorialBoardMember> implements OnInit, OnDestroy {
+export class EditorialBoardMemberControlComponent extends ControlComponent<RawEditorialBoardMember> implements OnDestroy {
 
   get position(): AbstractControl {
     return this.formGroup.get('position');
@@ -36,28 +36,17 @@ export class EditorialBoardMemberControlComponent extends ControlComponent<RawEd
     return this.formGroup.get('person');
   }
 
-	constructor(private formBuilder: FormBuilder) { super(formBuilder); }
+	constructor(formBuilder: FormBuilder) {
 
-	ngOnInit() {
-
-    let initialMemberData: RawEditorialBoardMember = {
-      person: {
-        firstName: null,
-        lastName: null,
-        middleName: null
-      },
-      position: null
-    };
-
-    const controlsConfig = {
+    super(formBuilder, {
       person: [
-        initialMemberData.person,
+        null,
         [
           Validators.required
         ]
       ],
       position: [
-        initialMemberData.position,
+        null,
         [
           Validators.required,
           Validators.pattern(
@@ -65,11 +54,8 @@ export class EditorialBoardMemberControlComponent extends ControlComponent<RawEd
           )
         ]
       ]
-    };
-
-    super.init(controlsConfig);
-
-	}
+    });
+  }
 
 	ngOnDestroy() {
 	  super.destroy();

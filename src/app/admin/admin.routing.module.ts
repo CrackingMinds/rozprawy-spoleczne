@@ -20,6 +20,10 @@ const childRoutes: Routes = [
   {
     path: AdminRoutesResolver.scientificBoard(),
     loadChildren: 'app/admin/pages/scientific-board/scientific.board.edit.module#ScientificBoardEditModule'
+  },
+  {
+    path: AdminRoutesResolver.reviewers(),
+    loadChildren: 'app/admin/pages/reviewers/reviewers.edit.module#ReviewersEditModule'
   }
 ];
 

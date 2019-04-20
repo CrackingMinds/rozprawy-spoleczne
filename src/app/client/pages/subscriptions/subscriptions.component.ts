@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subject, Observable, of } from 'rxjs';
+import { Subject, Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
@@ -18,9 +18,9 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
 
   subscriptionsInfo: ISubsriptionsInfo;
 
-  private subscriptionsInfoLoaded$: Subject<void> = new Subject<void>();
+  private readonly subscriptionsInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private subscriptionsEndpoint: SubscriptionsEndpoint) {
     super();
@@ -32,19 +32,19 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((data: ISubsriptionsInfo) => {
           this.subscriptionsInfo = data;
-          this.subscriptionsInfoLoaded$.next();
+          this.subscriptionsInfoLoading$.next(false);
         });
   }
 
   ngOnDestroy() {
-    this.subscriptionsInfoLoaded$.complete();
+    this.subscriptionsInfoLoading$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  observeContentLoaded(): Observable<void> {
-    return this.subscriptionsInfoLoaded$.asObservable();
+  observeContentLoading(): Observable<boolean> {
+    return this.subscriptionsInfoLoading$.asObservable();
   }
 
   observePageName(): Observable<string> {

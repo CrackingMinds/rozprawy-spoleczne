@@ -1,0 +1,10 @@
+<ng-container [formGroup]="formGroup">
+  <mat-form-field color="accent">
+    <input matInput type="text"
+           placeholder="Rok"
+           formControlName="year">
+    <mat-error *ngIf="year.hasError('required') || year.hasError('pattern')">
+      Wpisz rok np.: {{currentYear}}
+    </mat-error>
+  </mat-form-field>
+</ng-container>

@@ -1,0 +1,19 @@
+<button type="button" class="rs-add-year"
+        (click)="openYearAdditionDialog()">
+  <mat-icon>add</mat-icon>
+</button>
+<div class="rs-reviewer-years-list">
+  <ng-container *ngFor="let year of years">
+    <div class="rs-year-container"
+      [class.rs-selected]="isSelected(year.id)">
+      <button class="rs-edit-year-btn"
+              (click)="openYearEditingDialog(year.id)">
+        <mat-icon>create</mat-icon>
+      </button>
+      <div class="rs-year"
+        (click)="selectYear(year.id)">
+        <span>{{ year.value }}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

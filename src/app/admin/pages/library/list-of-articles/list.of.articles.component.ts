@@ -13,7 +13,7 @@ import { ModalService } from 'app/admin/pages/library/modal/modal.service';
 import { ArticleCrudComponent } from 'app/admin/pages/library/crud/article-crud/article.crud.component';
 
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
-import { ArticleCreateParams, ArticleEditParams } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
+import { ArticleCreateParams, ArticleCrudParams, ArticleEditParams } from 'app/admin/pages/library/crud/article-crud/article.crud.params';
 
 @Component({
   selector: 'rs-list-of-articles',
@@ -51,7 +51,7 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleCreationDialog(): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<ArticleCrudParams> = {
       title: `Dodanie nowego artykułu do numeru: ${this.issueStringPipe.transform(this.issue)}`,
       content: ArticleCrudComponent,
       buttons: {
@@ -80,7 +80,7 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleEditDialog(article: Article): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<ArticleCrudParams> = {
       title: `Edycja artykułu: ${article.title}`,
       content: ArticleCrudComponent,
       buttons: {
@@ -109,7 +109,7 @@ export class ListOfArticlesComponent implements OnDestroy {
 
   openArticleDeleteDialog(article: Article): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<void> = {
       title: undefined,
       content: 'Czy napewno chcesz usunąć ten artykuł?',
       buttons: {

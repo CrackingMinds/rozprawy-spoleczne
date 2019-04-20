@@ -1,0 +1,40 @@
+@import "variables";
+
+:host {
+  display: flex;
+  height: 100%;
+  position: relative;
+
+  .rs-reviewers-for-year {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rs-list-of-reviewers-container {
+    flex: 1;
+  }
+
+  .rs-list-of-years-container {
+    height: 100%;
+  }
+
+}
+
+.rs-spinner-wrapper {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  &.rs-content-spinner {
+    z-index: 2;
+  }
+}

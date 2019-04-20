@@ -104,7 +104,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   private openIssueCreationDialog(): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<Issue> = {
       title: 'Dodanie nowego numeru',
       content: IssueCrudComponent,
       buttons: {
@@ -135,7 +135,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   private openIssueEditDialog(issue: Issue): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<Issue> = {
       title: 'Edycja numeru',
       content: IssueCrudComponent,
       buttons: {
@@ -166,7 +166,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   private openMakeIssueCurrentDialog(issue: Issue): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<void> = {
       title: undefined,
       content: 'Czy napewno chcesz zrobić ten numer bieżącym?',
       buttons: {
@@ -198,7 +198,7 @@ export class ListOfIssuesComponent implements OnChanges, OnDestroy {
 
   private openIssueRemovalDialog(issue: Issue): void {
 
-    const modalData: ModalData = {
+    const modalData: ModalData<void> = {
       title: undefined,
       content: 'Czy napewno chcesz usunąć ten numer?',
       buttons: {
