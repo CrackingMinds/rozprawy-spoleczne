@@ -26,4 +26,8 @@ export class AdminRoutesResolver {
     return AdminPagesResolver.reviewers().url;
   }
 
+  static indexing(): string {
+    return AdminPagesResolver.indexing().url;
+  }
+
 }

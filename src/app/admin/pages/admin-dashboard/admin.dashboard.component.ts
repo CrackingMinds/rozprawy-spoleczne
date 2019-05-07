@@ -21,6 +21,7 @@ export class AdminDashboardComponent implements PageComponent {
     .withPage(AdminPagesResolver.editorialBoard())
     .withPage(AdminPagesResolver.scientificBoard())
     .withPage(AdminPagesResolver.reviewers())
+    .withPage(AdminPagesResolver.indexing())
     .items;
 
   observeContentLoading(): Observable<boolean> {

@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
-import { IIndexingInfo } from 'app/models/indexing-info';
+import { IndexingInfo } from 'app/models/indexing';
+
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { AsyncComponent } from 'app/client/pages/async.component';
+import { CustomSorting } from 'app/shared/custom.sorting';
 
 @Component({
   selector: 'rs-header',
@@ -13,7 +15,7 @@ import { AsyncComponent } from 'app/client/pages/async.component';
 })
 export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
-  indexingInfo: IIndexingInfo[];
+  indexingInfo: IndexingInfo;
 
   private readonly contentLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
@@ -23,9 +25,12 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
   ngOnInit() {
     this.indexingInfoEndpoint.getIndexingInfo()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: IIndexingInfo[]) => {
-          this.indexingInfo = data;
+        .pipe(
+          map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((indexingInfo: IndexingInfo) => {
+          this.indexingInfo = indexingInfo;
           this.contentLoading$.next(false);
         });
   }

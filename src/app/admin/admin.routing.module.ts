@@ -24,6 +24,10 @@ const childRoutes: Routes = [
   {
     path: AdminRoutesResolver.reviewers(),
     loadChildren: 'app/admin/pages/reviewers/reviewers.edit.module#ReviewersEditModule'
+  },
+  {
+    path: AdminRoutesResolver.indexing(),
+    loadChildren: 'app/admin/pages/indexing/indexing.edit.module#IndexingEditModule'
   }
 ];
 

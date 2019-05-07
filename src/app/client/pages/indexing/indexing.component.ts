@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Observable, Subject, of, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 
-import { IIndexingInfo } from 'app/models/indexing-info';
+import { IndexingInfo, IndexingInfoItem } from 'app/models/indexing';
 
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
+import { CustomSorting } from 'app/shared/custom.sorting';
 
 @Component({
   selector: 'rs-indexing',
@@ -16,26 +17,26 @@ import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.
 })
 export class IndexingComponent extends PageComponent implements OnInit, OnDestroy {
 
-  indexingData: IIndexingInfo[];
-  indexingDataToShow: IIndexingInfo[];
+  indexingInfo: IndexingInfo;
 
   private readonly indexingInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
+  constructor(private readonly indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
 
   ngOnInit() {
 
     this.indexingInfoEndpoint.getIndexingInfo()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res: IIndexingInfo[]) => {
-          this.indexingData = res;
-
-          this.indexingDataToShow = this.indexingData.filter((data) => {
-            return data.name !== 'ISSN';
-          });
-
+        .pipe(
+          map((indexingInfo: IndexingInfo) => {
+            return indexingInfo.filter((item: IndexingInfoItem) => item.name !== 'ISSN')
+          }),
+          map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe((indexingInfo: IndexingInfo) => {
+          this.indexingInfo = indexingInfo;
           this.indexingInfoLoading$.next(false);
         });
   }

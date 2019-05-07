@@ -2,10 +2,10 @@
   <h3 class="heading">Czasopismo indeksowane w:</h3>
   <div class="underline"></div>
   <ul class="indexing-list">
-    <li *ngFor="let data of indexingDataToShow" class="indexing-data-wrapper">
-      <div class="indexing-data" [class.name-only]="!data.value">
-        <p class="name">{{data.name}}</p>
-        <p *ngIf="data.value" class="value">{{data.value}}</p>
+    <li *ngFor="let indexingInfoItem of indexingInfo" class="indexing-data-wrapper">
+      <div class="indexing-data" [class.name-only]="!indexingInfoItem.value">
+        <p class="name">{{indexingInfoItem.name}}</p>
+        <p *ngIf="indexingInfoItem.value" class="value">{{indexingInfoItem.value}}</p>
       </div>
     </li>
   </ul>

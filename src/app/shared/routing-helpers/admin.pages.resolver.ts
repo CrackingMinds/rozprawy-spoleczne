@@ -40,4 +40,11 @@ export class AdminPagesResolver {
     };
   }
 
+  static indexing(): AdminPage {
+    return {
+      title: 'Bazy indeksacyjne',
+      url: 'indexing'
+    }
+  }
+
 }

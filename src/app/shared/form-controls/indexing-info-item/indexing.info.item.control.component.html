@@ -1,0 +1,18 @@
+<div [formGroup]="formGroup" class="rs-indexing-info-item-details">
+  <mat-form-field class="rs-name">
+    <input matInput
+           placeholder="Nazwa"
+           formControlName="name">
+    <mat-error *ngIf="name.hasError('required')">
+      Nazwa jest wymagana
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="rs-name">
+    <input matInput
+           placeholder="Wartość"
+           formControlName="value">
+    <mat-error *ngIf="value.hasError('required')">
+      Wartość jest wymagana
+    </mat-error>
+  </mat-form-field>
+</div>
