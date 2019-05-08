@@ -16,6 +16,11 @@ enum LoginErrorType {
   PASSWORD
 }
 
+enum SignInMode {
+  EMAIL,
+  ANONYMOUS
+}
+
 @Component({
   selector: 'rs-sign-in',
   templateUrl: './signin.component.html',
@@ -37,6 +42,8 @@ export class SigninComponent implements OnInit, OnDestroy {
 
   showLoginSpinner: boolean = false;
 
+  readonly SIGN_IN_MODE = SignInMode;
+
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private angularFireAuth: AngularFireAuth,
@@ -56,14 +63,27 @@ export class SigninComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  onSubmit(): void {
+  signIn(mode: SignInMode): void {
 
     this.showLoginSpinner = true;
 
-    const email: string = this.form.value.email;
-    const password: string = this.form.value.password;
+    let signInFn: () => Promise<any>;
 
-    this.angularFireAuth.auth.signInWithEmailAndPassword(email, password).then(() => {
+    switch (mode) {
+
+      case SignInMode.EMAIL: {
+        signInFn = this.signInWithEmail.bind(this);
+        break;
+      }
+
+      case SignInMode.ANONYMOUS: {
+        signInFn = this.signInAnonymously.bind(this);
+        break;
+      }
+
+    }
+
+    signInFn().then(() => {
 
       if (this.signInRepository.redirectedFrom) {
         this.redirectToPreviousPage();
@@ -84,6 +104,17 @@ export class SigninComponent implements OnInit, OnDestroy {
       return;
 
     this.loginError = null;
+  }
+
+  private signInWithEmail(): Promise<any> {
+    const email: string = this.form.value.email;
+    const password: string = this.form.value.password;
+
+    return this.angularFireAuth.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  private signInAnonymously(): Promise<any> {
+    return this.angularFireAuth.auth.signInAnonymously();
   }
 
   private showErrorMessageBasedOnCode(errorCode: string): void {

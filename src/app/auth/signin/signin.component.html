@@ -6,7 +6,7 @@
     <div *ngIf="showLoginSpinner" class="rs-login-form-spinner-container">
       <mat-spinner class="rs-login-form-spinner" color="primary"></mat-spinner>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="rs-login-form">
+    <form [formGroup]="form" class="rs-login-form">
 
       <mat-form-field color="accent" (click)="removeErrorMessage()">
         <input matInput formControlName="email"
@@ -30,8 +30,8 @@
       <div class="rs-login-button-with-error">
         <button *ngIf="!loginError; else showLoginError" mat-raised-button
                 color="accent"
-                type="submit"
                 [disabled]="!form.valid"
+                (click)="signIn(SIGN_IN_MODE.EMAIL)"
                 class="rs-submit-btn">
           Zaloguj się
         </button>
@@ -40,6 +40,13 @@
           <span class="rs-login-error">{{ loginError.message }}</span>
         </ng-template>
       </div>
+
+      <button *ngIf="!loginError" mat-button
+              color="accent"
+              (click)="signIn(SIGN_IN_MODE.ANONYMOUS)"
+              class="rs-anonymous-submit-btn">
+        Zaloguj się anonimowo
+      </button>
 
     </form>
   </div>
