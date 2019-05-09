@@ -5,8 +5,6 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Actions, Effect } from '@ngrx/effects';
 
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
-
 import {
   ADD_INDEXING_INFO_ITEM, AddIndexingInfoItemAction,
   LOAD_INDEXING_INFO,
@@ -14,13 +12,18 @@ import {
   LoadIndexingInfoSuccessAction, REMOVE_INDEXING_INFO_ITEM, RemoveIndexingInfoItemAction, UPDATE_INDEXING_INFO_ITEM, UpdateIndexingInfoItemAction
 } from 'app/admin/pages/indexing/store/actions/indexing.actions';
 
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
+
+import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+
 import { IndexingInfo } from 'app/models/indexing';
 
 @Injectable()
 export class IndexingEffects {
 
-	constructor(private actions$: Actions,
-              private indexingInfoEndpoint: IndexingInfoEndpoint) {}
+	constructor(private readonly actions$: Actions,
+              private readonly indexingInfoEndpoint: IndexingInfoEndpoint,
+              private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
   loadIndexingInfo$ = this.actions$.ofType(LOAD_INDEXING_INFO)
@@ -38,27 +41,27 @@ export class IndexingEffects {
   addIndexingInfoItem$ = this.actions$.ofType(ADD_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: AddIndexingInfoItemAction) => {
-        // @TODO: implement error handler
         return this.indexingInfoEndpoint.postIndexingInfoItem(action.payload.newIndexingInfoItem);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
   @Effect({ dispatch: false })
   removeIndexingInfoItem$ = this.actions$.ofType(REMOVE_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: RemoveIndexingInfoItemAction) => {
-        // @TODO: implement error handler
         return this.indexingInfoEndpoint.deleteIndexingInfoItem(action.payload.indexingInfoItemId);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
   @Effect({ dispatch: false })
   updateIndexingInfoItem$ = this.actions$.ofType(UPDATE_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: UpdateIndexingInfoItemAction) => {
-        // @TODO: implement error handler
         return this.indexingInfoEndpoint.updateIndexingInfoItem(action.payload.updatedIndexingInfoItem);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
 }

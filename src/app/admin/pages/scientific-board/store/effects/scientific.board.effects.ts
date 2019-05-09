@@ -5,8 +5,6 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Actions, Effect } from '@ngrx/effects';
 
-import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
-
 import {
   ADD_SCIENTIFIC_BOARD_MEMBER, AddScientificBoardMember,
   LOAD_SCIENTIFIC_BOARD,
@@ -14,13 +12,18 @@ import {
   LoadScientificBoardSuccess, REMOVE_SCIENTIFIC_BOARD_MEMBER, RemoveScientificBoardMember, UPDATE_SCIENTIFIC_BOARD_MEMBER, UpdateScientificBoardMember
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
+
+import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+
 import { ScientificBoard } from 'app/models/scientific.board';
 
 @Injectable()
 export class ScientificBoardEffects {
 
-  constructor(private actions$: Actions,
-              private scientificBoardEndpoint: ScientificBoardEndpoint) {}
+  constructor(private readonly actions$: Actions,
+              private readonly scientificBoardEndpoint: ScientificBoardEndpoint,
+              private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
   loadScientificBoard$ = this.actions$.ofType(LOAD_SCIENTIFIC_BOARD)
@@ -38,27 +41,27 @@ export class ScientificBoardEffects {
   addScientificBoardMember$ = this.actions$.ofType(ADD_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: AddScientificBoardMember) => {
-        // @TODO: implement error handler
         return this.scientificBoardEndpoint.postScientificBoardMember(action.memberData);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
   @Effect({ dispatch: false })
   removeScientificBoardMember$ = this.actions$.ofType(REMOVE_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: RemoveScientificBoardMember) => {
-        // @TODO: implement error handler
         return this.scientificBoardEndpoint.deleteScientificBoardMember(action.memberId);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
   @Effect({ dispatch: false })
   updateScientificBoardMember$ = this.actions$.ofType(UPDATE_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: UpdateScientificBoardMember) => {
-        // @TODO: implement error handler
         return this.scientificBoardEndpoint.updateScientificBoardMember(action.memberData);
-      })
+      }),
+      catchError(error => this.endpointErrorHandler.handle(error))
     );
 
 }

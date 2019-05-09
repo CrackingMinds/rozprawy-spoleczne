@@ -56,11 +56,14 @@ export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnD
         this.file = file;
         this.reportFileChanges(file);
 
-        if (!file)
-          return;
+        if (file) {
+          this.fileName = file.name;
+          this.changeFieldState(FieldState.DEFAULT);
+        } else {
+          this.fileInput.nativeElement.value = '';
+          this.changeFieldState(FieldState.EMPTY);
+        }
 
-        this.fileName = file.name;
-        this.changeFieldState(FieldState.DEFAULT);
       });
   }
 

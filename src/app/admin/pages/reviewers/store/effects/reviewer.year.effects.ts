@@ -12,14 +12,18 @@ import {
   UPDATE_REVIEWER_YEAR, UpdateReviewerYearAction
 } from 'app/admin/pages/reviewers/store/actions/reviewer.year.actions';
 
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
+
 import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
+
 import { ReviewerYears } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
 
 @Injectable()
 export class ReviewerYearEffects {
 
-  constructor(private actions$: Actions,
-              private reviewerYearsEndpoint: ReviewerYearsEndpoint) {}
+  constructor(private readonly actions$: Actions,
+              private readonly reviewerYearsEndpoint: ReviewerYearsEndpoint,
+              private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
   loadReviewers$ = this.actions$.ofType(LOAD_REVIEWER_YEARS)
@@ -37,27 +41,27 @@ export class ReviewerYearEffects {
   addReviewer$ = this.actions$.ofType(ADD_REVIEWER_YEAR)
                      .pipe(
                        switchMap((action: AddReviewerYearAction) => {
-                         // @TODO: implement error handler
                          return this.reviewerYearsEndpoint.postReviewerYear(action.newReviewerYear);
-                       })
+                       }),
+                       catchError(error => this.endpointErrorHandler.handle(error))
                      );
 
   @Effect({ dispatch: false })
   removeReviewer$ = this.actions$.ofType(REMOVE_REVIEWER_YEAR)
                         .pipe(
                           switchMap((action: RemoveReviewerYearAction) => {
-                            // @TODO: implement error handler
                             return this.reviewerYearsEndpoint.deleteReviewerYear(action.reviewerYearId);
-                          })
+                          }),
+                          catchError(error => this.endpointErrorHandler.handle(error))
                         );
 
   @Effect({ dispatch: false })
   updateReviewer$ = this.actions$.ofType(UPDATE_REVIEWER_YEAR)
                         .pipe(
                           switchMap((action: UpdateReviewerYearAction) => {
-                            // @TODO: implement error handler
                             return this.reviewerYearsEndpoint.updateReviewerYear(action.updatedReviewerYear);
-                          })
+                          }),
+                          catchError(error => this.endpointErrorHandler.handle(error))
                         );
 
 }

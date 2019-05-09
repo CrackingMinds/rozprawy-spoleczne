@@ -103,11 +103,17 @@ export class ArticleFileRepository {
     const downloadUrl$ = uploadTask.downloadUrl;
     downloadUrl$
       .subscribe((url: string) => {
-        this.currentFile = {
-          name: file.name,
-          storagePath: uploadTask.storagePath,
-          downloadUrl: url
-        };
+
+        if (url) {
+          this.currentFile = {
+            name: file.name,
+            storagePath: uploadTask.storagePath,
+            downloadUrl: url
+          };
+        } else {
+          this.currentFile = null;
+        }
+
       });
 
     return downloadUrl$

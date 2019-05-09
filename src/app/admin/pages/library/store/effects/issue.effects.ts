@@ -19,14 +19,18 @@ import {
   UpdateIssue
 } from 'app/admin/pages/library/store/actions/issue.actions';
 
-import { Issue } from 'app/models/issue';
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
+
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+
+import { Issue } from 'app/models/issue';
 
 @Injectable()
 export class IssueEffects {
 
-  constructor(private actions$: Actions,
-              private issueEndpoint: IssueEndpoint) {
+  constructor(private readonly actions$: Actions,
+              private readonly issueEndpoint: IssueEndpoint,
+              private readonly endpointErrorHandler: EndpointErrorHandler) {
   }
 
   @Effect()
@@ -45,38 +49,38 @@ export class IssueEffects {
   reloadIssue$ = this.actions$.ofType(RELOAD_ISSUE)
                      .pipe(
                        switchMap((action: ReloadIssue) => {
-                         // @TODO: implement error handler
                          return this.issueEndpoint.getIssue(action.issueId)
                            .pipe(
                              map((issue: Issue) => new ReloadIssueSuccess(issue))
                            );
-                       })
+                       }),
+                       catchError(error => this.endpointErrorHandler.handle(error))
                      );
 
   @Effect({ dispatch: false })
   createIssues$ = this.actions$.ofType(CREATE_ISSUE)
                       .pipe(
                         switchMap((action: CreateIssue) => {
-                          // @TODO: implement error handler
                           return this.issueEndpoint.postIssue(action.issue);
-                        })
+                        }),
+                        catchError(error => this.endpointErrorHandler.handle(error))
                       );
 
   @Effect({ dispatch: false })
   removeIssue$ = this.actions$.ofType(REMOVE_ISSUE)
                      .pipe(
                        switchMap((action: RemoveIssue) => {
-                         // @TODO: implement error handler
                          return this.issueEndpoint.deleteIssue(action.issueId);
-                       })
+                       }),
+                       catchError(error => this.endpointErrorHandler.handle(error))
                      );
 
   @Effect({ dispatch: false })
   updateIssue$ = this.actions$.ofType(UPDATE_ISSUE)
                      .pipe(
                        switchMap((action: UpdateIssue) => {
-                         // @TODO: implement error handler
                          return this.issueEndpoint.updateIssue(action.issue);
-                       })
+                       }),
+                       catchError(error => this.endpointErrorHandler.handle(error))
                      );
 }

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, map, finalize } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { AngularFireStorage } from 'angularfire2/storage';
 
+import { FirestorageArticleFileEndpointErrorHandler } from 'app/endpoints/firestorage-endpoint/article-file/firestorage.article.file.endpoint.error.handler';
+
 import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
+
 import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { FileUploadTask } from 'app/models/FileUploadTask';
@@ -15,7 +18,8 @@ const bucketPath: string = 'article-files/';
 @Injectable()
 export class FirestorageArticleFileEndpoint extends ArticleFileEndpoint {
 
-  constructor(private angularFireStorage: AngularFireStorage) { super(); }
+  constructor(private readonly angularFireStorage: AngularFireStorage,
+              private readonly firestorageErrorHandler: FirestorageArticleFileEndpointErrorHandler) { super(); }
 
   checkIfFileExists(fileName: string): Observable<boolean> {
     const filePath: string = this.composeStoragePath(fileName);
@@ -34,18 +38,21 @@ export class FirestorageArticleFileEndpoint extends ArticleFileEndpoint {
   upload(file: ArticleFile): FileUploadTask {
     const filePath = this.composeStoragePath(file.name);
     const ref = this.angularFireStorage.ref(filePath);
-    const task = ref.put(file.rawFile);
     const downloadUrl$ = new Subject<string>();
 
-    task.snapshotChanges()
-        .pipe(
-          finalize(() => {
-            ref.getDownloadURL()
-               .subscribe((url: string) => {
-                 downloadUrl$.next(url);
-               });
-          })
-        ).subscribe();
+    const task = ref.put(file.rawFile);
+    task.then(
+      () => {
+        ref.getDownloadURL()
+           .subscribe((url: string) => {
+             downloadUrl$.next(url);
+           });
+      },
+      (reason: any) => {
+        this.firestorageErrorHandler.handle(reason);
+        downloadUrl$.next(null);
+      }
+    );
 
     return new FileUploadTask(downloadUrl$.asObservable(), task.percentageChanges(), filePath);
   }

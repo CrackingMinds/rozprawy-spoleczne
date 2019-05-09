@@ -18,16 +18,20 @@ import {
   UpdateArticle
 } from 'app/admin/pages/library/store/actions/article.actions';
 
-import { Article } from 'app/models/article';
-import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { ReloadIssue } from 'app/admin/pages/library/store/actions/issue.actions';
+
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
+
+import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+
+import { Article } from 'app/models/article';
 
 @Injectable()
 export class ArticleEffects {
 
-  constructor(private actions$: Actions,
-              private articleEndpoint: ArticleEndpoint) {
-  }
+  constructor(private readonly actions$: Actions,
+              private readonly articleEndpoint: ArticleEndpoint,
+              private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
   loadArticles$ = this.actions$.ofType(LOAD_ARTICLES)
@@ -46,32 +50,32 @@ export class ArticleEffects {
   createArticle$ = this.actions$.ofType(CREATE_ARTICLE)
                        .pipe(
                          switchMap((action: CreateArticle) => {
-                           // @TODO: implement error handler
                            return this.articleEndpoint.postArticle(action.article)
                                       .pipe(
                                         map(() => new ReloadIssue(action.article.issueId))
                                       );
-                         })
+                         }),
+                         catchError(error => this.endpointErrorHandler.handle(error))
                        );
 
   @Effect({ dispatch: false })
   updateArticle$ = this.actions$.ofType(UPDATE_ARTICLE)
                        .pipe(
                          switchMap((action: UpdateArticle) => {
-                           // @TODO: implement error handler
                             return this.articleEndpoint.updateArticle(action.updatedArticle);
-                         })
+                         }),
+                         catchError(error => this.endpointErrorHandler.handle(error))
                        );
 
   @Effect()
   removeArticle$ = this.actions$.ofType(REMOVE_ARTICLE)
                        .pipe(
                          switchMap((action: RemoveArticle) => {
-                           // @TODO: implement error handler
                            return this.articleEndpoint.deleteArticle(action.article)
                                       .pipe(
                                         map(() => new ReloadIssue(action.article.issueId))
                                       );
-                         })
+                         }),
+                         catchError(error => this.endpointErrorHandler.handle(error))
                        );
 }

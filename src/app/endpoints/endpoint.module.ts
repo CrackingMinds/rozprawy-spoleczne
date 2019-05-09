@@ -1,6 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { FirestoreEndpointModule } from 'app/endpoints/firestore-endpoint/firestore.endpoint.module';
+import { FirestorageArticleFileEndpointModule } from 'app/endpoints/firestorage-endpoint/article-file/firestorage.article.file.endpoint.module';
+
+import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
 import { ENDPOINT_URL } from 'app/endpoints/endpoint.tokens';
 
@@ -31,9 +34,6 @@ import { FirestoreReviewerYearsEndpoint } from 'app/endpoints/firestore-endpoint
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
 import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscriptions/rest.subscriptions.endpoint';
 
-import { ArticleFileEndpoint } from 'app/endpoints/endpoint/article-file/article.file.endpoint';
-import { FirestorageArticleFileEndpoint } from 'app/endpoints/firestorage-endpoint/article-file/firestorage.article.file.endpoint';
-
 import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
 
@@ -41,6 +41,7 @@ import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board
 import { FirestoreScientificBoardEndpoint } from 'app/endpoints/firestore-endpoint/scientific-board/firestore.scientific.board.endpoint';
 
 const providers = [
+  EndpointErrorHandler,
   {
     provide: ENDPOINT_URL,
     useValue: 'http://api.rozprawyspoleczne.edu.pl'
@@ -82,10 +83,6 @@ const providers = [
     useClass: RestSubscriptionsEndpoint
   },
   {
-    provide: ArticleFileEndpoint,
-    useClass: FirestorageArticleFileEndpoint
-  },
-  {
     provide: EditorialBoardEndpoint,
     useClass: FirestoreEditorialBoardEndpoint
   },
@@ -98,7 +95,8 @@ const providers = [
 @NgModule({
 	providers: providers,
   imports: [
-    FirestoreEndpointModule
+    FirestoreEndpointModule,
+    FirestorageArticleFileEndpointModule.forRoot()
   ]
 })
 export class EndpointModule {
