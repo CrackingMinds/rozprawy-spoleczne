@@ -15,6 +15,8 @@ import { AppComponent } from 'app/app.component';
 
 import { SignInRepository } from 'app/auth/signin/signin.repository';
 
+import { MessagesModule } from 'app/shared/messages/messages.module';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -31,6 +33,8 @@ import { SignInRepository } from 'app/auth/signin/signin.repository';
     FirebaseConfigModule,
 
     ServicesModule.forRoot(),
+
+    MessagesModule.forRoot()
   ],
   providers: [
     SignInRepository

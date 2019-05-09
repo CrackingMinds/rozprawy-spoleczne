@@ -20,6 +20,8 @@ export const UPDATE_ISSUE_FAIL = `${ACTION_PREFIX} Update Issue Fail`;
 export const REMOVE_ISSUE = `${ACTION_PREFIX} Remove Issue`;
 export const REMOVE_ISSUE_FAIL = `${ACTION_PREFIX} Remove Issue Fail`;
 
+export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
+
 export class LoadIssues implements Action {
   readonly type: string = LOAD_ISSUES;
   constructor() {}
@@ -75,6 +77,11 @@ export class RemoveIssueFail implements Action {
   constructor(public error: any) {}
 }
 
+export class EndpointCallFailAction implements Action {
+  readonly type: string = ENDPOINT_CALL_FAIL;
+  constructor(public readonly error: any) {}
+}
+
 export type IssueAction =
   LoadIssues |
   LoadIssuesSuccess |
@@ -87,4 +94,6 @@ export type IssueAction =
   UpdateIssueFail |
 
   RemoveIssue |
-  RemoveIssueFail;
+  RemoveIssueFail |
+
+  EndpointCallFailAction;

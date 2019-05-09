@@ -3,7 +3,7 @@ import { Article } from 'app/models/article';
 import {
   ArticleAction,
   CREATE_ARTICLE,
-  CREATE_ARTICLE_FAIL,
+  CREATE_ARTICLE_FAIL, ENDPOINT_CALL_FAIL,
   LOAD_ARTICLES,
   LOAD_ARTICLES_FAIL,
   LOAD_ARTICLES_SUCCESS, LoadArticlesSuccess, REMOVE_ARTICLE, UPDATE_ARTICLE, UPDATE_ARTICLE_FAIL
@@ -83,6 +83,13 @@ export function reducer(state = initialState, action: ArticleAction): ArticlesSt
       return {
         ...state,
         loading: true
+      }
+    }
+
+    case ENDPOINT_CALL_FAIL: {
+      return {
+        ...state,
+        loading: false
       }
     }
 

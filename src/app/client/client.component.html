@@ -1,4 +1,4 @@
-<rs-page-load-spinner [visible]="(getSpinnerVisibility() | async)">
+<rs-spinner [visible]="(getSpinnerVisibility() | async)">
   <div id="page-content">
     <mat-sidenav-container>
       <mat-sidenav #sidenav [mode]="'side'" [opened]="true" id="menu-container">
@@ -37,4 +37,4 @@
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>
-</rs-page-load-spinner>
+</rs-spinner>

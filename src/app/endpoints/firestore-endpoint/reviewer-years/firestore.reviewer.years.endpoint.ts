@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 
@@ -24,7 +24,8 @@ export class FirestoreReviewerYearsEndpoint extends ReviewerYearsEndpoint {
             id: a.payload.doc.id,
             ...data
           };
-        }))
+        })),
+        take(1)
       );
   }
 

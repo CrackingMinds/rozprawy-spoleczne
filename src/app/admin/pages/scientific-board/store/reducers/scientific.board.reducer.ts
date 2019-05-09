@@ -10,7 +10,8 @@ import {
   REMOVE_SCIENTIFIC_BOARD_MEMBER, REMOVE_SCIENTIFIC_BOARD_MEMBER_FAIL,
   ScientificBoardAction,
   UPDATE_SCIENTIFIC_BOARD_MEMBER,
-  UPDATE_SCIENTIFIC_BOARD_MEMBER_FAIL
+  UPDATE_SCIENTIFIC_BOARD_MEMBER_FAIL,
+  ENDPOINT_CALL_FAIL
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 
 import { ScientificBoard } from 'app/models/scientific.board';
@@ -100,6 +101,13 @@ export function reducer(state = initialState, action: ScientificBoardAction): Sc
         loading: false,
         loaded: false
       };
+    }
+
+    case ENDPOINT_CALL_FAIL: {
+      return {
+        ...state,
+        loading: false
+      }
     }
 
   }

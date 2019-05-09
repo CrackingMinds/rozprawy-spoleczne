@@ -8,7 +8,8 @@ import {
   LOAD_ISSUES_FAIL,
   LOAD_ISSUES_SUCCESS, LoadIssuesSuccess, RELOAD_ISSUE_SUCCESS, ReloadIssueSuccess,
   REMOVE_ISSUE_FAIL,
-  UPDATE_ISSUE_FAIL
+  UPDATE_ISSUE_FAIL,
+  ENDPOINT_CALL_FAIL
 } from 'app/admin/pages/library/store/actions/issue.actions';
 
 export type IssueStoreEntity = { [id: string]: Issue };
@@ -105,6 +106,13 @@ export function reducer(state = initialState, action: IssueAction): IssuesState 
         ...state,
         loading: false,
         loaded: false
+      }
+    }
+
+    case ENDPOINT_CALL_FAIL: {
+      return {
+        ...state,
+        loading: false
       }
     }
 

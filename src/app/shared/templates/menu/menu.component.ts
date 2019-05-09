@@ -11,6 +11,7 @@ import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact
 
 import { AsyncComponent } from 'app/client/pages/async.component';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
+import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 
 @Component({
   selector: 'rs-menu',
@@ -57,6 +58,10 @@ export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
 
   observeContentLoading(): Observable<boolean> {
     return this.contentLoading$.asObservable();
+  }
+
+  composeLink(url: string): string {
+    return RoutesComposer.composeClientRouterLink(url);
   }
 
 }

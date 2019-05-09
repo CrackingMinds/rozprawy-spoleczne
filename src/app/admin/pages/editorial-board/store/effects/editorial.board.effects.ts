@@ -13,7 +13,8 @@ import {
   ADD_EDITORIAL_BOARD_MEMBER, AddEditorialBoardMember,
   LOAD_EDITORIAL_BOARD,
   LoadEditorialBoardFail,
-  LoadEditorialBoardSuccess, REMOVE_EDITORIAL_BOARD_MEMBER, RemoveEditorialBoardMember, UPDATE_EDITORIAL_BOARD_MEMBER, UpdateEditorialBoardMember
+  LoadEditorialBoardSuccess, REMOVE_EDITORIAL_BOARD_MEMBER, RemoveEditorialBoardMember, UPDATE_EDITORIAL_BOARD_MEMBER, UpdateEditorialBoardMember,
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadEditorialBoard
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 import { EditorialBoard } from 'app/models/editorial.board';
 
@@ -36,31 +37,48 @@ export class EditorialBoardEffects {
       })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   addEditorialBoardMember$ = this.actions$.ofType(ADD_EDITORIAL_BOARD_MEMBER)
     .pipe(
       switchMap((action: AddEditorialBoardMember) => {
-        return this.editorialBoardEndpoint.postEditorialBoardMember(action.memberData);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.editorialBoardEndpoint.postEditorialBoardMember(action.memberData)
+          .pipe(
+            map(() => new LoadEditorialBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   removeEditorialBoardMember$ = this.actions$.ofType(REMOVE_EDITORIAL_BOARD_MEMBER)
     .pipe(
       switchMap((action: RemoveEditorialBoardMember) => {
-        return this.editorialBoardEndpoint.deleteEditorialBoardMember(action.memberId);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.editorialBoardEndpoint.deleteEditorialBoardMember(action.memberId)
+          .pipe(
+            map(() => new LoadEditorialBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   updateEditorialBoardMember$ = this.actions$.ofType(UPDATE_EDITORIAL_BOARD_MEMBER)
     .pipe(
       switchMap((action: UpdateEditorialBoardMember) => {
-        return this.editorialBoardEndpoint.updateEditorialBoardMember(action.memberData);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.editorialBoardEndpoint.updateEditorialBoardMember(action.memberData)
+          .pipe(
+            map(() => new LoadEditorialBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
 
 }

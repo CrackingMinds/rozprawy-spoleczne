@@ -14,10 +14,7 @@ export class Menu {
   }
 
   withPage(page: MenuItem): Menu {
-    this.menuItems.push({
-      ...page,
-      url: `/${page.url}`
-    });
+    this.menuItems.push(page);
     return this;
   }
 

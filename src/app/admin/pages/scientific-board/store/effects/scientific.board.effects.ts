@@ -9,7 +9,8 @@ import {
   ADD_SCIENTIFIC_BOARD_MEMBER, AddScientificBoardMember,
   LOAD_SCIENTIFIC_BOARD,
   LoadScientificBoardFail,
-  LoadScientificBoardSuccess, REMOVE_SCIENTIFIC_BOARD_MEMBER, RemoveScientificBoardMember, UPDATE_SCIENTIFIC_BOARD_MEMBER, UpdateScientificBoardMember
+  LoadScientificBoardSuccess, REMOVE_SCIENTIFIC_BOARD_MEMBER, RemoveScientificBoardMember, UPDATE_SCIENTIFIC_BOARD_MEMBER, UpdateScientificBoardMember,
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadScientificBoard
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
@@ -37,31 +38,51 @@ export class ScientificBoardEffects {
       })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   addScientificBoardMember$ = this.actions$.ofType(ADD_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: AddScientificBoardMember) => {
-        return this.scientificBoardEndpoint.postScientificBoardMember(action.memberData);
+        return this.scientificBoardEndpoint.postScientificBoardMember(action.memberData)
+          .pipe(
+            map(() => new LoadScientificBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
       }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   removeScientificBoardMember$ = this.actions$.ofType(REMOVE_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: RemoveScientificBoardMember) => {
-        return this.scientificBoardEndpoint.deleteScientificBoardMember(action.memberId);
+        return this.scientificBoardEndpoint.deleteScientificBoardMember(action.memberId)
+          .pipe(
+            map(() => new LoadScientificBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
       }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   updateScientificBoardMember$ = this.actions$.ofType(UPDATE_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: UpdateScientificBoardMember) => {
-        return this.scientificBoardEndpoint.updateScientificBoardMember(action.memberData);
+        return this.scientificBoardEndpoint.updateScientificBoardMember(action.memberData)
+          .pipe(
+            map(() => new LoadScientificBoard()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
       }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+
     );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
 
 }

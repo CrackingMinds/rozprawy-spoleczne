@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
@@ -12,9 +12,9 @@ import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
   templateUrl: './admin.dashboard.component.html',
   styleUrls: ['./admin.dashboard.component.scss']
 })
-export class AdminDashboardComponent implements PageComponent {
+export class AdminDashboardComponent extends AdminPageComponent {
 
-  constructor() {}
+  constructor() { super(); }
 
   readonly menuItems: MenuItems = new Menu()
     .withPage(AdminPagesResolver.library())
@@ -24,12 +24,12 @@ export class AdminDashboardComponent implements PageComponent {
     .withPage(AdminPagesResolver.indexing())
     .items;
 
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
-  }
-
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.dashboard().title);
+  }
+
+  isDashboard(): boolean {
+    return true;
   }
 
   composeLink(url: string): string {

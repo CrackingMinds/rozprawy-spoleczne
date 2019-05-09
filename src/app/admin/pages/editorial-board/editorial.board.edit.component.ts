@@ -25,7 +25,7 @@ import {
 import { EditorialBoardMemberControlComponent } from 'app/shared/form-controls/editorial-board-member/editorial.board.member.control.component';
 import { EditorialBoard } from 'app/models/editorial.board';
 import { EditorialBoardMember, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { CustomSorting } from 'app/shared/custom.sorting';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 
@@ -34,7 +34,7 @@ import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resol
 	templateUrl: `editorial.board.edit.component.html`,
   styleUrls: ['./editorial.board.edit.component.scss']
 })
-export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDestroy {
+export class EditorialBoardEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
   contentLoading: boolean;
 
@@ -56,7 +56,7 @@ export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDes
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder,
-              private store: Store<EditorialBoardState>) {}
+              private store: Store<EditorialBoardState>) { super(); }
 
 	ngOnInit() {
 
@@ -80,10 +80,6 @@ export class EditorialBoardEditComponent implements PageComponent, OnInit, OnDes
 	ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
   }
 
   observePageName(): Observable<string> {

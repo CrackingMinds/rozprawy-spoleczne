@@ -29,6 +29,15 @@ html {
   max-width: 680px !important;
 }
 
+.rs-scrollable {
+  height: 100%;
+  overflow: auto;
+
+  &.rs-loading {
+    overflow: hidden;
+  }
+}
+
 @import "partials/page_header";
 @import "partials/footer";
 @import "partials/menu";
@@ -41,3 +50,5 @@ html {
 @import "partials/contact";
 @import "partials/modals/modals";
 @import "partials/pages/pages";
+
+@import "../../../src/app/shared/messages/messages.scss";

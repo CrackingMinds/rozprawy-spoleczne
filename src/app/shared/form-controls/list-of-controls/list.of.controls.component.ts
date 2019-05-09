@@ -151,8 +151,6 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
             controlIndex: index
           });
 
-          this.removeControl(index);
-
         })
 
     } else {

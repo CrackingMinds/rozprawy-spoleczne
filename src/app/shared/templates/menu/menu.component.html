@@ -6,7 +6,7 @@
 </div>
 <ul class="menu-items">
     <li *ngFor="let menuItem of menuItems" class="menu-item" routerLinkActive="active">
-        <a routerLink="{{menuItem.url}}">
+        <a [routerLink]="composeLink(menuItem.url)">
             <p>{{ menuItem.title }}</p>
             <mat-icon class="arrow-icon">keyboard_arrow_right</mat-icon>
         </a>

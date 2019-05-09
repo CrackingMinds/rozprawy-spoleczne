@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 
 import * as reviewersRootSelectors from 'app/admin/pages/reviewers/store/selectors/reviewers.root.selectors';
 
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 import { Reviewers } from 'app/models/reviewer';
 import {
@@ -39,7 +39,7 @@ import { AddReviewerAction, LoadReviewersAction, RemoveReviewerAction, UpdateRev
 	templateUrl: `reviewers.edit.component.html`,
   styleUrls: ['./reviewers.edit.component.scss']
 })
-export class ReviewersEditComponent implements PageComponent, OnInit, OnDestroy {
+export class ReviewersEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
   reviewersLoading$: Observable<boolean>;
   reviewerYearsLoading$: Observable<boolean>;
@@ -54,7 +54,7 @@ export class ReviewersEditComponent implements PageComponent, OnInit, OnDestroy 
 
   private readonly destroy$: Subject<void> = new Subject();
 
-	constructor(private store: Store<ReviewersRootState>) {}
+	constructor(private store: Store<ReviewersRootState>) { super(); }
 
 	ngOnInit() {
 
@@ -74,10 +74,6 @@ export class ReviewersEditComponent implements PageComponent, OnInit, OnDestroy 
 	ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
   }
 
   observePageName(): Observable<string> {
@@ -102,7 +98,7 @@ export class ReviewersEditComponent implements PageComponent, OnInit, OnDestroy 
 
       case ReviewerEventType.REMOVE: {
         const reviewerId = (event as ReviewerRemoveEvent).payload.reviewerId;
-        this.store.dispatch(new RemoveReviewerAction(reviewerId));
+        this.store.dispatch(new RemoveReviewerAction({ reviewerId: reviewerId, yearId: this.selectedYearId }));
         break;
       }
 

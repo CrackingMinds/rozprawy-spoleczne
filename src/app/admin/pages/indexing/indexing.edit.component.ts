@@ -27,7 +27,7 @@ import {
 
 import { IndexingInfoItemControlComponent } from 'app/shared/form-controls/indexing-info-item/indexing.info.item.control.component';
 
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
@@ -36,7 +36,7 @@ import { CustomSorting } from 'app/shared/custom.sorting';
 	templateUrl: `indexing.edit.component.html`,
   styleUrls: ['./indexing.edit.component.scss']
 })
-export class IndexingEditComponent implements PageComponent, OnInit, OnDestroy {
+export class IndexingEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
   contentLoading: boolean = false;
 
@@ -58,7 +58,7 @@ export class IndexingEditComponent implements PageComponent, OnInit, OnDestroy {
   private readonly destroy$: Subject<void> = new Subject<void>();
 
 	constructor(private formBuilder: FormBuilder,
-              private store: Store<IndexingState>) {}
+              private store: Store<IndexingState>) { super(); }
 
 	ngOnInit() {
 	  this.store.select(indexingInfoSelectors.getIndexingInfoLoading)
@@ -81,10 +81,6 @@ export class IndexingEditComponent implements PageComponent, OnInit, OnDestroy {
 	ngOnDestroy() {
 	  this.destroy$.next();
 	  this.destroy$.complete();
-  }
-
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
   }
 
   observePageName(): Observable<string> {

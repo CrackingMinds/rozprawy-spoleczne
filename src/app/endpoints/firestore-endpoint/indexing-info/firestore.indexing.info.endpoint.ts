@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 
@@ -25,7 +25,8 @@ export class FirestoreIndexingInfoEndpoint extends IndexingInfoEndpoint {
             id: a.payload.doc.id,
             ...data
           };
-        }))
+        })),
+        take(1)
       );
   }
 

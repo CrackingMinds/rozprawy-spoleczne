@@ -20,6 +20,8 @@ const deleteActionName = 'Remove Reviewer';
 export const REMOVE_REVIEWER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_REVIEWER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
 
+export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
+
 export class AddReviewerAction implements Action {
   readonly type: string = ADD_REVIEWER;
   constructor(public readonly newReviewerData: NewReviewer) {}
@@ -57,11 +59,16 @@ export class UpdateReviewerFailAction implements Action {
 
 export class RemoveReviewerAction implements Action {
   readonly type: string = REMOVE_REVIEWER;
-  constructor(public readonly reviewerId: string) {}
+  constructor(public readonly payload: { reviewerId: string, yearId: string }) {}
 }
 
 export class RemoveReviewerFailAction implements Action {
   readonly type: string = REMOVE_REVIEWER_FAIL;
+  constructor(public readonly error: any) {}
+}
+
+export class EndpointCallFailAction implements Action {
+  readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
 }
 
@@ -77,4 +84,6 @@ export type ReviewerAction =
   UpdateReviewerFailAction |
 
   RemoveReviewerAction |
-  RemoveReviewerFailAction;
+  RemoveReviewerFailAction |
+
+  EndpointCallFailAction;

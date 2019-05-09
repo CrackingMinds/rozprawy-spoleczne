@@ -30,4 +30,16 @@
     }
   }
 
+  .rs-back-to-dashboard {
+    margin-right: auto;
+  }
+
+  .rs-anonymous-indicator {
+    margin-right: $universal-padding;
+    border: 2px solid $black;
+    border-radius: $border-radius;
+    padding: ($universal-padding-half / 2) $universal-padding-half;
+    pointer-events: none;
+  }
+
 }

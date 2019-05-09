@@ -10,7 +10,8 @@ import {
   AddReviewerAction,
   LOAD_REVIEWERS, LoadReviewersAction,
   LoadReviewersFailAction,
-  LoadReviewersSuccessAction, REMOVE_REVIEWER, RemoveReviewerAction, UPDATE_REVIEWER, UpdateReviewerAction
+  LoadReviewersSuccessAction, REMOVE_REVIEWER, RemoveReviewerAction, UPDATE_REVIEWER, UpdateReviewerAction,
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction
 } from 'app/admin/pages/reviewers/store/actions/reviewers.actions';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
@@ -38,31 +39,48 @@ export class ReviewersEffects {
       })
     );
 
-	@Effect({ dispatch: false })
+	@Effect()
   addReviewer$ = this.actions$.ofType(ADD_REVIEWER)
     .pipe(
       switchMap((action: AddReviewerAction) => {
-        return this.reviewersEndpoint.postReviewer(action.newReviewerData);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.reviewersEndpoint.postReviewer(action.newReviewerData)
+          .pipe(
+            map(() => new LoadReviewersAction({ reviewerYearId: action.newReviewerData.yearId })),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-	@Effect({ dispatch: false })
+	@Effect()
   removeReviewer$ = this.actions$.ofType(REMOVE_REVIEWER)
     .pipe(
       switchMap((action: RemoveReviewerAction) => {
-        return this.reviewersEndpoint.deleteReviewer(action.reviewerId);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.reviewersEndpoint.deleteReviewer(action.payload.reviewerId)
+          .pipe(
+            map(() => new LoadReviewersAction({ reviewerYearId: action.payload.yearId })),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-	@Effect({ dispatch: false })
+	@Effect()
   updateReviewer$ = this.actions$.ofType(UPDATE_REVIEWER)
     .pipe(
       switchMap((action: UpdateReviewerAction) => {
-        return this.reviewersEndpoint.updateReviewer(action.updatedReviewerData);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.reviewersEndpoint.updateReviewer(action.updatedReviewerData)
+          .pipe(
+            map(() => new LoadReviewersAction({ reviewerYearId: action.updatedReviewerData.yearId })),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
 
 }

@@ -7,8 +7,8 @@ import { Actions, Effect } from '@ngrx/effects';
 
 import {
   CREATE_ISSUE,
-  CreateIssue,
-  LOAD_ISSUES,
+  CreateIssue, ENDPOINT_CALL_FAIL, EndpointCallFailAction,
+  LOAD_ISSUES, LoadIssues,
   LoadIssuesFail,
   LoadIssuesSuccess,
   RELOAD_ISSUE,
@@ -51,36 +51,54 @@ export class IssueEffects {
                        switchMap((action: ReloadIssue) => {
                          return this.issueEndpoint.getIssue(action.issueId)
                            .pipe(
-                             map((issue: Issue) => new ReloadIssueSuccess(issue))
+                             map((issue: Issue) => new ReloadIssueSuccess(issue)),
+                             catchError(error => of(new EndpointCallFailAction(error)))
                            );
-                       }),
-                       catchError(error => this.endpointErrorHandler.handle(error))
+                       })
                      );
 
-  @Effect({ dispatch: false })
+  @Effect()
   createIssues$ = this.actions$.ofType(CREATE_ISSUE)
                       .pipe(
                         switchMap((action: CreateIssue) => {
-                          return this.issueEndpoint.postIssue(action.issue);
-                        }),
-                        catchError(error => this.endpointErrorHandler.handle(error))
+                          return this.issueEndpoint.postIssue(action.issue)
+                            .pipe(
+                              map(() => new LoadIssues()),
+                              catchError(error => of(new EndpointCallFailAction(error)))
+                            );
+                        })
                       );
 
-  @Effect({ dispatch: false })
+  @Effect()
   removeIssue$ = this.actions$.ofType(REMOVE_ISSUE)
                      .pipe(
                        switchMap((action: RemoveIssue) => {
-                         return this.issueEndpoint.deleteIssue(action.issueId);
-                       }),
-                       catchError(error => this.endpointErrorHandler.handle(error))
+                         return this.issueEndpoint.deleteIssue(action.issueId)
+                           .pipe(
+                             map(() => new LoadIssues()),
+                             catchError(error => of(new EndpointCallFailAction(error)))
+                           );
+                       })
                      );
 
-  @Effect({ dispatch: false })
+  @Effect()
   updateIssue$ = this.actions$.ofType(UPDATE_ISSUE)
                      .pipe(
                        switchMap((action: UpdateIssue) => {
-                         return this.issueEndpoint.updateIssue(action.issue);
-                       }),
-                       catchError(error => this.endpointErrorHandler.handle(error))
+                         return this.issueEndpoint.updateIssue(action.issue)
+                           .pipe(
+                             map(() => new LoadIssues()),
+                             catchError(error => of(new EndpointCallFailAction(error)))
+                           );
+                       })
                      );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
+
 }

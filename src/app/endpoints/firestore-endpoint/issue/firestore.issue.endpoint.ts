@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of, zip, Observer } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, Observer, zip } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 
 import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
 
@@ -43,7 +43,8 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
               return this.addArticleInfo(issue);
             })
           );
-        })
+        }),
+        take(1)
       );
 
   }
@@ -69,7 +70,8 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
               return this.addArticleInfo(issue);
             })
           );
-        })
+        }),
+        take(1)
       );
 
     return issues$
@@ -94,9 +96,12 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
                                         })
                                       );
     return issueEntity$
-      .pipe(switchMap((entity) => {
-        return this.addArticleInfo(entity);
-      }));
+      .pipe(
+        switchMap((entity) => {
+          return this.addArticleInfo(entity);
+        }),
+        take(1)
+      );
   }
 
   getCurrentIssue(): Observable<Issue> {
@@ -165,9 +170,12 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
                                            })
                                          );
     return issueEntity$
-      .pipe(switchMap((entity) => {
-        return this.addArticleInfo(entity);
-      }));
+      .pipe(
+        switchMap((entity) => {
+          return this.addArticleInfo(entity);
+        }),
+        take(1)
+      );
   }
 
   private addArticleInfo(issue: IssueEntityWithId): Observable<Issue> {

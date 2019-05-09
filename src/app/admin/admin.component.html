@@ -1,0 +1,15 @@
+<div class="rs-admin-header">
+  <a *ngIf="showBackToDashboardLink" class="rs-back-to-dashboard" mat-stroked-button [routerLink]="composeDashboardLink()">
+    Do panelu administratora
+  </a>
+  <span *ngIf="viewingAsAnonymous" class="rs-anonymous-indicator">
+          Viewing as anonymous
+        </span>
+  <button mat-raised-button color="primary" (click)="logOut()">Wyloguj</button>
+</div>
+<div class="rs-page-header">
+  <h3 class="rs-page-title">{{ pageName }}</h3>
+</div>
+<router-outlet
+  (activate)="onActivate($event)">
+</router-outlet>

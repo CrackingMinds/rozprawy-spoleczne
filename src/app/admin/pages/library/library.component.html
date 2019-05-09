@@ -6,7 +6,7 @@
   </mat-progress-spinner>
 </div>
 
-<div class="rs-list-of-issues-container">
+<div class="rs-scrollable rs-list-of-issues-container" [class.rs-loading]="issuesLoading$ | async">
   <div *ngIf="issuesLoading$ | async" class="rs-spinner-wrapper">
     <mat-progress-spinner class="rs-progress-spinner"
                           mode="indeterminate"
@@ -23,7 +23,7 @@
   </rs-list-of-issues>
 </div>
 
-<div class="rs-list-of-articles-container">
+<div class="rs-scrollable rs-list-of-articles-container" [class.rs-loading]="articlesLoading$ | async">
   <div *ngIf="articlesLoading$ | async" class="rs-spinner-wrapper">
     <mat-progress-spinner class="rs-progress-spinner"
                           mode="indeterminate"

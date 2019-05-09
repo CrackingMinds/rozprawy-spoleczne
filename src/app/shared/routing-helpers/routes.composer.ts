@@ -11,7 +11,11 @@ export class RoutesComposer {
   }
 
   static composeAdminRouterLink(url: string): string {
-    return `/${AdminRoutesResolver.admin()}${url}`;
+    return `/${AdminRoutesResolver.admin()}/${url}`;
+  }
+
+  static composeClientRouterLink(url: string): string {
+    return `/${url}`;
   }
 
 }

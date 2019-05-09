@@ -8,6 +8,8 @@ import { Actions, Effect } from '@ngrx/effects';
 import {
   CREATE_ARTICLE,
   CreateArticle,
+  ENDPOINT_CALL_FAIL,
+  EndpointCallFailAction,
   LOAD_ARTICLES,
   LoadArticles,
   LoadArticlesFail,
@@ -52,19 +54,25 @@ export class ArticleEffects {
                          switchMap((action: CreateArticle) => {
                            return this.articleEndpoint.postArticle(action.article)
                                       .pipe(
-                                        map(() => new ReloadIssue(action.article.issueId))
+                                        switchMap(() => [
+                                          new ReloadIssue(action.article.issueId),
+                                          new LoadArticles(action.article.issueId)
+                                        ]),
+                                        catchError(error => of(new EndpointCallFailAction(error)))
                                       );
-                         }),
-                         catchError(error => this.endpointErrorHandler.handle(error))
+                         })
                        );
 
-  @Effect({ dispatch: false })
+  @Effect()
   updateArticle$ = this.actions$.ofType(UPDATE_ARTICLE)
                        .pipe(
                          switchMap((action: UpdateArticle) => {
-                            return this.articleEndpoint.updateArticle(action.updatedArticle);
-                         }),
-                         catchError(error => this.endpointErrorHandler.handle(error))
+                            return this.articleEndpoint.updateArticle(action.updatedArticle)
+                              .pipe(
+                                map(() => new LoadArticles(action.updatedArticle.issueId)),
+                                catchError(error => of(new EndpointCallFailAction(error)))
+                              );
+                         })
                        );
 
   @Effect()
@@ -73,9 +81,21 @@ export class ArticleEffects {
                          switchMap((action: RemoveArticle) => {
                            return this.articleEndpoint.deleteArticle(action.article)
                                       .pipe(
-                                        map(() => new ReloadIssue(action.article.issueId))
+                                        switchMap(() => [
+                                          new ReloadIssue(action.article.issueId),
+                                          new LoadArticles(action.article.issueId)
+                                        ]),
+                                        catchError(error => of(new EndpointCallFailAction(error)))
                                       );
-                         }),
-                         catchError(error => this.endpointErrorHandler.handle(error))
+                         })
                        );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
+
 }

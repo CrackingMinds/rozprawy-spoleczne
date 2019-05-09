@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { ArticleType } from 'app/models/article.type';
@@ -22,7 +22,8 @@ export class FirestoreArticleEndpoint extends ArticleEndpoint {
       .pipe(
         switchMap((untypedArticles: UntypedArticle[]) => {
           return this.replaceTypeIdsWithTypes(untypedArticles);
-        })
+        }),
+        take(1)
       );
   }
 
@@ -34,7 +35,8 @@ export class FirestoreArticleEndpoint extends ArticleEndpoint {
             .pipe(
               map((articles: Article[]) => articles[0])
             )
-        })
+        }),
+        take(1)
       );
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, Observer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 
@@ -46,7 +46,8 @@ export class FirestoreScientificBoardEndpoint extends ScientificBoardEndpoint {
             id: a.payload.doc.id,
             ...data
           };
-        }))
+        })),
+        take(1)
       );
 
   }

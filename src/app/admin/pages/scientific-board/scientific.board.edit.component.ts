@@ -17,7 +17,7 @@ import {
 } from 'app/shared/form-controls/list-of-controls/list.of.controls';
 
 import { ScientificBoardMemberControlComponent } from 'app/shared/form-controls/scientific-board-member/scientific.board.member.control.component';
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 import { ScientificBoard } from 'app/models/scientific.board';
 import { NewScientificBoardMember, ScientificBoardMember, UpdatedScientificBoardMember } from 'app/models/scientific-board-member';
@@ -33,7 +33,7 @@ import { CustomSorting } from 'app/shared/custom.sorting';
 	templateUrl: `scientific.board.edit.component.html`,
   styleUrls: ['./scientific.board.edit.component.scss']
 })
-export class ScientificBoardEditComponent implements PageComponent, OnInit {
+export class ScientificBoardEditComponent extends AdminPageComponent implements OnInit {
 
   contentLoading: boolean;
 
@@ -55,9 +55,7 @@ export class ScientificBoardEditComponent implements PageComponent, OnInit {
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder,
-              private store: Store<ScientificBoardState>) {
-
-	}
+              private store: Store<ScientificBoardState>) { super(); }
 
 	ngOnInit() {
     this.store.select(scientificBoardSelectors.getScientificBoardLoading)
@@ -80,10 +78,6 @@ export class ScientificBoardEditComponent implements PageComponent, OnInit {
 	ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
   }
 
   observePageName(): Observable<string> {

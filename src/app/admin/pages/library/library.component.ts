@@ -16,7 +16,7 @@ import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { Utils } from 'app/shared/utils';
-import { PageComponent } from 'app/client/pages/page.component';
+import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 
 @Component({
@@ -24,7 +24,7 @@ import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resol
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss']
 })
-export class LibraryComponent implements PageComponent, OnInit, OnDestroy {
+export class LibraryComponent extends AdminPageComponent implements OnInit, OnDestroy {
   issues: Issue[];
   articles: Article[];
 
@@ -37,8 +37,7 @@ export class LibraryComponent implements PageComponent, OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
-              private store: Store<LibraryState>) {
-  }
+              private store: Store<LibraryState>) { super(); }
 
   ngOnInit() {
 
@@ -71,10 +70,6 @@ export class LibraryComponent implements PageComponent, OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  observeContentLoading(): Observable<boolean> {
-    return of(false);
   }
 
   observePageName(): Observable<string> {

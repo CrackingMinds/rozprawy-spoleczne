@@ -11,7 +11,8 @@ import {
   REMOVE_EDITORIAL_BOARD_MEMBER,
   REMOVE_EDITORIAL_BOARD_MEMBER_FAIL,
   UPDATE_EDITORIAL_BOARD_MEMBER,
-  UPDATE_EDITORIAL_BOARD_MEMBER_FAIL
+  UPDATE_EDITORIAL_BOARD_MEMBER_FAIL,
+  ENDPOINT_CALL_FAIL
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 
 import { EditorialBoard } from 'app/models/editorial.board';
@@ -101,6 +102,13 @@ export function reducer(state = initialState, action: EditorialBoardAction): Edi
         loading: false,
         loaded: false
       };
+    }
+
+    case ENDPOINT_CALL_FAIL: {
+      return {
+        ...state,
+        loading: false
+      }
     }
 
   }

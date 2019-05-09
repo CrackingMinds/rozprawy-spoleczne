@@ -17,6 +17,8 @@ export const UPDATE_ARTICLE_FAIL = `${ACTION_PREFIX} Update Article Fail`;
 export const REMOVE_ARTICLE = `${ACTION_PREFIX} Remove Article`;
 export const REMOVE_ARTICLE_FAIL = `${ACTION_PREFIX} Remove Article Fail`;
 
+export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
+
 export class LoadArticles implements Action {
   readonly type: string = LOAD_ARTICLES;
   constructor(public issueId: string) {}
@@ -62,6 +64,11 @@ export class RemoveArticleFail implements Action {
   constructor(public error: any) {}
 }
 
+export class EndpointCallFailAction implements Action {
+  readonly type: string = ENDPOINT_CALL_FAIL;
+  constructor(public readonly error: any) {}
+}
+
 export type ArticleAction =
   LoadArticles|
   LoadArticlesSuccess |
@@ -71,4 +78,6 @@ export type ArticleAction =
   CreateArticleFail |
 
   RemoveArticle |
-  RemoveArticleFail;
+  RemoveArticleFail |
+
+  EndpointCallFailAction;

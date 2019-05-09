@@ -9,7 +9,8 @@ import {
   ADD_INDEXING_INFO_ITEM, AddIndexingInfoItemAction,
   LOAD_INDEXING_INFO,
   LoadIndexingInfoFailAction,
-  LoadIndexingInfoSuccessAction, REMOVE_INDEXING_INFO_ITEM, RemoveIndexingInfoItemAction, UPDATE_INDEXING_INFO_ITEM, UpdateIndexingInfoItemAction
+  LoadIndexingInfoSuccessAction, REMOVE_INDEXING_INFO_ITEM, RemoveIndexingInfoItemAction, UPDATE_INDEXING_INFO_ITEM, UpdateIndexingInfoItemAction,
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadIndexingInfoAction
 } from 'app/admin/pages/indexing/store/actions/indexing.actions';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
@@ -37,31 +38,48 @@ export class IndexingEffects {
       })
     );
 
-	@Effect({ dispatch: false })
+	@Effect()
   addIndexingInfoItem$ = this.actions$.ofType(ADD_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: AddIndexingInfoItemAction) => {
-        return this.indexingInfoEndpoint.postIndexingInfoItem(action.payload.newIndexingInfoItem);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.indexingInfoEndpoint.postIndexingInfoItem(action.payload.newIndexingInfoItem)
+          .pipe(
+            map(() => new LoadIndexingInfoAction()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   removeIndexingInfoItem$ = this.actions$.ofType(REMOVE_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: RemoveIndexingInfoItemAction) => {
-        return this.indexingInfoEndpoint.deleteIndexingInfoItem(action.payload.indexingInfoItemId);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.indexingInfoEndpoint.deleteIndexingInfoItem(action.payload.indexingInfoItemId)
+          .pipe(
+            map(() => new LoadIndexingInfoAction()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
 
-  @Effect({ dispatch: false })
+  @Effect()
   updateIndexingInfoItem$ = this.actions$.ofType(UPDATE_INDEXING_INFO_ITEM)
     .pipe(
       switchMap((action: UpdateIndexingInfoItemAction) => {
-        return this.indexingInfoEndpoint.updateIndexingInfoItem(action.payload.updatedIndexingInfoItem);
-      }),
-      catchError(error => this.endpointErrorHandler.handle(error))
+        return this.indexingInfoEndpoint.updateIndexingInfoItem(action.payload.updatedIndexingInfoItem)
+          .pipe(
+            map(() => new LoadIndexingInfoAction()),
+            catchError(error => of(new EndpointCallFailAction(error)))
+          );
+      })
     );
+
+  @Effect({ dispatch: false })
+  endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)
+                          .pipe(
+                            switchMap((action: EndpointCallFailAction) => {
+                              return this.endpointErrorHandler.handle(action.error);
+                            })
+                          );
 
 }

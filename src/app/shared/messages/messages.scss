@@ -1,0 +1,15 @@
+@import "variables";
+
+.rs-message-snack-bar {
+  background-color: $white;
+
+  .mat-simple-snackbar {
+    font-weight: bold;
+    color: $red;
+  }
+
+  .mat-simple-snackbar-action {
+    color: $main-blue-color;
+  }
+
+}
