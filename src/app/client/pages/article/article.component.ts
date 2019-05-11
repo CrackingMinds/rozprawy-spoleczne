@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, Subject, BehaviorSubject, combineLatest } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { allFalsy } from 'app/shared/custom.observable.creators';
+import { firstTrue } from 'app/shared/custom.operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 import { Article } from 'app/models/article';
@@ -52,18 +55,11 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return combineLatest(
+  observePageLoaded(): Observable<void> {
+    return allFalsy(
       this.issueLoading$,
       this.articleLoading$
-    ).pipe(
-      map((data: Array<boolean>) => {
-        const issueLoading = data[0];
-        const articleLoading = data[1];
-
-        return issueLoading || articleLoading;
-      })
-    );
+    ).pipe(firstTrue());
   }
 
   observePageName(): Observable<string> {

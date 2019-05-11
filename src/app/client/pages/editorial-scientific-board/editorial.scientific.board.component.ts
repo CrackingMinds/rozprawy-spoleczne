@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subject, Observable, of, ReplaySubject, combineLatest } from 'rxjs';
+import { Subject, Observable, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+
+import { allFalsy } from 'app/shared/custom.observable.creators';
+import { firstTrue } from 'app/shared/custom.operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 import { CustomSorting } from 'app/shared/custom.sorting';
@@ -67,18 +70,11 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return combineLatest(
+  observePageLoaded(): Observable<void> {
+    return allFalsy(
       this.editorialBoardLoading$.asObservable(),
       this.scientificBoardLoading$.asObservable()
-    ).pipe(
-      map((data: Array<boolean>) => {
-        const editorialBoardLoading: boolean = data[0];
-        const scientificBoardLoading: boolean = data[1];
-
-        return editorialBoardLoading || scientificBoardLoading;
-      })
-    );
+    ).pipe(firstTrue());
   }
 
   observePageName(): Observable<string> {

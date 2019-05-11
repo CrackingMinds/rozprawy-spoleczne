@@ -5,7 +5,7 @@ import {
   ADD_REVIEWER_FAIL,
   LOAD_REVIEWERS, LOAD_REVIEWERS_FAIL,
   LOAD_REVIEWERS_SUCCESS, LoadReviewersSuccessAction, REMOVE_REVIEWER, REMOVE_REVIEWER_FAIL,
-  ReviewerAction, ENDPOINT_CALL_FAIL
+  ReviewerAction, ENDPOINT_CALL_FAIL, RESET_REVIEWERS_STATE
 } from 'app/admin/pages/reviewers/store/actions/reviewers.actions';
 
 import { Reviewers } from 'app/models/reviewer';
@@ -79,6 +79,10 @@ export function reducer(state = initialState, action: ReviewerAction): Reviewers
         loading: false,
         loaded: false
       };
+    }
+
+    case RESET_REVIEWERS_STATE: {
+      return initialState;
     }
 
     case ENDPOINT_CALL_FAIL: {

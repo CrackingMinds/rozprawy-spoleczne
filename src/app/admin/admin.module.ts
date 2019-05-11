@@ -8,6 +8,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 import { MatButtonModule } from '@angular/material';
 
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
+
 import { adminReducer } from 'app/admin/store/admin.reducer';
 
 import { environment } from 'environments/environment';
@@ -45,6 +47,8 @@ const devOnlyModules = [
     StoreRouterConnectingModule,
 
     MatButtonModule,
+
+    SpinnerModule,
 
     AdminRoutingModule,
 

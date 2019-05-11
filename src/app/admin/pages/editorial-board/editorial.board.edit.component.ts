@@ -6,13 +6,15 @@ import { takeUntil, map } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import * as editorialBoardSelectors from 'app/admin/pages/editorial-board/store/selectors/editorial.board.selectors';
 import { EditorialBoardState } from 'app/admin/pages/editorial-board/store/reducers/editorial.board.reducer';
 
 import {
   AddEditorialBoardMember,
   LoadEditorialBoard,
-  RemoveEditorialBoardMember,
+  RemoveEditorialBoardMember, ResetEditorialBoardStateAction,
   UpdateEditorialBoardMember
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 
@@ -36,8 +38,6 @@ import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resol
 })
 export class EditorialBoardEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
-  contentLoading: boolean;
-
   control: Type<ListOfControlsControl> = EditorialBoardMemberControlComponent;
 
   form: FormGroup = this.formBuilder.group({
@@ -51,6 +51,8 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
     return this.form.get('editorialBoardMembers') as FormArray;
   }
 
+  readonly contentLoading$: Subject<boolean> = new Subject<boolean>();
+
   private editorialBoard: EditorialBoard;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -59,10 +61,9 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
               private store: Store<EditorialBoardState>) { super(); }
 
 	ngOnInit() {
-
     this.store.select(editorialBoardSelectors.getEditorialBoardLoading)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((loading: boolean) => this.contentLoading = loading);
+        .subscribe((loading: boolean) => this.contentLoading$.next(loading));
 
     this.store.select(editorialBoardSelectors.getEditorialBoard)
         .pipe(
@@ -80,10 +81,16 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
 	ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.resetState();
   }
 
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.editorialBoard().title);
+  }
+
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
   onEditorialBoardMemberUpdate(event: ListOfControlsValueUpdate<UpdatedEditorialBoardMember>): void {
@@ -125,6 +132,10 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
 
   private getMemberByIndex(index: number): EditorialBoardMember {
     return this.editorialBoard[index];
+  }
+
+  private resetState(): void {
+    this.store.dispatch(new ResetEditorialBoardStateAction());
   }
 
 }

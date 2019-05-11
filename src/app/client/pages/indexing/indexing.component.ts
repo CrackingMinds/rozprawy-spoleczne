@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { PageComponent } from 'app/client/pages/page.component';
 
 import { IndexingInfo, IndexingInfoItem } from 'app/models/indexing';
@@ -48,8 +50,8 @@ export class IndexingComponent extends PageComponent implements OnInit, OnDestro
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.indexingInfoLoading$.asObservable();
+  observePageLoaded(): Observable<void> {
+    return this.indexingInfoLoading$.asObservable().pipe(firstFalse());
   }
 
   observePageName(): Observable<string> {

@@ -1,8 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
-import { first, takeUntil, filter, map } from 'rxjs/operators';
+import { filter, first, map, takeUntil } from 'rxjs/operators';
+
+import { withMinDuration } from 'app/shared/custom.operators';
 
 import { User } from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -16,20 +18,21 @@ import { AdminRoutesResolver } from 'app/shared/routing-helpers/admin.routes.res
 @Component({
   selector: 'rs-admin',
   templateUrl: `./admin.component.html`,
-  styleUrls: ['./admin.component.scss']
+  styleUrls: ['./admin.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
   pageName: string;
+  pageLoading: boolean = true;
 
   viewingAsAnonymous: boolean = false;
-
   showBackToDashboardLink: boolean = false;
 
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private firebaseAuth: AngularFireAuth,
-              private router: Router,
+  constructor(private router: Router,
+              private firebaseAuth: AngularFireAuth,
               private pageNameService: PageNameService) {}
 
   ngOnInit() {
@@ -60,8 +63,18 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.pageNameService.setPageName(this.pageName);
       });
 
-    this.showBackToDashboardLink = !page.isDashboard();
+    page.observePageLoaded()
+        .pipe(
+          withMinDuration(),
+          first()
+        )
+        .subscribe(() => this.pageLoading = false);
 
+    this.showBackToDashboardLink = !page.isDashboard();
+  }
+
+  onDeactivate(page: AdminPageComponent): void {
+    this.pageLoading = true;
   }
 
   composeDashboardLink(): string {

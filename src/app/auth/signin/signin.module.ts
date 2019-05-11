@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/material';
+
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
 
 import { SigninComponent } from 'app/auth/signin/signin.component';
 
@@ -24,7 +26,8 @@ const declarations = [
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+
+    SpinnerModule
   ]
 })
 export class SigninModule {

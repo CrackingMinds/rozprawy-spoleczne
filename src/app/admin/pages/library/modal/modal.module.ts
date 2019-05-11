@@ -1,7 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatProgressSpinnerModule, MatDialogModule, MatButtonModule } from '@angular/material';
+import { MatDialogModule, MatButtonModule } from '@angular/material';
+
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
 
 import { ModalComponent } from 'app/admin/pages/library/modal/modal.component';
 import { ModalService } from 'app/admin/pages/library/modal/modal.service';
@@ -20,7 +22,8 @@ const providers = [
 
     MatDialogModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+
+    SpinnerModule
   ],
   declarations: declarations,
   exports: declarations,

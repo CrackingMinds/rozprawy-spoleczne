@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
 
-import { withMinDuration } from 'app/shared/custom.operators';
+import { firstFalse, withMinDuration } from 'app/shared/custom.operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 
@@ -15,19 +15,26 @@ import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/rev
 import { ReviewerYear, ReviewerYears, ReviewerYearType } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
+type YearData = {
+  isLoading: boolean;
+  reviewers: Reviewers
+};
+
 @Component({
   selector: 'rs-reviewers',
-  templateUrl: './reviewers.component.html'
+  templateUrl: './reviewers.component.html',
+  styleUrls: ['./reviewers.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ReviewersComponent extends PageComponent implements OnInit, OnDestroy {
 
-  private yearToReviewersMap: { [year: string]: Reviewers } = {};
+  yearData: { [yearId: string]: YearData } = {};
 
   private reviewerYears: ReviewerYears;
 
   private expandedYearId: string;
 
-  private readonly contentLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly contentLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
@@ -45,8 +52,8 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.contentLoading$.asObservable();
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
   observePageName(): Observable<string> {
@@ -62,7 +69,13 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
   }
 
   getReviewersForYear(yearId: string): Reviewers {
-    const reviewers = this.yearToReviewersMap[yearId];
+    const yearData = this.yearData[yearId];
+
+    if (!yearData) {
+      return [];
+    }
+
+    const reviewers = yearData.reviewers;
 
     if (!reviewers)
       return [];
@@ -80,12 +93,26 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
 
   onYearExpanded(yearId: string): void {
     this.expandedYearId = yearId;
+
     this.contentLoading$.next(true);
+    this.setReviewerYearLoading(this.getExpandedYearId(), true);
+
     this.fetchReviewers()
-        .pipe(withMinDuration(250))
-        .subscribe(() => {
+        .pipe(withMinDuration(700))
+        .subscribe((reviewers: Reviewers) => {
+          this.setReviewersForYear(this.getExpandedYearId(), reviewers);
+          this.setReviewerYearLoading(this.getExpandedYearId(), false);
           this.contentLoading$.next(false);
         });
+  }
+
+  checkIfShouldShowSpinner(yearId: string): boolean {
+    const yearData = this.yearData[yearId];
+    if (!yearData) {
+      return false;
+    } else {
+      return yearData.isLoading && this.checkIfYearExpanded(yearId);
+    }
   }
 
   private fetchReviewerYears(): void {
@@ -98,27 +125,30 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
           this.reviewerYears = reviewerYears;
 
           this.reviewerYears.forEach((reviewerYear: ReviewerYearType) => {
-            this.yearToReviewersMap[reviewerYear.value] = [];
+            this.yearData[reviewerYear.id] = {
+              isLoading: false,
+              reviewers: []
+            };
           });
 
           this.expandedYearId = this.reviewerYears[0].id;
         });
   }
 
-  private fetchReviewers(): Observable<void> {
-    const reviewers$ = this.reviewersEndpoint.getReviewers(this.getExpandedYearId())
+  private fetchReviewers(): Observable<Reviewers> {
+    return this.reviewersEndpoint.getReviewers(this.getExpandedYearId())
                            .pipe(
                              first(),
                              map((reviewers: Reviewers) => [...reviewers].sort(CustomSorting.byCustomOrder))
                            );
+  }
 
-    reviewers$
-      .subscribe((reviewers: Reviewers) => {
-        this.yearToReviewersMap[this.getExpandedYearId()] = reviewers;
-      });
+  private setReviewerYearLoading(yearId: string, loading: boolean): void {
+    this.yearData[yearId].isLoading = loading;
+  }
 
-    return reviewers$
-      .pipe(map(() => null));
+  private setReviewersForYear(yearId: string, reviewers: Reviewers): void {
+    this.yearData[yearId].reviewers = reviewers;
   }
 
 }

@@ -6,25 +6,29 @@
     <mat-expansion-panel *ngFor="let year of getReviewerYears()"
                          [expanded]="checkIfYearExpanded(year.id)"
                          (opened)="onYearExpanded(year.id)"
-                         class="year">
+                         class="year"
+                         [class.rs-loading-year-data]="checkIfShouldShowSpinner(year.id)">
       <mat-expansion-panel-header>
         <mat-panel-title class="year-number">
           {{ year.value }}
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <p *ngIf="!checkIfReviewersForYearExist(year.id); else reviewersList">Brak recenzentów w wybranym roku</p>
+      <rs-spinner
+        [visible]="checkIfShouldShowSpinner(year.id)">
+        <p *ngIf="!checkIfReviewersForYearExist(year.id); else reviewersList">Brak recenzentów w wybranym roku</p>
 
-      <ng-template #reviewersList>
-        <ul class="reviewers-list">
-          <li *ngFor="let reviewer of getReviewersForYear(year.id)" class="reviewer">
-            <span>{{ reviewer.title }} </span>
-            <span>{{ reviewer.person.firstName }} </span>
-            <span>{{ reviewer.person.lastName }}</span>
-            <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
-          </li>
-        </ul>
-      </ng-template>
+        <ng-template #reviewersList>
+          <ul class="reviewers-list">
+            <li *ngFor="let reviewer of getReviewersForYear(year.id)" class="reviewer">
+              <span>{{ reviewer.title }} </span>
+              <span>{{ reviewer.person.firstName }} </span>
+              <span>{{ reviewer.person.lastName }}</span>
+              <span *ngIf="reviewer.additionalInfo">, {{ reviewer.additionalInfo }}</span>
+            </li>
+          </ul>
+        </ng-template>
+      </rs-spinner>
 
     </mat-expansion-panel>
   </mat-accordion>

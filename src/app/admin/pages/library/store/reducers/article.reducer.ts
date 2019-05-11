@@ -6,7 +6,7 @@ import {
   CREATE_ARTICLE_FAIL, ENDPOINT_CALL_FAIL,
   LOAD_ARTICLES,
   LOAD_ARTICLES_FAIL,
-  LOAD_ARTICLES_SUCCESS, LoadArticlesSuccess, REMOVE_ARTICLE, UPDATE_ARTICLE, UPDATE_ARTICLE_FAIL
+  LOAD_ARTICLES_SUCCESS, LoadArticlesSuccess, REMOVE_ARTICLE, RESET_ARTICLES_STATE, UPDATE_ARTICLE, UPDATE_ARTICLE_FAIL
 } from 'app/admin/pages/library/store/actions/article.actions';
 
 export interface ArticlesState {
@@ -84,6 +84,10 @@ export function reducer(state = initialState, action: ArticleAction): ArticlesSt
         ...state,
         loading: true
       }
+    }
+
+    case RESET_ARTICLES_STATE: {
+      return initialState;
     }
 
     case ENDPOINT_CALL_FAIL: {

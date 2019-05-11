@@ -3,6 +3,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { IContactInfo } from 'app/models/contact-info';
 
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
@@ -56,8 +58,8 @@ export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.contentLoading$.asObservable();
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
   composeLink(url: string): string {

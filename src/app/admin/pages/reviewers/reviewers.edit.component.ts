@@ -1,9 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Observable, of, Subject, zip } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
+
+import { allFalsy } from 'app/shared/custom.observable.creators';
+import { firstTrue } from 'app/shared/custom.operators';
 
 import * as reviewersRootSelectors from 'app/admin/pages/reviewers/store/selectors/reviewers.root.selectors';
 
@@ -29,22 +32,30 @@ import {
   AddReviewerYearAction,
   LoadReviewerYearsAction,
   RemoveReviewerYearAction,
+  ResetReviewerYearsStateAction,
   UpdateReviewerYearAction
 } from 'app/admin/pages/reviewers/store/actions/reviewer.year.actions';
 import { ReviewersRootState } from 'app/admin/pages/reviewers/store/reducers/reviewers.root.reducer';
-import { AddReviewerAction, LoadReviewersAction, RemoveReviewerAction, UpdateReviewerAction } from 'app/admin/pages/reviewers/store/actions/reviewers.actions';
+import {
+  AddReviewerAction,
+  LoadReviewersAction,
+  RemoveReviewerAction,
+  ResetReviewersStateAction,
+  UpdateReviewerAction
+} from 'app/admin/pages/reviewers/store/actions/reviewers.actions';
 
 @Component({
 	selector: 'rs-reviewers-edit',
 	templateUrl: `reviewers.edit.component.html`,
-  styleUrls: ['./reviewers.edit.component.scss']
+  styleUrls: ['./reviewers.edit.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ReviewersEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
-  reviewersLoading$: Observable<boolean>;
-  reviewerYearsLoading$: Observable<boolean>;
+  readonly reviewerYearsLoading$: Subject<boolean> = new Subject();
+  readonly reviewersLoading$: Subject<boolean> = new Subject();
 
-  contentLoading$: Observable<boolean>;
+  contentLoading: boolean = false;
 
   years: ReviewerYears = [];
 
@@ -58,7 +69,9 @@ export class ReviewersEditComponent extends AdminPageComponent implements OnInit
 
 	ngOnInit() {
 
-	  this.store.select(reviewersRootSelectors.getReviewerYears)
+    this.initSpinnerManagers();
+
+    this.store.select(reviewersRootSelectors.getReviewerYears)
         .pipe(takeUntil(this.destroy$))
         .subscribe((reviewerYears: ReviewerYears) => this.years = reviewerYears);
 
@@ -66,18 +79,22 @@ export class ReviewersEditComponent extends AdminPageComponent implements OnInit
       .pipe(takeUntil(this.destroy$))
       .subscribe((reviewers: Reviewers) => this.reviewers = reviewers);
 
-    this.initSpinnerManagers();
-
     this.store.dispatch(new LoadReviewerYearsAction());
 	}
 
 	ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+
+    this.resetState();
   }
 
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.reviewers().title);
+  }
+
+  observePageLoaded(): Observable<void> {
+    return this.subscribeForAllResourcesLoad();
   }
 
   onReviewerEvent(event: ReviewerEvent): void {
@@ -131,8 +148,14 @@ export class ReviewersEditComponent extends AdminPageComponent implements OnInit
       }
 
       case ReviewerYearEventType.REMOVE: {
+        this.showMainSpinner();
+
         const reviewerYearId = (event as ReviewerYearUpdateEvent).payload.id;
         this.store.dispatch(new RemoveReviewerYearAction(reviewerYearId));
+
+        this.subscribeForAllResourcesLoad()
+            .subscribe(() => this.hideMainSpinner());
+
         break;
       }
 
@@ -140,26 +163,33 @@ export class ReviewersEditComponent extends AdminPageComponent implements OnInit
   }
 
   private initSpinnerManagers(): void {
-    this.reviewersLoading$ = this.store.select(reviewersRootSelectors.getReviewersLoading)
-                                 .pipe(takeUntil(this.destroy$));
+    this.store.select(reviewersRootSelectors.getReviewerYearsLoading)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((loading: boolean) => this.reviewerYearsLoading$.next(loading));
 
-    this.reviewerYearsLoading$ = this.store.select(reviewersRootSelectors.getReviewerYearsLoading)
-                                     .pipe(takeUntil(this.destroy$));
-
-    this.initMainSpinnerManager();
+    this.store.select(reviewersRootSelectors.getReviewersLoading)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((loading: boolean) => this.reviewersLoading$.next(loading));
   }
 
-  private initMainSpinnerManager(): void {
-	  this.contentLoading$ = zip(
-	    this.reviewersLoading$,
-      this.reviewerYearsLoading$
-    ).pipe(
-      map((contentLoading: boolean[]) => {
-        const reviewersLoading = contentLoading[0];
-        const reviewerYearsLoading = contentLoading[1];
-        return reviewersLoading && reviewerYearsLoading;
-      })
-    );
+  private resetState(): void {
+	  this.store.dispatch(new ResetReviewerYearsStateAction());
+    this.store.dispatch(new ResetReviewersStateAction());
+  }
+
+  private showMainSpinner(): void {
+	  this.contentLoading = true;
+  }
+
+  private hideMainSpinner(): void {
+	  this.contentLoading = false;
+  }
+
+  private subscribeForAllResourcesLoad(): Observable<void> {
+	  return allFalsy(
+      this.reviewerYearsLoading$.asObservable(),
+      this.reviewersLoading$.asObservable()
+    ).pipe(firstTrue());
   }
 
 }

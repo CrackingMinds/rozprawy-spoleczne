@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { PageComponent } from 'app/client/pages/page.component';
 
 import { ISubsriptionsInfo } from 'app/models/subscriptions';
@@ -43,8 +45,8 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.subscriptionsInfoLoading$.asObservable();
+  observePageLoaded(): Observable<boolean> {
+    return this.subscriptionsInfoLoading$.asObservable().pipe(firstFalse());
   }
 
   observePageName(): Observable<string> {

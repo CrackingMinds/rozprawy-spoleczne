@@ -1,15 +1,16 @@
 import {
+  ApplicationRef,
   Component,
+  ComponentFactoryResolver,
   ComponentRef,
   Inject,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  ComponentFactoryResolver,
-  ApplicationRef,
   Injector,
   OnDestroy,
-  Type
+  OnInit,
+  Type,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -23,7 +24,8 @@ import { ModalContent } from 'app/admin/pages/library/modal/content/modal.conten
 @Component({
     selector: 'rs-modal',
     templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss']
+    styleUrls: ['./modal.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ModalComponent implements OnInit, OnDestroy {
 

@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
+
 import { reviewersStoreFeatureName } from 'app/admin/pages/reviewers/store/store.feature.name';
 import { reviewersRootReducers } from 'app/admin/pages/reviewers/store/reducers/reviewers.root.reducer';
 import { reviewersRootEffects } from 'app/admin/pages/reviewers/store/effects/reviewers.root.effects';
-
-import { MatProgressSpinnerModule } from '@angular/material';
 
 import { ReviewersEditComponent } from 'app/admin/pages/reviewers/reviewers.edit.component';
 
@@ -31,7 +31,7 @@ const declarations = [
     StoreModule.forFeature(reviewersStoreFeatureName, reviewersRootReducers),
     EffectsModule.forFeature(reviewersRootEffects),
 
-    MatProgressSpinnerModule,
+    SpinnerModule,
 
     ListOfYearsModule,
     ListOfReviewersModule

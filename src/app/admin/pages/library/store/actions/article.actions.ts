@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 
-import { ACTION_PREFIX } from 'app/admin/pages/library/store/actions/action.prefix';
+export const ACTION_PREFIX: string = '[Library Articles]';
 
 export const LOAD_ARTICLES = `${ACTION_PREFIX} Load Articles`;
 export const LOAD_ARTICLES_SUCCESS = `${ACTION_PREFIX} Load Articles Success`;
@@ -16,6 +16,8 @@ export const UPDATE_ARTICLE_FAIL = `${ACTION_PREFIX} Update Article Fail`;
 
 export const REMOVE_ARTICLE = `${ACTION_PREFIX} Remove Article`;
 export const REMOVE_ARTICLE_FAIL = `${ACTION_PREFIX} Remove Article Fail`;
+
+export const RESET_ARTICLES_STATE = `${ACTION_PREFIX} Reset state`;
 
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
@@ -64,6 +66,10 @@ export class RemoveArticleFail implements Action {
   constructor(public error: any) {}
 }
 
+export class ResetArticlesStateAction implements Action {
+  readonly type: string = RESET_ARTICLES_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -79,5 +85,7 @@ export type ArticleAction =
 
   RemoveArticle |
   RemoveArticleFail |
+
+  ResetArticlesStateAction |
 
   EndpointCallFailAction;

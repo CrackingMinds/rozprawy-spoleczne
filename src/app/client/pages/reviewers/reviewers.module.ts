@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { MatExpansionModule } from '@angular/material';
 
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
+
 import { ReviewersComponent } from 'app/client/pages/reviewers/reviewers.component';
-import { CommonModule } from '@angular/common';
 
 const declarations = [
   ReviewersComponent
@@ -13,7 +15,9 @@ const declarations = [
   imports: [
     CommonModule,
 
-    MatExpansionModule
+    MatExpansionModule,
+
+    SpinnerModule
   ],
   declarations: declarations,
   exports: declarations,

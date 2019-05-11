@@ -20,6 +20,8 @@ const deleteActionName = 'Remove Indexing Info Item';
 export const REMOVE_INDEXING_INFO_ITEM = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_INDEXING_INFO_ITEM_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
 
+export const RESET_INDEXING_STATE = `${ACTION_PREFIX} Reset state`;
+
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
 export class AddIndexingInfoItemAction implements Action {
@@ -66,6 +68,10 @@ export class RemoveIndexingInfoItemFailAction implements Action {
   constructor(public readonly error: any) {}
 }
 
+export class ResetIndexingStateAction implements Action {
+  readonly type: string = RESET_INDEXING_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -84,5 +90,7 @@ export type IndexingInfoAction =
 
   RemoveIndexingInfoItemAction |
   RemoveIndexingInfoItemFailAction |
+
+  ResetIndexingStateAction |
 
   EndpointCallFailAction;

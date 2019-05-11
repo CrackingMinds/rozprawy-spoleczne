@@ -1,36 +1,26 @@
-<div *ngIf="contentLoading$ | async" class="rs-spinner-wrapper rs-content-spinner">
-  <mat-progress-spinner class="rs-progress-spinner"
-                        mode="indeterminate"
-                        color="primary"
-                        [diameter]="100">
-  </mat-progress-spinner>
-</div>
-
-<div class="rs-list-of-years-container">
-  <div *ngIf="reviewerYearsLoading$ | async" class="rs-spinner-wrapper">
-    <mat-progress-spinner class="rs-progress-spinner"
-                          mode="indeterminate"
-                          color="primary"
-                          [diameter]="100">
-    </mat-progress-spinner>
-  </div>
-  <rs-list-of-years class="rs-years"
-                    [years]="years"
-                    (yearEvent)="onYearEvent($event)">
-  </rs-list-of-years>
-</div>
-<div class="rs-list-of-reviewers-container">
-  <div *ngIf="reviewersLoading$ | async" class="rs-spinner-wrapper">
-    <mat-progress-spinner class="rs-progress-spinner"
-                          mode="indeterminate"
-                          color="primary"
-                          [diameter]="100">
-    </mat-progress-spinner>
-  </div>
-  <rs-list-of-reviewers class="rs-reviewers-for-year"
-                        [yearId]="selectedYearId"
-                        [reviewers]="reviewers"
-                        (reviewerEvent)="onReviewerEvent($event)"
+<rs-spinner class="rs-reviewers-main-spinner"
+            containerClass="rs-reviewers-main-spinner-container"
+            [visible]="contentLoading">
+  <div class="rs-scrollable rs-list-of-years-container" [class.rs-loading]="reviewerYearsLoading$ | async">
+    <rs-spinner
+      [diameter]="50"
+      [visible]="reviewerYearsLoading$ | async">
+      <rs-list-of-years class="rs-years"
+                        [years]="years"
                         (yearEvent)="onYearEvent($event)">
-  </rs-list-of-reviewers>
-</div>
+      </rs-list-of-years>
+    </rs-spinner>
+  </div>
+
+  <div class="rs-list-of-reviewers-container">
+    <rs-spinner
+      [visible]="reviewersLoading$ | async">
+      <rs-list-of-reviewers class="rs-reviewers-for-year"
+                            [yearId]="selectedYearId"
+                            [reviewers]="reviewers"
+                            (reviewerEvent)="onReviewerEvent($event)"
+                            (yearEvent)="onYearEvent($event)">
+      </rs-list-of-reviewers>
+    </rs-spinner>
+  </div>
+</rs-spinner>

@@ -3,7 +3,7 @@
 $field-horizontal-padding: $universal-padding-half;
 $error-height: 20px;
 
-:host {
+rs-upload-article {
   display: block;
   position: relative;
   padding-top: $error-height;
@@ -73,6 +73,7 @@ $error-height: 20px;
     border-radius: 0 $border-radius $border-radius 0;
     border: none;
     color: $white;
+    position: relative;
 
     &:hover {
       background-color: $hover-color;
@@ -89,6 +90,10 @@ $error-height: 20px;
 
   .rs-field-placeholder {
     color: #828282;
+  }
+
+  .rs-submit-btn-spinner {
+    background: transparent;
   }
 
 }

@@ -4,7 +4,7 @@ import {
   ADD_REVIEWER_YEAR,
   ADD_REVIEWER_YEAR_FAIL,
   LOAD_REVIEWER_YEARS, LOAD_REVIEWER_YEARS_FAIL, LOAD_REVIEWER_YEARS_SUCCESS, LoadReviewerYearsSuccessAction, REMOVE_REVIEWER_YEAR, REMOVE_REVIEWER_YEAR_FAIL,
-  ReviewerYearAction, ENDPOINT_CALL_FAIL
+  ReviewerYearAction, ENDPOINT_CALL_FAIL, RESET_REVIEWER_YEARS_STATE
 } from 'app/admin/pages/reviewers/store/actions/reviewer.year.actions';
 
 import { ReviewerYears } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
@@ -78,6 +78,10 @@ export function reducer(state = initialState, action: ReviewerYearAction): Revie
         loading: false,
         loaded: false
       };
+    }
+
+    case RESET_REVIEWER_YEARS_STATE: {
+      return initialState;
     }
 
     case ENDPOINT_CALL_FAIL: {

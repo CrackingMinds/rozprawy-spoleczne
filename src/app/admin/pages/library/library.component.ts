@@ -1,16 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subject, zip, of } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
+import { allFalsy } from 'app/shared/custom.observable.creators';
+import { firstTrue } from 'app/shared/custom.operators';
+
 import * as librarySelectors from 'app/admin/pages/library/store/selectors/library.selectors';
 import { LibraryState } from 'app/admin/pages/library/store/reducers/library.reducer';
 
-import { CreateIssue, LoadIssues, RemoveIssue, UpdateIssue } from 'app/admin/pages/library/store/actions/issue.actions';
-import { CreateArticle, LoadArticles, RemoveArticle, UpdateArticle } from 'app/admin/pages/library/store/actions/article.actions';
+import { CreateIssue, LoadIssues, RemoveIssue, ResetIssuesStateAction, UpdateIssue } from 'app/admin/pages/library/store/actions/issue.actions';
+import { CreateArticle, LoadArticles, RemoveArticle, ResetArticlesStateAction, UpdateArticle } from 'app/admin/pages/library/store/actions/article.actions';
 
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 import { Issue } from 'app/models/issue';
@@ -22,15 +25,17 @@ import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resol
 @Component({
   selector: 'rs-library-editorial',
   templateUrl: './library.component.html',
-  styleUrls: ['./library.component.scss']
+  styleUrls: ['./library.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LibraryComponent extends AdminPageComponent implements OnInit, OnDestroy {
   issues: Issue[];
   articles: Article[];
 
-  issuesLoading$: Observable<boolean>;
-  articlesLoading$: Observable<boolean>;
-  contentLoading$: Observable<boolean>;
+  readonly issuesLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  readonly articlesLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+
+  contentLoading: boolean = false;
 
   selectedIssue: Issue;
 
@@ -59,10 +64,7 @@ export class LibraryComponent extends AdminPageComponent implements OnInit, OnDe
       )
       .subscribe((articles: Article[]) => this.articles = articles);
 
-    this.issuesLoading$ = this.store.select(librarySelectors.getIssuesLoading);
-    this.articlesLoading$ = this.store.select(librarySelectors.getArticlesLoading);
-
-    this.initMainSpinnerManager();
+    this.initSpinnerManager();
 
     this.store.dispatch(new LoadIssues());
   }
@@ -70,10 +72,19 @@ export class LibraryComponent extends AdminPageComponent implements OnInit, OnDe
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.resetState();
   }
 
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.library().title);
+  }
+
+  observePageLoaded(): Observable<void> {
+    return allFalsy(
+      this.issuesLoading$.asObservable(),
+      this.articlesLoading$.asObservable()
+    ).pipe(firstTrue());
   }
 
   onIssueSelect(issue: Issue): void {
@@ -105,17 +116,19 @@ export class LibraryComponent extends AdminPageComponent implements OnInit, OnDe
     this.store.dispatch(new RemoveArticle(article));
   }
 
-  private initMainSpinnerManager(): void {
-    this.contentLoading$ = zip(
-      this.issuesLoading$,
-      this.articlesLoading$
-    ).pipe(
-      map((contentLoading: boolean[]) => {
-        const issuesLoading = contentLoading[0];
-        const articlesLoading = contentLoading[1];
-        return issuesLoading && articlesLoading;
-      })
-    );
+  private initSpinnerManager(): void {
+    this.store.select(librarySelectors.getIssuesLoading)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((loading: boolean) => this.issuesLoading$.next(loading));
+
+    this.store.select(librarySelectors.getArticlesLoading)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((loading: boolean) => this.articlesLoading$.next(loading));
+  }
+
+  private resetState(): void {
+    this.store.dispatch(new ResetIssuesStateAction());
+    this.store.dispatch(new ResetArticlesStateAction());
   }
 
 }

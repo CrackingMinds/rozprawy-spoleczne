@@ -1,16 +1,12 @@
-<div *ngIf="contentLoading" class="rs-spinner-wrapper rs-content-spinner">
-  <mat-progress-spinner class="rs-progress-spinner"
-                        mode="indeterminate"
-                        color="primary"
-                        [diameter]="100">
-  </mat-progress-spinner>
-</div>
-<ng-container [formGroup]="form">
-  <rs-list-of-controls
-    formControlName="indexingInfoItemsArray"
-    (valueCreate)="onItemCreate($event)"
-    (valueUpdate)="onItemUpdate($event)"
-    (valueRemove)="onItemRemove($event)"
-    [controlType]="control">
-  </rs-list-of-controls>
-</ng-container>
+<rs-spinner
+  [visible]="contentLoading$ | async">
+  <ng-container [formGroup]="form">
+    <rs-list-of-controls
+      formControlName="indexingInfoItemsArray"
+      (valueCreate)="onItemCreate($event)"
+      (valueUpdate)="onItemUpdate($event)"
+      (valueRemove)="onItemRemove($event)"
+      [controlType]="control">
+    </rs-list-of-controls>
+  </ng-container>
+</rs-spinner>

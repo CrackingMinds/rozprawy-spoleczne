@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -24,7 +24,8 @@ enum SignInMode {
 @Component({
   selector: 'rs-sign-in',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  styleUrls: ['./signin.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class SigninComponent implements OnInit, OnDestroy {
 

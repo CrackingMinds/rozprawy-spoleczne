@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { PageComponent } from 'app/client/pages/page.component';
 
 import { ContactInfo, IContactInfo } from 'app/models/contact-info';
@@ -41,8 +43,8 @@ export class AuthorRequirementsComponent extends PageComponent implements OnInit
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.contactInfoLoading$.asObservable();
+  observePageLoaded(): Observable<boolean> {
+    return this.contactInfoLoading$.asObservable().pipe(firstFalse());
   }
 
   observePageName(): Observable<string> {

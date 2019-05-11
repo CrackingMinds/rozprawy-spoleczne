@@ -1,0 +1,7 @@
+<div *ngIf="visible" class="rs-spinner-container" [ngClass]="getContainerClass()">
+  <mat-spinner class="rs-spinner" color="primary"
+               [color]="color"
+               [diameter]="diameter">
+  </mat-spinner>
+</div>
+<ng-content></ng-content>

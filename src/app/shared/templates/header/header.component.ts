@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { IndexingInfo } from 'app/models/indexing';
 
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
@@ -42,8 +44,8 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.contentLoading$.asObservable();
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
 }

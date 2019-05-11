@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { first, map, takeUntil } from 'rxjs/operators';
+import { Subject, ReplaySubject } from 'rxjs';
+import { first } from 'rxjs/operators';
+
+import { allTruthy } from 'app/shared/custom.observable.creators';
+import { firstTrue, withMinDuration } from 'app/shared/custom.operators';
 
 import { PageNameService } from 'app/shared/services/page.name.service';
 
@@ -23,35 +26,26 @@ export class ClientComponent implements OnInit, OnDestroy {
   @ViewChild(HeaderComponent)
   headerComponentRef: HeaderComponent;
 
+  pageName: string;
+  pageLoading: boolean = true;
+
   readonly linkedInProfileLink = 'https://www.linkedin.com/in/viacheslav-guselnykov-13b25b15a/';
 
-  pageName: string;
-
-  private readonly headerLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  private readonly menuLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  private readonly pageContentLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-
-  private readonly pageLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-
-  private readonly pageChange$: Subject<void> = new Subject();
+  private readonly headerLoaded$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly menuLoaded$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private pageNameService: PageNameService) {}
 
   ngOnInit() {
-    this.initPageSpinnerManager();
-
     this.observeHeaderContentLoading();
     this.observeMenuContentLoading();
   }
 
   ngOnDestroy() {
-    this.headerLoading$.complete();
-    this.menuLoading$.complete();
-    this.pageContentLoading$.complete();
-
-    this.pageLoading$.complete();
+    this.headerLoaded$.complete();
+    this.menuLoaded$.complete();
 
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -65,50 +59,35 @@ export class ClientComponent implements OnInit, OnDestroy {
           this.pageNameService.setPageName(this.pageName);
         });
 
-    page.observeContentLoading()
-      .pipe(takeUntil(this.pageChange$))
-      .subscribe((contentLoading: boolean) => this.pageContentLoading$.next(contentLoading));
+    page.observePageLoaded()
+        .pipe(
+          withMinDuration(),
+          first()
+        )
+        .subscribe(() => {
+          allTruthy(
+            this.headerLoaded$.asObservable(),
+            this.menuLoaded$.asObservable(),
+          ).pipe(firstTrue()).subscribe(() => this.pageLoading = false);
+        });
   }
 
   onDeactivate(page: PageComponent): void {
-    this.pageContentLoading$.next(true);
-    this.pageChange$.next();
-  }
-
-  getSpinnerVisibility(): Observable<boolean> {
-    return this.pageLoading$.asObservable();
+    this.pageLoading = true;
   }
 
   private observeMenuContentLoading(): void {
     const menuComponent: AsyncComponent = this.menuComponentRef;
-    menuComponent.observeContentLoading()
-                 .subscribe((contentLoading: boolean) => this.menuLoading$.next(contentLoading));
+    menuComponent.observePageLoaded()
+                 .pipe(first())
+                 .subscribe(() => this.menuLoaded$.next(true));
   }
 
   private observeHeaderContentLoading(): void {
     const headerComponent: AsyncComponent = this.headerComponentRef;
-    headerComponent.observeContentLoading()
-                   .subscribe((contentLoading: boolean) => this.headerLoading$.next(contentLoading));
-  }
-
-  private initPageSpinnerManager(): void {
-    this.headerLoading$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((loading: boolean) => {
-        this.pageLoading$.next(loading || this.menuLoading$.getValue() || this.pageContentLoading$.getValue());
-      });
-
-    this.menuLoading$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((loading: boolean) => {
-          this.pageLoading$.next(loading || this.headerLoading$.getValue() || this.pageContentLoading$.getValue());
-        });
-
-    this.pageContentLoading$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((loading: boolean) => {
-          this.pageLoading$.next(loading || this.headerLoading$.getValue() || this.menuLoading$.getValue());
-        });
+    headerComponent.observePageLoaded()
+                   .pipe(first())
+                   .subscribe(() => this.headerLoaded$.next(true));
   }
 
 }

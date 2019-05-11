@@ -3,6 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import { IssuesByYear } from 'app/models/issue';
 import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
@@ -56,8 +58,8 @@ export class ArchiveComponent extends PageComponent implements OnInit, OnDestroy
     this.unsubscribe$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return this.pageLoading$.asObservable();
+  observePageLoaded(): Observable<void> {
+    return this.pageLoading$.asObservable().pipe(firstFalse());
   }
 
   observePageName(): Observable<string> {

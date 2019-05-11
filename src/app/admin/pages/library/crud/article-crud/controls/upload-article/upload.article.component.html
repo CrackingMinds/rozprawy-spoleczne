@@ -11,9 +11,11 @@
     <mat-icon *ngSwitchCase="FieldState.EMPTY">cloud_upload</mat-icon>
     <mat-icon *ngSwitchCase="FieldState.DEFAULT">delete</mat-icon>
     <mat-icon *ngSwitchCase="FieldState.ERROR">cloud_upload</mat-icon>
-    <mat-spinner *ngSwitchCase="FieldState.PENDING"
-                 [diameter]="20">
-    </mat-spinner>
+    <rs-spinner *ngSwitchCase="FieldState.PENDING"
+                containerClass="rs-submit-btn-spinner"
+                [visible]="true"
+                [diameter]="20">
+    </rs-spinner>
   </button>
   <input #fileInput type="file" (change)="onFileChosen($event)" accept=".pdf"/>
 </div>

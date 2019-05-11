@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Subject } from 'rxjs';
@@ -8,7 +8,11 @@ import { IF_ArticleFile } from 'app/models/firestore/article.file.f';
 import { ArticleFile } from 'app/models/article.file';
 import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 import { FieldState } from 'app/admin/pages/library/crud/article-crud/controls/field.state';
-import { ArticleFileError, ArticleFileErrorType, ArticleFileExistsError } from 'app/admin/pages/library/crud/article-crud/controls/upload-article/article.error';
+import {
+  ArticleFileError,
+  ArticleFileErrorType,
+  ArticleFileExistsError
+} from 'app/admin/pages/library/crud/article-crud/controls/upload-article/article.error';
 import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud/article.file.repository';
 
 @Component({
@@ -24,7 +28,8 @@ import { ArticleFileRepository } from 'app/admin/pages/library/crud/article-crud
   ],
   host: {
     '[class.rs-has-error]': 'this.fileError'
-  }
+  },
+  encapsulation: ViewEncapsulation.None
 })
 export class UploadArticleComponent implements ControlValueAccessor, OnInit, OnDestroy {
 

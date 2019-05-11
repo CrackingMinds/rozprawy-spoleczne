@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
 
-import { ACTION_PREFIX } from 'app/admin/pages/reviewers/store/actions/action.prefix';
 import { NewReviewerYear, ReviewerYears, UpdatedReviewerYear } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
+
+export const ACTION_PREFIX: string = '[Reviewer Years]';
 
 const createActionName = 'Add Reviewer Year';
 export const ADD_REVIEWER_YEAR = `${ACTION_PREFIX} ${createActionName}`;
@@ -19,6 +20,8 @@ export const UPDATE_REVIEWER_YEAR_FAIL = `${ACTION_PREFIX} ${updateActionName} F
 const deleteActionName = 'Remove Reviewer Year';
 export const REMOVE_REVIEWER_YEAR = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_REVIEWER_YEAR_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const RESET_REVIEWER_YEARS_STATE = `${ACTION_PREFIX} Reset state`;
 
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
@@ -67,6 +70,10 @@ export class RemoveReviewerYearFailAction implements Action {
   constructor(public readonly error: any) {}
 }
 
+export class ResetReviewerYearsStateAction implements Action {
+  readonly type: string = RESET_REVIEWER_YEARS_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -85,5 +92,7 @@ export type ReviewerYearAction =
 
   RemoveReviewerYearAction |
   RemoveReviewerYearFailAction |
+
+  ResetReviewerYearsStateAction |
 
   EndpointCallFailAction;

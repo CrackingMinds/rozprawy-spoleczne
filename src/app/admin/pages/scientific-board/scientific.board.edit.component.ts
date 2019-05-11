@@ -6,6 +6,8 @@ import { takeUntil, map } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import * as scientificBoardSelectors from 'app/admin/pages/scientific-board/store/selectors/scientific.board.selectors';
 import { ScientificBoardState } from 'app/admin/pages/scientific-board/store/reducers/scientific.board.reducer';
 
@@ -23,7 +25,7 @@ import { ScientificBoard } from 'app/models/scientific.board';
 import { NewScientificBoardMember, ScientificBoardMember, UpdatedScientificBoardMember } from 'app/models/scientific-board-member';
 import {
   AddScientificBoardMember, LoadScientificBoard,
-  RemoveScientificBoardMember,
+  RemoveScientificBoardMember, ResetScientificBoardAction,
   UpdateScientificBoardMember
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 import { CustomSorting } from 'app/shared/custom.sorting';
@@ -34,8 +36,6 @@ import { CustomSorting } from 'app/shared/custom.sorting';
   styleUrls: ['./scientific.board.edit.component.scss']
 })
 export class ScientificBoardEditComponent extends AdminPageComponent implements OnInit {
-
-  contentLoading: boolean;
 
   control: Type<ListOfControlsControl> = ScientificBoardMemberControlComponent;
 
@@ -50,6 +50,8 @@ export class ScientificBoardEditComponent extends AdminPageComponent implements 
     return this.form.get('scientificBoardMembers') as FormArray;
   }
 
+  readonly contentLoading$: Subject<boolean> = new Subject();
+
   private scientificBoard: ScientificBoard;
 
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -58,9 +60,7 @@ export class ScientificBoardEditComponent extends AdminPageComponent implements 
               private store: Store<ScientificBoardState>) { super(); }
 
 	ngOnInit() {
-    this.store.select(scientificBoardSelectors.getScientificBoardLoading)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((loading: boolean) => this.contentLoading = loading);
+    this.initSpinnerManager();
 
     this.store.select(scientificBoardSelectors.getScientificBoard)
       .pipe(
@@ -78,10 +78,16 @@ export class ScientificBoardEditComponent extends AdminPageComponent implements 
 	ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+
+    this.resetState();
   }
 
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.scientificBoard().title);
+  }
+
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
   onMemberUpdate(event: ListOfControlsValueUpdate<UpdatedScientificBoardMember>): void {
@@ -110,12 +116,22 @@ export class ScientificBoardEditComponent extends AdminPageComponent implements 
 	  this.store.dispatch(new RemoveScientificBoardMember(member.id));
   }
 
+  private initSpinnerManager(): void {
+    this.store.select(scientificBoardSelectors.getScientificBoardLoading)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((loading: boolean) => this.contentLoading$.next(loading));
+  }
+
   private setFormValue(value: ScientificBoard): void {
     this.scientificBoardMembers.setValue(value);
   }
 
   private getMemberByIndex(index: number): ScientificBoardMember {
 	  return this.scientificBoard[index];
+  }
+
+  private resetState(): void {
+    this.store.dispatch(new ResetScientificBoardAction());
   }
 
 }

@@ -5,15 +5,14 @@ import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
+import { ModalModule } from 'app/admin/pages/library/modal/modal.module';
+
 import { libraryStoreFeatureName } from 'app/admin/pages/library/store/store.feature.name';
 import { libraryReducers } from 'app/admin/pages/library/store/reducers/library.reducer';
 import { libraryEffects } from 'app/admin/pages/library/store/effects/library.effects';
 
-import { MatProgressSpinnerModule } from '@angular/material';
-
 import { LibraryComponent } from 'app/admin/pages/library/library.component';
-
-import { ModalModule } from 'app/admin/pages/library/modal/modal.module';
 
 import { ListOfIssuesModule } from 'app/admin/pages/library/list-of-issues/list.of.issues.module';
 import { ListOfArticlesModule } from 'app/admin/pages/library/list-of-articles/list.of.articles.module';
@@ -39,8 +38,7 @@ const providers = [
     StoreModule.forFeature(libraryStoreFeatureName, libraryReducers),
     EffectsModule.forFeature(libraryEffects),
 
-    MatProgressSpinnerModule,
-
+    SpinnerModule,
     ModalModule.forRoot(),
 
     ListOfIssuesModule,

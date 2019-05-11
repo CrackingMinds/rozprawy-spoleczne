@@ -1,10 +1,21 @@
 @import "variables";
 
-:host {
+rs-library-editorial {
   display: flex;
-  flex-direction: row;
   width: 100%;
+  height: 100%;
   flex: 1;
+
+  .rs-library-main-spinner {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    position: relative;
+
+    .rs-library-main-spinner-container {
+      z-index: 4;
+    }
+  }
 
   .rs-list-of-issues-container, .rs-list-of-articles-container {
     position: relative;
@@ -20,20 +31,4 @@
     flex: 1;
   }
 
-  .rs-spinner-wrapper {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $white;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    &.rs-content-spinner {
-      z-index: 2;
-    }
-  }
 }

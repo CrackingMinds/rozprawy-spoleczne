@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { Issue, RawIssue } from 'app/models/issue';
 
-import { ACTION_PREFIX } from 'app/admin/pages/library/store/actions/action.prefix';
+export const ACTION_PREFIX: string = '[Library Issues]';
 
 export const LOAD_ISSUES = `${ACTION_PREFIX} Load Issues`;
 export const LOAD_ISSUES_SUCCESS = `${ACTION_PREFIX} Load Issues Success`;
@@ -19,6 +19,8 @@ export const UPDATE_ISSUE_FAIL = `${ACTION_PREFIX} Update Issue Fail`;
 
 export const REMOVE_ISSUE = `${ACTION_PREFIX} Remove Issue`;
 export const REMOVE_ISSUE_FAIL = `${ACTION_PREFIX} Remove Issue Fail`;
+
+export const RESET_ISSUES_STATE = `${ACTION_PREFIX} Reset state`;
 
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
@@ -77,6 +79,10 @@ export class RemoveIssueFail implements Action {
   constructor(public error: any) {}
 }
 
+export class ResetIssuesStateAction implements Action {
+  readonly type: string = RESET_ISSUES_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -95,5 +101,7 @@ export type IssueAction =
 
   RemoveIssue |
   RemoveIssueFail |
+
+  ResetIssuesStateAction |
 
   EndpointCallFailAction;

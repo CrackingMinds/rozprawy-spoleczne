@@ -20,6 +20,8 @@ const deleteActionName = 'Remove Editorial Board Member';
 export const REMOVE_EDITORIAL_BOARD_MEMBER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_EDITORIAL_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
 
+export const RESET_EDITORIAL_BOARD_STATE = `${ACTION_PREFIX} Reset state`;
+
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
 export class AddEditorialBoardMember implements Action {
@@ -67,6 +69,10 @@ export class RemoveEditorialBoardMemberFail implements Action {
   constructor(public readonly error: any) {}
 }
 
+export class ResetEditorialBoardStateAction implements Action {
+  readonly type: string = RESET_EDITORIAL_BOARD_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -85,5 +91,7 @@ export type EditorialBoardAction =
 
   RemoveEditorialBoardMember |
   RemoveEditorialBoardMemberFail |
+
+  ResetEditorialBoardStateAction |
 
   EndpointCallFailAction;

@@ -1,28 +1,26 @@
-<div *ngIf="spinnerVisible" class="rs-spinner-wrapper">
-  <mat-progress-spinner class="rs-progress-spinner"
-                        mode="indeterminate"
-                        color="accent"
-                        [diameter]="100">
-  </mat-progress-spinner>
-</div>
-<h2 *ngIf="modalData.title" class="rs-modal-title" mat-dialog-title>{{ modalData.title }}</h2>
-<mat-dialog-content>
-  <h4 *ngIf="modalMessage">
-    {{ modalMessage }}
-  </h4>
-  <ng-container #dynamicContentContainer></ng-container>
-</mat-dialog-content>
-<mat-dialog-actions class="rs-modal-buttons">
-  <button mat-button
-          type="button"
-          (click)="cancel()">
-    Anuluj
-  </button>
-  <button mat-raised-button
-          color="accent"
-          type="button"
-          [disabled]="!canSubmit"
-          (click)="submit()">
-    {{ modalData.buttons.submit.text }}
-  </button>
-</mat-dialog-actions>
+<rs-spinner
+  containerClass="rs-modal-spinner-container"
+  color="accent"
+  [visible]="spinnerVisible">
+  <h2 *ngIf="modalData.title" class="rs-modal-title" mat-dialog-title>{{ modalData.title }}</h2>
+  <mat-dialog-content>
+    <h4 *ngIf="modalMessage">
+      {{ modalMessage }}
+    </h4>
+    <ng-container #dynamicContentContainer></ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="rs-modal-buttons">
+    <button mat-button
+            type="button"
+            (click)="cancel()">
+      Anuluj
+    </button>
+    <button mat-raised-button
+            color="accent"
+            type="button"
+            [disabled]="!canSubmit"
+            (click)="submit()">
+      {{ modalData.buttons.submit.text }}
+    </button>
+  </mat-dialog-actions>
+</rs-spinner>

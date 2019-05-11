@@ -6,13 +6,15 @@ import { takeUntil, map } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
+import { firstFalse } from 'app/shared/custom.operators';
+
 import * as indexingInfoSelectors from 'app/admin/pages/indexing/store/selectors/indexing.selectors';
 import { IndexingState } from 'app/admin/pages/indexing/store/reducers/indexing.reducer';
 
 import {
   AddIndexingInfoItemAction,
   LoadIndexingInfoAction,
-  RemoveIndexingInfoItemAction,
+  RemoveIndexingInfoItemAction, ResetIndexingStateAction,
   UpdateIndexingInfoItemAction
 } from 'app/admin/pages/indexing/store/actions/indexing.actions';
 
@@ -38,9 +40,9 @@ import { CustomSorting } from 'app/shared/custom.sorting';
 })
 export class IndexingEditComponent extends AdminPageComponent implements OnInit, OnDestroy {
 
-  contentLoading: boolean = false;
+  readonly contentLoading$: Subject<boolean> = new Subject<boolean>();
 
-  readonly control: Type<ListOfControlsControl> = IndexingInfoItemControlComponent;;
+  readonly control: Type<ListOfControlsControl> = IndexingInfoItemControlComponent;
 
   readonly form: FormGroup = this.formBuilder.group({
     indexingInfoItemsArray: [
@@ -63,7 +65,7 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
 	ngOnInit() {
 	  this.store.select(indexingInfoSelectors.getIndexingInfoLoading)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((loading: boolean) => this.contentLoading = loading);
+      .subscribe((loading: boolean) => this.contentLoading$.next(loading));
 
 	  this.store.select(indexingInfoSelectors.getIndexingInfo)
       .pipe(
@@ -81,10 +83,16 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
 	ngOnDestroy() {
 	  this.destroy$.next();
 	  this.destroy$.complete();
+
+	  this.resetState();
   }
 
   observePageName(): Observable<string> {
     return of(AdminPagesResolver.indexing().title);
+  }
+
+  observePageLoaded(): Observable<void> {
+    return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
 	onItemCreate(event: ListOfControlsValueCreate<NewIndexingInfoItem>): void {
@@ -119,6 +127,10 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
 
   private getIndexingInfoItemByIndex(index: number): IndexingInfoItem {
     return this.indexingInfo[index];
+  }
+
+  private resetState(): void {
+	  this.store.dispatch(new ResetIndexingStateAction());
   }
 
 }

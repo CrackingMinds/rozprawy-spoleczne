@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
 
-import { ACTION_PREFIX } from 'app/admin/pages/reviewers/store/actions/action.prefix';
 import { NewReviewer, Reviewers, UpdatedReviewer } from 'app/models/reviewer';
+
+export const ACTION_PREFIX: string = '[Reviewers]';
 
 const createActionName = 'Add Reviewer';
 export const ADD_REVIEWER = `${ACTION_PREFIX} ${createActionName}`;
@@ -19,6 +20,8 @@ export const UPDATE_REVIEWER_FAIL = `${ACTION_PREFIX} ${updateActionName} Fail`;
 const deleteActionName = 'Remove Reviewer';
 export const REMOVE_REVIEWER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_REVIEWER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const RESET_REVIEWERS_STATE = `${ACTION_PREFIX} Reset state`;
 
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
@@ -67,6 +70,10 @@ export class RemoveReviewerFailAction implements Action {
   constructor(public readonly error: any) {}
 }
 
+export class ResetReviewersStateAction implements Action {
+  readonly type: string = RESET_REVIEWERS_STATE;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -85,5 +92,7 @@ export type ReviewerAction =
 
   RemoveReviewerAction |
   RemoveReviewerFailAction |
+
+  ResetReviewersStateAction |
 
   EndpointCallFailAction;

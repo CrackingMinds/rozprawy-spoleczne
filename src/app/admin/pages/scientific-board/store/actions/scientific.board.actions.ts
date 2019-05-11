@@ -21,6 +21,8 @@ const deleteActionName = 'Remove Scientific Board Member';
 export const REMOVE_SCIENTIFIC_BOARD_MEMBER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_SCIENTIFIC_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
 
+export const RESET_SCIENTIFIC_BOARD = `${ACTION_PREFIX} Reset state`;
+
 export const ENDPOINT_CALL_FAIL = `${ACTION_PREFIX} Endpoint Call Fail`;
 
 export class AddScientificBoardMember implements Action {
@@ -68,6 +70,10 @@ export class RemoveScientificBoardMemberFail implements Action {
   constructor(public readonly error: any) {}
 }
 
+export class ResetScientificBoardAction implements Action {
+  readonly type: string = RESET_SCIENTIFIC_BOARD;
+}
+
 export class EndpointCallFailAction implements Action {
   readonly type: string = ENDPOINT_CALL_FAIL;
   constructor(public readonly error: any) {}
@@ -86,5 +92,7 @@ export type ScientificBoardAction =
 
   RemoveScientificBoardMember |
   RemoveScientificBoardMemberFail |
+
+  ResetScientificBoardAction |
 
   EndpointCallFailAction;

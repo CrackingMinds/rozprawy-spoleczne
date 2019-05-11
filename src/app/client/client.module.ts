@@ -20,7 +20,7 @@ import { AboutModule } from 'app/client/pages/about/about.module';
 import { EditorialScientificBoardModule } from 'app/client/pages/editorial-scientific-board/editorial.scientific.board.module';
 import { HeaderModule } from 'app/shared/templates/header/header.module';
 import { MenuModule } from 'app/shared/templates/menu/menu.module';
-import { PageLoadSpinnerModule } from 'app/shared/templates/page-load-spinner/page.load.spinner.module';
+import { SpinnerModule } from 'app/shared/templates/spinner/spinner.module';
 
 const declarations = [
   ClientComponent
@@ -41,7 +41,7 @@ const providers = [
 
     HeaderModule,
     MenuModule,
-    PageLoadSpinnerModule.forRoot(),
+    SpinnerModule,
 
     ArchiveModule,
     ReviewersModule,

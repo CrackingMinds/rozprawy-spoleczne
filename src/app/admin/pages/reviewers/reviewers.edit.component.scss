@@ -1,7 +1,8 @@
 @import "variables";
 
-:host {
+rs-reviewers-edit {
   display: flex;
+  width: 100%;
   height: 100%;
   position: relative;
 
@@ -12,29 +13,28 @@
     flex-direction: column;
   }
 
+  .rs-list-of-years-container, .rs-list-of-reviewers-container {
+    position: relative;
+  }
+
   .rs-list-of-reviewers-container {
     flex: 1;
   }
 
   .rs-list-of-years-container {
+    border: 2px solid $main-green-color;
     height: 100%;
   }
 
-}
+  .rs-reviewers-main-spinner {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    position: relative;
 
-.rs-spinner-wrapper {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
-  &.rs-content-spinner {
-    z-index: 2;
+    .rs-reviewers-main-spinner-container {
+      z-index: 4;
+    }
   }
+
 }

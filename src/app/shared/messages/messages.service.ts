@@ -8,7 +8,7 @@ export class MessagesService {
 	constructor(private snackBar: MatSnackBar) {}
 
 	show(message: string) {
-	  this.snackBar.open(message, 'Close', {
+	  this.snackBar.open(message, 'Zamknij', {
 	    duration: 4000,
       verticalPosition: 'top',
       panelClass: 'rs-message-snack-bar'

@@ -1,6 +1,6 @@
 @import "variables";
 
-:host {
+rs-admin {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -40,6 +40,22 @@
     border-radius: $border-radius;
     padding: ($universal-padding-half / 2) $universal-padding-half;
     pointer-events: none;
+  }
+
+  rs-spinner.rs-admin-main-spinner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .rs-admin-main-spinner-container {
+      z-index: 10;
+    }
+
+  }
+
+  .rs-admin-content-container {
+    display: flex;
+    flex: 1;
   }
 
 }

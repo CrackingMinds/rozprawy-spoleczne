@@ -1,53 +1,54 @@
-<mat-card>
+<mat-card class="rs-sign-card">
   <div class="rs-login-header">
     <h1 class="rs-header-content">Zalogowanie</h1>
   </div>
   <div class="rs-login-form-container">
-    <div *ngIf="showLoginSpinner" class="rs-login-form-spinner-container">
-      <mat-spinner class="rs-login-form-spinner" color="primary"></mat-spinner>
-    </div>
-    <form [formGroup]="form" class="rs-login-form">
+    <rs-spinner
+      containerClass="rs-login-form-spinner-container"
+      [visible]="showLoginSpinner">
+      <form [formGroup]="form" class="rs-login-form">
 
-      <mat-form-field color="accent" (click)="removeErrorMessage()">
-        <input matInput formControlName="email"
-               type="text" placeholder="Email" class="rs-email">
-        <mat-error *ngIf="form.get('email').hasError('required')">
-          Podaj adres email
-        </mat-error>
-        <mat-error *ngIf="form.get('email').hasError('pattern')">
-          Błędny adres email
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field color="accent" (click)="removeErrorMessage()">
+          <input matInput formControlName="email"
+                 type="text" placeholder="Email" class="rs-email">
+          <mat-error *ngIf="form.get('email').hasError('required')">
+            Podaj adres email
+          </mat-error>
+          <mat-error *ngIf="form.get('email').hasError('pattern')">
+            Błędny adres email
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field color="accent" (click)="removeErrorMessage()">
-        <input matInput formControlName="password"
-               type="password" placeholder="Hasło" class="rs-password">
-        <mat-error *ngIf="form.get('password').hasError('required')">
-          Podaj hasło
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field color="accent" (click)="removeErrorMessage()">
+          <input matInput formControlName="password"
+                 type="password" placeholder="Hasło" class="rs-password">
+          <mat-error *ngIf="form.get('password').hasError('required')">
+            Podaj hasło
+          </mat-error>
+        </mat-form-field>
 
-      <div class="rs-login-button-with-error">
-        <button *ngIf="!loginError; else showLoginError" mat-raised-button
+        <div class="rs-login-button-with-error">
+          <button *ngIf="!loginError; else showLoginError" mat-raised-button
+                  color="accent"
+                  [disabled]="!form.valid"
+                  (click)="signIn(SIGN_IN_MODE.EMAIL)"
+                  class="rs-submit-btn">
+            Zaloguj się
+          </button>
+
+          <ng-template #showLoginError>
+            <span class="rs-login-error">{{ loginError.message }}</span>
+          </ng-template>
+        </div>
+
+        <button *ngIf="!loginError" mat-button
                 color="accent"
-                [disabled]="!form.valid"
-                (click)="signIn(SIGN_IN_MODE.EMAIL)"
-                class="rs-submit-btn">
-          Zaloguj się
+                (click)="signIn(SIGN_IN_MODE.ANONYMOUS)"
+                class="rs-anonymous-submit-btn">
+          Zaloguj się anonimowo
         </button>
 
-        <ng-template #showLoginError>
-          <span class="rs-login-error">{{ loginError.message }}</span>
-        </ng-template>
-      </div>
-
-      <button *ngIf="!loginError" mat-button
-              color="accent"
-              (click)="signIn(SIGN_IN_MODE.ANONYMOUS)"
-              class="rs-anonymous-submit-btn">
-        Zaloguj się anonimowo
-      </button>
-
-    </form>
+      </form>
+    </rs-spinner>
   </div>
 </mat-card>

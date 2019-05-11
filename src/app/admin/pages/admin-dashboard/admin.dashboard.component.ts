@@ -28,6 +28,10 @@ export class AdminDashboardComponent extends AdminPageComponent {
     return of(AdminPagesResolver.dashboard().title);
   }
 
+  observePageLoaded(): Observable<void> {
+    return of(null);
+  }
+
   isDashboard(): boolean {
     return true;
   }

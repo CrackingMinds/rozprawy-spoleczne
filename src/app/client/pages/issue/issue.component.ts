@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, Subject, ReplaySubject, combineLatest } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+
+import { allFalsy } from 'app/shared/custom.observable.creators';
+import { firstTrue } from 'app/shared/custom.operators';
 
 import { Issue } from 'app/models/issue';
 import { Article } from 'app/models/article';
@@ -55,17 +58,11 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
     this.issueArticlesLoading$.complete();
   }
 
-  observeContentLoading(): Observable<boolean> {
-    return combineLatest(
+  observePageLoaded(): Observable<void> {
+    return allFalsy(
       this.issueLoading$,
       this.issueArticlesLoading$
-    ).pipe(
-      map((data: Array<boolean>) => {
-        const issueLoading = data[0];
-        const issueArticlesLoading = data[1];
-        return issueLoading || issueArticlesLoading;
-      })
-    );
+    ).pipe(firstTrue());
   }
 
   observePageName(): Observable<string> {

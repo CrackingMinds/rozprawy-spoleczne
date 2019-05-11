@@ -98,7 +98,7 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
 
 	ngOnInit() {
 
-    this.listOfControls.valueChanges
+    this.controls.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: ListValue) => {
         this.onChangeCallback && this.onChangeCallback(data);
