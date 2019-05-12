@@ -43,7 +43,7 @@ export class AuthorRequirementsComponent extends PageComponent implements OnInit
     this.unsubscribe$.complete();
   }
 
-  observePageLoaded(): Observable<boolean> {
+  observePageLoaded(): Observable<void> {
     return this.contactInfoLoading$.asObservable().pipe(firstFalse());
   }
 

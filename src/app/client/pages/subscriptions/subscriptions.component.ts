@@ -45,7 +45,7 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
     this.unsubscribe$.complete();
   }
 
-  observePageLoaded(): Observable<boolean> {
+  observePageLoaded(): Observable<void> {
     return this.subscriptionsInfoLoading$.asObservable().pipe(firstFalse());
   }
 

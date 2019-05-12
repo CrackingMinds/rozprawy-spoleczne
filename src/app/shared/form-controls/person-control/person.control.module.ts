@@ -19,7 +19,10 @@ const declarations = [
     MatInputModule
 	],
 	declarations: declarations,
-	exports: declarations
+	exports: declarations,
+  entryComponents: [
+    PersonControlComponent
+  ]
 })
 export class PersonControlModule {
 }
