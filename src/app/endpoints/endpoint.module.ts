@@ -16,9 +16,6 @@ import { FirestoreArticleTypeEndpoint } from 'app/endpoints/firestore-endpoint/a
 import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 import { RestContactInfoEndpoint } from 'app/endpoints/rest-endpoint/contact-info/rest.contact.info.endpoint';
 
-import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
-import { RestEditorialScientificBoardEndpoint } from 'app/endpoints/rest-endpoint/editorial-and-scientific-board/rest.editorial.scientific.board.endpoint';
-
 import { INDEXING_INFO_ENDPOINT } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { FirestoreIndexingInfoEndpoint } from 'app/endpoints/firestore-endpoint/indexing-info/firestore.indexing.info.endpoint';
 
@@ -61,10 +58,6 @@ const providers = [
   {
     provide: ContactInfoEndpoint,
     useClass: RestContactInfoEndpoint
-  },
-  {
-    provide: EditorialScientificBoardEndpoint,
-    useClass: RestEditorialScientificBoardEndpoint
   },
   {
     provide: INDEXING_INFO_ENDPOINT,
