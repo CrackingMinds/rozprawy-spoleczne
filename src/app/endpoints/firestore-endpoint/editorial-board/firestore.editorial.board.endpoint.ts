@@ -1,44 +1,28 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, Observer } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 
 import { EditorialBoard } from 'app/models/editorial.board';
-import {
-  EditorialBoardMemberEntity,
-  NewEditorialBoardMember,
-  UpdatedEditorialBoardMember
-} from 'app/models/editorial-board-member';
+import { EditorialBoardMemberEntity, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
 
 @Injectable()
-export class FirestoreEditorialBoardEndpoint extends EditorialBoardEndpoint {
+export class FirestoreEditorialBoardEndpoint extends FirestoreEndpoint<EditorialBoardMemberEntity> implements EditorialBoardEndpoint {
 
-  private static collectionName: string = 'editorial-board';
-
-  constructor(private angularFirestore: AngularFirestore) { super(); }
+  constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   deleteEditorialBoardMember(memberId: string): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      const editorialBoardMemberDocToBeDeleted: AngularFirestoreDocument<EditorialBoardMemberEntity> = this.angularFirestore.doc(`${FirestoreEditorialBoardEndpoint.collectionName}/${memberId}`);
-      editorialBoardMemberDocToBeDeleted.delete()
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch(reason => observer.error(reason));
-    });
-
+    return from(this.getDocument(memberId).delete());
   }
 
   getEditorialBoard(): Observable<EditorialBoard> {
-
-    const editorialBoardCollection = this.angularFirestore.collection<EditorialBoardMemberEntity>(FirestoreEditorialBoardEndpoint.collectionName);
-    return editorialBoardCollection.snapshotChanges()
+    return this.getCollection().snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
           const data = a.payload.doc.data() as EditorialBoardMemberEntity;
@@ -49,40 +33,24 @@ export class FirestoreEditorialBoardEndpoint extends EditorialBoardEndpoint {
         })),
         take(1)
       );
-
   }
 
   postEditorialBoardMember(rawMemberData: NewEditorialBoardMember): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection<EditorialBoardMemberEntity>(FirestoreEditorialBoardEndpoint.collectionName).add(rawMemberData)
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch((reason) => observer.error(reason));
-    });
-
+    return from(this.getCollection().add(rawMemberData))
+      .pipe(map(() => null));
   }
 
   updateEditorialBoardMember(memberData: UpdatedEditorialBoardMember): Observable<void> {
-
     const persistedEditorialBoardMember: EditorialBoardMemberEntity = {
       person: memberData.person,
       position: memberData.position,
       index: memberData.index
     };
+    return from(this.getDocument(memberData.id).update(persistedEditorialBoardMember));
+  }
 
-    return Observable.create((observer: Observer<void>) => {
-      const editorialBoardMemberDocToBeUpdated: AngularFirestoreDocument<EditorialBoardMemberEntity> = this.angularFirestore.doc(`${FirestoreEditorialBoardEndpoint.collectionName}/${memberData.id}`);
-      editorialBoardMemberDocToBeUpdated.update(persistedEditorialBoardMember)
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch(reason => observer.error(reason));
-    });
-
+  protected getCollectionName(): string {
+    return "editorial-board";
   }
 
 }

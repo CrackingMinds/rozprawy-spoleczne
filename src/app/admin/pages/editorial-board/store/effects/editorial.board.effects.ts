@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { Actions, Effect } from '@ngrx/effects';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
+import { EDITORIAL_BOARD_ENDPOINT, EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 
 import {
   ADD_EDITORIAL_BOARD_MEMBER, AddEditorialBoardMember,
@@ -22,7 +22,7 @@ import { EditorialBoard } from 'app/models/editorial.board';
 export class EditorialBoardEffects {
 
   constructor(private readonly actions$: Actions,
-              private readonly editorialBoardEndpoint: EditorialBoardEndpoint,
+              @Inject(EDITORIAL_BOARD_ENDPOINT) private readonly editorialBoardEndpoint: EditorialBoardEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
