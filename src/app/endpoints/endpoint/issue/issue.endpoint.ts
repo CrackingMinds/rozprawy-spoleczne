@@ -1,17 +1,21 @@
+import { InjectionToken } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { Issue, IssuesByYear, RawIssue } from 'app/models/issue';
 
-export abstract class IssueEndpoint {
+export const ISSUE_ENDPOINT = new InjectionToken<IssueEndpoint>('ISSUE_ENDPOINT');
 
-  abstract getIssue(id: string): Observable<Issue>;
-  abstract getCurrentIssue(): Observable<Issue>;
+export interface IssueEndpoint {
 
-  abstract getAllIssues(): Observable<Issue[]>;
-  abstract getAllIssuesByYear(): Observable<IssuesByYear>;
+  getIssue(id: string): Observable<Issue>;
+  getCurrentIssue(): Observable<Issue>;
 
-  abstract postIssue(issue: RawIssue): Observable<void>;
-  abstract deleteIssue(issueId: string): Observable<void>;
-  abstract updateIssue(issue: Issue): Observable<void>;
+  getAllIssues(): Observable<Issue[]>;
+  getAllIssuesByYear(): Observable<IssuesByYear>;
+
+  postIssue(issue: RawIssue): Observable<void>;
+  deleteIssue(issueId: string): Observable<void>;
+  updateIssue(issue: Issue): Observable<void>;
 
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -21,7 +21,7 @@ import {
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { ISSUE_ENDPOINT, IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 import { Issue } from 'app/models/issue';
 
@@ -29,7 +29,7 @@ import { Issue } from 'app/models/issue';
 export class IssueEffects {
 
   constructor(private readonly actions$: Actions,
-              private readonly issueEndpoint: IssueEndpoint,
+              @Inject(ISSUE_ENDPOINT) private readonly issueEndpoint: IssueEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {
   }
 

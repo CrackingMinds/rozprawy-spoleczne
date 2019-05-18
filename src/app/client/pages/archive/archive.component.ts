@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
 import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { firstFalse } from 'app/shared/custom.operators';
 
 import { IssuesByYear } from 'app/models/issue';
 import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
-import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { ISSUE_ENDPOINT, IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 import { PageComponent } from 'app/client/pages/page.component';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
@@ -25,7 +25,7 @@ export class ArchiveComponent extends PageComponent implements OnInit, OnDestroy
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private issueEndpoint: IssueEndpoint) { super(); }
+  constructor(@Inject(ISSUE_ENDPOINT) private issueEndpoint: IssueEndpoint) { super(); }
 
   ngOnInit() {
 

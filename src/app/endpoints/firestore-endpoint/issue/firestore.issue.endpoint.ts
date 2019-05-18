@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, Observer, zip } from 'rxjs';
+import { Observable, zip, from } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
+import { AngularFirestore, QueryFn } from 'angularfire2/firestore';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { Issue, IssueEntity, IssueEntityWithId, IssuesByYear, RawIssue } from 'app/models/issue';
 
@@ -12,19 +14,13 @@ import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { Utils } from 'app/shared/utils';
 
 @Injectable()
-export class FirestoreIssueEndpoint extends IssueEndpoint {
+export class FirestoreIssueEndpoint extends FirestoreEndpoint<IssueEntity> implements IssueEndpoint {
 
-  private static collectionName: string = 'issues';
-
-  constructor(private angularFirestore: AngularFirestore,
-              private firestoreArticleService: FirestoreArticleService) {
-    super();
-  }
+  constructor(angularFirestore: AngularFirestore,
+              private firestoreArticleService: FirestoreArticleService) { super(angularFirestore); }
 
   getAllIssues(): Observable<Issue[]> {
-
-    const issuesCollection = this.angularFirestore.collection<IssueEntity>(FirestoreIssueEndpoint.collectionName);
-    const issues: Observable<IssueEntityWithId[]> = issuesCollection.snapshotChanges()
+    const issues: Observable<IssueEntityWithId[]> = this.getCollection().snapshotChanges()
                                                                   .pipe(
                                                                     map(actions => actions.map(a => {
                                                                       const data = a.payload.doc.data() as IssueEntity;
@@ -46,13 +42,10 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
         }),
         take(1)
       );
-
   }
 
   getAllIssuesByYear(): Observable<IssuesByYear> {
-
-    const issuesCollection = this.angularFirestore.collection<IssueEntity>(FirestoreIssueEndpoint.collectionName);
-    const issuesWithoutArticleInfo$ = issuesCollection.snapshotChanges()
+    const issuesWithoutArticleInfo$ = this.getCollection().snapshotChanges()
                                                       .pipe(
                                                         map(actions => actions.map(a => {
                                                           const data = a.payload.doc.data() as IssueEntity;
@@ -83,9 +76,7 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
   }
 
   getIssue(id: string): Observable<Issue> {
-
-    const issueDocument: AngularFirestoreDocument = this.angularFirestore.doc(`${FirestoreIssueEndpoint.collectionName}/${id}`);
-    const issueEntity$ = issueDocument.snapshotChanges()
+    const issueEntity$ = this.getDocument(id).snapshotChanges()
                                       .pipe(
                                         map(action => {
                                           const data = action.payload.data() as IssueEntity;
@@ -110,56 +101,30 @@ export class FirestoreIssueEndpoint extends IssueEndpoint {
   }
 
   postIssue(rawIssue: RawIssue): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection<IssueEntity>(FirestoreIssueEndpoint.collectionName).add(rawIssue)
-          .then(() => {
-            observer.next(null);
-            observer.complete();
-          })
-          .catch((reason) => observer.error(reason));
-    });
-
+    return from(this.getCollection().add(rawIssue))
+      .pipe(map(() => null));
   }
 
   deleteIssue(issueId: string): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      const issueDocToBeDeleted: AngularFirestoreDocument<Issue> = this.angularFirestore.doc(`${FirestoreIssueEndpoint.collectionName}/${issueId}`);
-      issueDocToBeDeleted.delete()
-                         .then(() => {
-                           observer.next(null);
-                           observer.complete();
-                         })
-                         .catch((reason) => observer.error(reason));
-    });
-
+    return from(this.getDocument(issueId).delete());
   }
 
   updateIssue(updatedIssue: Issue): Observable<void> {
-
     const persistedIssue: IssueEntity = {
       year: updatedIssue.year,
       vol: updatedIssue.vol,
       number: updatedIssue.number,
       isCurrent: updatedIssue.isCurrent
     };
+    return from(this.getDocument(updatedIssue.id).update(persistedIssue));
+  }
 
-    return Observable.create((observer: Observer<void>) => {
-      const issueDocToBeUpdated: AngularFirestoreDocument<IssueEntity> = this.angularFirestore.doc(`${FirestoreIssueEndpoint.collectionName}/${updatedIssue.id}`);
-      issueDocToBeUpdated.update(persistedIssue)
-                         .then(() => {
-                           observer.next(null);
-                           observer.complete();
-                         })
-                         .catch((reason) => observer.error(reason));
-    });
-
+  protected getCollectionName(): string {
+    return 'issues';
   }
 
   private getIssueByQuery(queryFn: QueryFn): Observable<Issue> {
-    const issuesCollection = this.angularFirestore.collection<IssueEntity>(FirestoreIssueEndpoint.collectionName, queryFn);
-    const issueEntity$ = issuesCollection.snapshotChanges()
+    const issueEntity$ = this.getCollection(queryFn).snapshotChanges()
                                          .pipe(
                                            map(actions => {
                                              const data = actions[0].payload.doc.data() as IssueEntity;

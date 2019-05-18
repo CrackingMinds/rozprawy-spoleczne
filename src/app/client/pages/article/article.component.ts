@@ -12,7 +12,7 @@ import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
 import { ARTICLE_ENDPOINT, ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
-import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { ISSUE_ENDPOINT, IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 @Component({
   selector: 'rs-article',
@@ -31,8 +31,8 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
-              private issueEndpoint: IssueEndpoint,
-              @Inject(ARTICLE_ENDPOINT) private articleEndpoint: ArticleEndpoint) { super(); }
+              @Inject(ISSUE_ENDPOINT) private readonly issueEndpoint: IssueEndpoint,
+              @Inject(ARTICLE_ENDPOINT) private readonly articleEndpoint: ArticleEndpoint) { super(); }
 
   ngOnInit() {
 

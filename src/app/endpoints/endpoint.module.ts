@@ -19,7 +19,7 @@ import { RestContactInfoEndpoint } from 'app/endpoints/rest-endpoint/contact-inf
 import { INDEXING_INFO_ENDPOINT } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { FirestoreIndexingInfoEndpoint } from 'app/endpoints/firestore-endpoint/indexing-info/firestore.indexing.info.endpoint';
 
-import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
+import { ISSUE_ENDPOINT } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { FirestoreIssueEndpoint } from 'app/endpoints/firestore-endpoint/issue/firestore.issue.endpoint';
 
 import { REVIEWERS_ENDPOINT } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
@@ -44,7 +44,7 @@ const providers = [
     useValue: 'http://api.rozprawyspoleczne.edu.pl'
   },
   {
-    provide: IssueEndpoint,
+    provide: ISSUE_ENDPOINT,
     useClass: FirestoreIssueEndpoint
   },
   {
