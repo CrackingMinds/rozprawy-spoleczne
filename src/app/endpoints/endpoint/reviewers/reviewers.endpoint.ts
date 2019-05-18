@@ -1,12 +1,16 @@
+import { InjectionToken } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { NewReviewer, Reviewers, UpdatedReviewer } from 'app/models/reviewer';
 
-export abstract class ReviewersEndpoint {
+export const REVIEWERS_ENDPOINT = new InjectionToken<ReviewersEndpoint>('REVIEWERS_ENDPOINT');
 
-  abstract getReviewers(reviewerYearId: string): Observable<Reviewers>;
-  abstract postReviewer(newReviewerData: NewReviewer): Observable<void>;
-  abstract deleteReviewer(reviewerId: string): Observable<void>;
-  abstract updateReviewer(updatedReviewerData: UpdatedReviewer): Observable<void>;
+export interface ReviewersEndpoint {
+
+  getReviewers(reviewerYearId: string): Observable<Reviewers>;
+  postReviewer(newReviewerData: NewReviewer): Observable<void>;
+  deleteReviewer(reviewerId: string): Observable<void>;
+  updateReviewer(updatedReviewerData: UpdatedReviewer): Observable<void>;
 
 }

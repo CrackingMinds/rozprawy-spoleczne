@@ -25,7 +25,7 @@ import { FirestoreIndexingInfoEndpoint } from 'app/endpoints/firestore-endpoint/
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { FirestoreIssueEndpoint } from 'app/endpoints/firestore-endpoint/issue/firestore.issue.endpoint';
 
-import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
+import { REVIEWERS_ENDPOINT } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { FirestoreReviewersEndpoint } from 'app/endpoints/firestore-endpoint/reviewers/firestore.reviewers.endpoint';
 
 import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
@@ -71,7 +71,7 @@ const providers = [
     useClass: FirestoreIndexingInfoEndpoint
   },
   {
-    provide: ReviewersEndpoint,
+    provide: REVIEWERS_ENDPOINT,
     useClass: FirestoreReviewersEndpoint
   },
   {

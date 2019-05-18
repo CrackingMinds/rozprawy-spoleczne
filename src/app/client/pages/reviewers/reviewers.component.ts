@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { first, map, takeUntil } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { PageComponent } from 'app/client/pages/page.component';
 
 import { Reviewers } from 'app/models/reviewer';
 
-import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
+import { REVIEWERS_ENDPOINT, ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { ReviewerYear, ReviewerYears, ReviewerYearType } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
@@ -38,7 +38,7 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private reviewersEndpoint: ReviewersEndpoint,
+  constructor(@Inject(REVIEWERS_ENDPOINT) private reviewersEndpoint: ReviewersEndpoint,
               private reviewerYearsEndpoint: ReviewerYearsEndpoint) {
     super();
   }

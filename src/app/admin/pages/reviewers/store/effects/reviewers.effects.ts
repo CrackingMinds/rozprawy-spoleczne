@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import {
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
+import { REVIEWERS_ENDPOINT, ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 
 import { Reviewers } from 'app/models/reviewer';
 
@@ -24,7 +24,7 @@ import { Reviewers } from 'app/models/reviewer';
 export class ReviewersEffects {
 
 	constructor(private readonly actions$: Actions,
-              private readonly reviewersEndpoint: ReviewersEndpoint,
+              @Inject(REVIEWERS_ENDPOINT) private readonly reviewersEndpoint: ReviewersEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
