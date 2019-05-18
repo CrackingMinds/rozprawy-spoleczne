@@ -25,7 +25,7 @@ import { FirestoreIssueEndpoint } from 'app/endpoints/firestore-endpoint/issue/f
 import { REVIEWERS_ENDPOINT } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { FirestoreReviewersEndpoint } from 'app/endpoints/firestore-endpoint/reviewers/firestore.reviewers.endpoint';
 
-import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
+import { REVIEWER_YEARS_ENDPOINT } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { FirestoreReviewerYearsEndpoint } from 'app/endpoints/firestore-endpoint/reviewer-years/firestore.reviewer.years.endpoint';
 
 import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
@@ -68,7 +68,7 @@ const providers = [
     useClass: FirestoreReviewersEndpoint
   },
   {
-    provide: ReviewerYearsEndpoint,
+    provide: REVIEWER_YEARS_ENDPOINT,
     useClass: FirestoreReviewerYearsEndpoint
   },
   {

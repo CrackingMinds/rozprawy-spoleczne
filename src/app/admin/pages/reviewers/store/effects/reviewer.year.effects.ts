@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import {
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
+import { REVIEWER_YEARS_ENDPOINT, ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 
 import { ReviewerYears } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
 
@@ -23,7 +23,7 @@ import { ReviewerYears } from 'app/admin/pages/reviewers/list-of-years/reviewer.
 export class ReviewerYearEffects {
 
   constructor(private readonly actions$: Actions,
-              private readonly reviewerYearsEndpoint: ReviewerYearsEndpoint,
+              @Inject(REVIEWER_YEARS_ENDPOINT) private readonly reviewerYearsEndpoint: ReviewerYearsEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()

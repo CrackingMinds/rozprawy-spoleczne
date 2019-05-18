@@ -3,17 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { NewReviewerYear, ReviewerYearEntity, ReviewerYears, UpdatedReviewerYear } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
 
 @Injectable()
-export class FirestoreReviewerYearsEndpoint extends ReviewerYearsEndpoint {
+export class FirestoreReviewerYearsEndpoint extends FirestoreEndpoint<ReviewerYearEntity> implements ReviewerYearsEndpoint {
 
-  private static readonly collectionName: string = 'reviewer-years';
-
-  constructor(private angularFirestore: AngularFirestore) { super(); }
+  constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getReviewerYears(): Observable<ReviewerYears> {
     return this.getCollection().snapshotChanges()
@@ -35,25 +35,18 @@ export class FirestoreReviewerYearsEndpoint extends ReviewerYearsEndpoint {
   }
 
   deleteReviewerYear(reviewerYearId: string): Observable<void> {
-    const reviewerYearDocToBeDeleted = this.getDocById(reviewerYearId);
-    return from(reviewerYearDocToBeDeleted.delete());
+    return from(this.getDocument(reviewerYearId).delete());
   }
 
   updateReviewerYear(updatedReviewerYear: UpdatedReviewerYear): Observable<void> {
     const persistedReviewerYear: ReviewerYearEntity = {
       value: updatedReviewerYear.value
     };
-
-    const reviewerYearDocToBeUpdated = this.getDocById(updatedReviewerYear.id);
-    return from(reviewerYearDocToBeUpdated.update(persistedReviewerYear));
+    return from(this.getDocument(updatedReviewerYear.id).update(persistedReviewerYear));
   }
 
-  private getCollection(): AngularFirestoreCollection {
-    return this.angularFirestore.collection<ReviewerYearEntity>(FirestoreReviewerYearsEndpoint.collectionName);
-  }
-
-  private getDocById(reviewerYearId: string): AngularFirestoreDocument<ReviewerYearEntity> {
-    return this.angularFirestore.doc(`${FirestoreReviewerYearsEndpoint.collectionName}/${reviewerYearId}`);
+  protected getCollectionName(): string {
+    return "reviewer-years";
   }
 
 }

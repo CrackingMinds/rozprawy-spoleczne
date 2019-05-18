@@ -11,7 +11,7 @@ import { Reviewers } from 'app/models/reviewer';
 
 import { REVIEWERS_ENDPOINT, ReviewersEndpoint } from 'app/endpoints/endpoint/reviewers/reviewers.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
-import { ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
+import { REVIEWER_YEARS_ENDPOINT, ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { ReviewerYear, ReviewerYears, ReviewerYearType } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
@@ -38,8 +38,8 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(@Inject(REVIEWERS_ENDPOINT) private reviewersEndpoint: ReviewersEndpoint,
-              private reviewerYearsEndpoint: ReviewerYearsEndpoint) {
+  constructor(@Inject(REVIEWERS_ENDPOINT) private readonly reviewersEndpoint: ReviewersEndpoint,
+              @Inject(REVIEWER_YEARS_ENDPOINT) private readonly reviewerYearsEndpoint: ReviewerYearsEndpoint) {
     super();
   }
 

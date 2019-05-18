@@ -1,12 +1,17 @@
+import { InjectionToken } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { NewReviewerYear, ReviewerYears, UpdatedReviewerYear } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
+import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 
-export abstract class ReviewerYearsEndpoint {
+export const REVIEWER_YEARS_ENDPOINT = new InjectionToken<IndexingInfoEndpoint>('REVIEWER_YEARS_ENDPOINT');
 
-  abstract getReviewerYears(): Observable<ReviewerYears>;
-  abstract postReviewerYear(newReviewerYear: NewReviewerYear): Observable<void>;
-  abstract deleteReviewerYear(reviewerYearId: string): Observable<void>;
-  abstract updateReviewerYear(updatedReviewerYear: UpdatedReviewerYear): Observable<void>;
+export interface ReviewerYearsEndpoint {
+
+  getReviewerYears(): Observable<ReviewerYears>;
+  postReviewerYear(newReviewerYear: NewReviewerYear): Observable<void>;
+  deleteReviewerYear(reviewerYearId: string): Observable<void>;
+  updateReviewerYear(updatedReviewerYear: UpdatedReviewerYear): Observable<void>;
 
 }
