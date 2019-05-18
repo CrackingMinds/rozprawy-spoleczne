@@ -1,13 +1,17 @@
+import { InjectionToken } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { ScientificBoard } from 'app/models/scientific.board';
 import { NewScientificBoardMember, UpdatedScientificBoardMember } from 'app/models/scientific-board-member';
 
-export abstract class ScientificBoardEndpoint {
+export const SCIENTIFIC_BOARD_ENDPOINT = new InjectionToken<ScientificBoardEndpoint>('SCIENTIFIC_BOARD_ENDPOINT');
 
-  abstract getScientificBoard(): Observable<ScientificBoard>;
-  abstract postScientificBoardMember(rawMemberData: NewScientificBoardMember): Observable<void>;
-  abstract deleteScientificBoardMember(memberId: string): Observable<void>;
-  abstract updateScientificBoardMember(memberData: UpdatedScientificBoardMember): Observable<void>;
+export interface ScientificBoardEndpoint {
+
+  getScientificBoard(): Observable<ScientificBoard>;
+  postScientificBoardMember(rawMemberData: NewScientificBoardMember): Observable<void>;
+  deleteScientificBoardMember(memberId: string): Observable<void>;
+  updateScientificBoardMember(memberData: UpdatedScientificBoardMember): Observable<void>;
 
 }

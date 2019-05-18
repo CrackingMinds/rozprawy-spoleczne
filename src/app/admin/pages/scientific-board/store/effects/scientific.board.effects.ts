@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import {
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+import { SCIENTIFIC_BOARD_ENDPOINT, ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
 
 import { ScientificBoard } from 'app/models/scientific.board';
 
@@ -23,7 +23,7 @@ import { ScientificBoard } from 'app/models/scientific.board';
 export class ScientificBoardEffects {
 
   constructor(private readonly actions$: Actions,
-              private readonly scientificBoardEndpoint: ScientificBoardEndpoint,
+              @Inject(SCIENTIFIC_BOARD_ENDPOINT) private readonly scientificBoardEndpoint: ScientificBoardEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
@@ -47,7 +47,7 @@ export class ScientificBoardEffects {
             map(() => new LoadScientificBoard()),
             catchError(error => of(new EndpointCallFailAction(error)))
           );
-      }),
+      })
 
     );
 
@@ -60,7 +60,7 @@ export class ScientificBoardEffects {
             map(() => new LoadScientificBoard()),
             catchError(error => of(new EndpointCallFailAction(error)))
           );
-      }),
+      })
 
     );
 
@@ -73,7 +73,7 @@ export class ScientificBoardEffects {
             map(() => new LoadScientificBoard()),
             catchError(error => of(new EndpointCallFailAction(error)))
           );
-      }),
+      })
 
     );
 

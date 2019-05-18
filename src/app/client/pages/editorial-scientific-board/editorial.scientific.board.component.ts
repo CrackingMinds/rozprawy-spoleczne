@@ -13,7 +13,7 @@ import { EditorialBoard } from 'app/models/editorial.board';
 import { ScientificBoard } from 'app/models/scientific.board';
 
 import { EDITORIAL_BOARD_ENDPOINT, EditorialBoardEndpoint } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
-import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+import { SCIENTIFIC_BOARD_ENDPOINT, ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
 
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
@@ -31,8 +31,8 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private scientificBoardEndpoint: ScientificBoardEndpoint,
-              @Inject(EDITORIAL_BOARD_ENDPOINT) private editorialBoardEndpoint: EditorialBoardEndpoint) { super(); }
+  constructor(@Inject(SCIENTIFIC_BOARD_ENDPOINT) private readonly scientificBoardEndpoint: ScientificBoardEndpoint,
+              @Inject(EDITORIAL_BOARD_ENDPOINT) private readonly editorialBoardEndpoint: EditorialBoardEndpoint) { super(); }
 
   ngOnInit() {
 

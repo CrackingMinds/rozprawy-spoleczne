@@ -3,9 +3,8 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { NewReviewerYear, ReviewerYears, UpdatedReviewerYear } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 
-export const REVIEWER_YEARS_ENDPOINT = new InjectionToken<IndexingInfoEndpoint>('REVIEWER_YEARS_ENDPOINT');
+export const REVIEWER_YEARS_ENDPOINT = new InjectionToken<ReviewerYearsEndpoint>('REVIEWER_YEARS_ENDPOINT');
 
 export interface ReviewerYearsEndpoint {
 

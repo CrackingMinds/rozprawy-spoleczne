@@ -34,7 +34,7 @@ import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscript
 import { EDITORIAL_BOARD_ENDPOINT } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
 
-import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+import { SCIENTIFIC_BOARD_ENDPOINT } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
 import { FirestoreScientificBoardEndpoint } from 'app/endpoints/firestore-endpoint/scientific-board/firestore.scientific.board.endpoint';
 
 const providers = [
@@ -80,7 +80,7 @@ const providers = [
     useClass: FirestoreEditorialBoardEndpoint
   },
   {
-    provide: ScientificBoardEndpoint,
+    provide: SCIENTIFIC_BOARD_ENDPOINT,
     useClass: FirestoreScientificBoardEndpoint
   }
 ];

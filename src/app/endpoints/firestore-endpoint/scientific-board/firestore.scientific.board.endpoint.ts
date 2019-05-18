@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, Observer } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { ScientificBoardEndpoint } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
 
@@ -15,30 +17,16 @@ import {
 } from 'app/models/scientific-board-member';
 
 @Injectable()
-export class FirestoreScientificBoardEndpoint extends ScientificBoardEndpoint {
+export class FirestoreScientificBoardEndpoint extends FirestoreEndpoint<ScientificBoardMemberEntity> implements ScientificBoardEndpoint {
 
-  private static readonly collectionName: string = 'scientific-board';
-
-  constructor(private angularFirestore: AngularFirestore) { super(); }
+  constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   deleteScientificBoardMember(memberId: string): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      const scientificBoardMemberDocToBeDeleted: AngularFirestoreDocument<ScientificBoardMemberEntity> = this.angularFirestore.doc(`${FirestoreScientificBoardEndpoint.collectionName}/${memberId}`);
-      scientificBoardMemberDocToBeDeleted.delete()
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch(reason => observer.error(reason));
-    });
-
+    return from(this.getDocument(memberId).delete());
   }
 
   getScientificBoard(): Observable<ScientificBoard> {
-
-    const scientificBoardCollection = this.angularFirestore.collection<ScientificBoardMemberEntity>(FirestoreScientificBoardEndpoint.collectionName);
-    return scientificBoardCollection.snapshotChanges()
+    return this.getCollection().snapshotChanges()
       .pipe(
         map(actions => actions.map(a => {
           const data = a.payload.doc.data() as ScientificBoardMemberEntity;
@@ -49,40 +37,24 @@ export class FirestoreScientificBoardEndpoint extends ScientificBoardEndpoint {
         })),
         take(1)
       );
-
   }
 
   postScientificBoardMember(rawMemberData: NewScientificBoardMember): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection<ScientificBoardMemberEntity>(FirestoreScientificBoardEndpoint.collectionName).add(rawMemberData)
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch((reason) => observer.error(reason));
-    });
-
+    return from(this.getCollection().add(rawMemberData))
+      .pipe(map(() => null));
   }
 
   updateScientificBoardMember(memberData: UpdatedScientificBoardMember): Observable<void> {
-
     const persistedScientificBoardMember: ScientificBoardMemberEntity = {
       person: memberData.person,
       institute: memberData.institute,
       index: memberData.index
     };
+    return from(this.getDocument(memberData.id).update(persistedScientificBoardMember));
+  }
 
-    return Observable.create((observer: Observer<void>) => {
-      const scientificBoardMemberDocToBeUpdated: AngularFirestoreDocument<ScientificBoardMemberEntity> = this.angularFirestore.doc(`${FirestoreScientificBoardEndpoint.collectionName}/${memberData.id}`);
-      scientificBoardMemberDocToBeUpdated.update(persistedScientificBoardMember)
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch(reason => observer.error(reason));
-    });
-
+  protected getCollectionName(): string {
+    return 'scientific-board';
   }
 
 }
