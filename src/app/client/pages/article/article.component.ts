@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
@@ -11,7 +11,7 @@ import { PageComponent } from 'app/client/pages/page.component';
 import { Article } from 'app/models/article';
 import { Issue } from 'app/models/issue';
 
-import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { ARTICLE_ENDPOINT, ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 
 @Component({
@@ -32,7 +32,7 @@ export class ArticleComponent extends PageComponent implements OnInit, OnDestroy
 
   constructor(private route: ActivatedRoute,
               private issueEndpoint: IssueEndpoint,
-              private articleEndpoint: ArticleEndpoint) { super(); }
+              @Inject(ARTICLE_ENDPOINT) private articleEndpoint: ArticleEndpoint) { super(); }
 
   ngOnInit() {
 

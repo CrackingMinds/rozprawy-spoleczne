@@ -5,6 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
+
 import { ArticleType } from 'app/models/article.type';
 
 interface IFirestoreArticleType {
@@ -12,15 +14,12 @@ interface IFirestoreArticleType {
 }
 
 @Injectable()
-export class FirestoreArticleTypeService {
+export class FirestoreArticleTypeService extends FirestoreEndpoint<IFirestoreArticleType> {
 
-  private static collectionName: string = 'article-types';
-
-  constructor(private angularFirestore: AngularFirestore) {}
+  constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getArticleType(id: string): Observable<ArticleType> {
-    let articleTypesCollection = this.angularFirestore.collection<IFirestoreArticleType>(FirestoreArticleTypeService.collectionName);
-    return articleTypesCollection.doc(id).valueChanges()
+    return this.getCollection().doc(id).valueChanges()
                                  .pipe(
                                    map((articleType: IFirestoreArticleType) => {
                                      return {
@@ -32,8 +31,7 @@ export class FirestoreArticleTypeService {
   }
 
   getArticleTypes(): Observable<ArticleType[]> {
-    let articleTypesCollection = this.angularFirestore.collection<IFirestoreArticleType>(FirestoreArticleTypeService.collectionName);
-    return articleTypesCollection.snapshotChanges().pipe(
+    return this.getCollection().snapshotChanges().pipe(
       map(actions => actions.map(a => {
         let data = a.payload.doc.data() as IFirestoreArticleType;
         return {
@@ -43,4 +41,9 @@ export class FirestoreArticleTypeService {
       }))
     );
   }
+
+  protected getCollectionName(): string {
+    return "article-types";
+  }
+
 }

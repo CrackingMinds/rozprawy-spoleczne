@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { catchError, delay, map, switchMap } from 'rxjs/operators';
@@ -24,7 +24,7 @@ import { ReloadIssue } from 'app/admin/pages/library/store/actions/issue.actions
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { ARTICLE_ENDPOINT, ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 
 import { Article } from 'app/models/article';
 
@@ -32,7 +32,7 @@ import { Article } from 'app/models/article';
 export class ArticleEffects {
 
   constructor(private readonly actions$: Actions,
-              private readonly articleEndpoint: ArticleEndpoint,
+              @Inject(ARTICLE_ENDPOINT) private readonly articleEndpoint: ArticleEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()

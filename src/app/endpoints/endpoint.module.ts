@@ -7,7 +7,7 @@ import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
 import { ENDPOINT_URL } from 'app/endpoints/endpoint.tokens';
 
-import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { ARTICLE_ENDPOINT } from 'app/endpoints/endpoint/article/article.endpoint';
 import { FirestoreArticleEndpoint } from 'app/endpoints/firestore-endpoint/article/firestore.article.endpoint';
 
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
@@ -51,7 +51,7 @@ const providers = [
     useClass: FirestoreIssueEndpoint
   },
   {
-    provide: ArticleEndpoint,
+    provide: ARTICLE_ENDPOINT,
     useClass: FirestoreArticleEndpoint
   },
   {

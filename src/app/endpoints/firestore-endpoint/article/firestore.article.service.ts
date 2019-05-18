@@ -1,34 +1,32 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, Observer } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreDocument, QueryFn } from 'angularfire2/firestore';
+import { AngularFirestore, QueryFn } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { Article, ArticleEntity, UntypedArticle } from 'app/models/article';
 
 @Injectable()
-export class FirestoreArticleService {
+export class FirestoreArticleService extends FirestoreEndpoint<ArticleEntity> {
 
-  private static collectionName: string = 'articles';
-
-  constructor(private angularFirestore: AngularFirestore,
-              private angularFireStorage: AngularFireStorage) {}
+  constructor(angularFirestore: AngularFirestore,
+              private readonly angularFireStorage: AngularFireStorage) { super(angularFirestore); }
 
   getArticle(articleId: string): Observable<UntypedArticle> {
-
-    const articleDocument: AngularFirestoreDocument = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${articleId}`);
-    return articleDocument.snapshotChanges()
-                             .pipe(
-                               map(action => {
-                                 let data = action.payload.data() as ArticleEntity;
-                                 return {
-                                   id: action.payload.id,
-                                   ...data
-                                 };
-                               })
-                             );
+    return this.getDocument(articleId).snapshotChanges()
+               .pipe(
+                 map(action => {
+                   let data = action.payload.data() as ArticleEntity;
+                   return {
+                     id: action.payload.id,
+                     ...data
+                   };
+                 })
+               );
   }
 
   getArticleByFile(fileName: string): Observable<UntypedArticle> {
@@ -37,9 +35,8 @@ export class FirestoreArticleService {
   }
 
   getIssueArticles(issueId: string): Observable<UntypedArticle[]> {
-
-    const articlesCollection = this.angularFirestore.collection<ArticleEntity>(FirestoreArticleService.collectionName, ref => ref.where('issueId', '==', issueId));
-    return articlesCollection.snapshotChanges()
+    const queryFn: QueryFn = ref => ref.where('issueId', '==', issueId);
+    return this.getCollection(queryFn).snapshotChanges()
                              .pipe(
                                map(actions => actions.map(
                                  a => {
@@ -55,20 +52,11 @@ export class FirestoreArticleService {
   }
 
   postArticle(rawArticle: ArticleEntity): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      this.angularFirestore.collection<ArticleEntity>(FirestoreArticleService.collectionName).add(rawArticle)
-          .then(() => {
-            observer.next(null);
-            observer.complete();
-          })
-          .catch((reason) => observer.error(reason));
-    });
-
+    return from(this.getCollection().add(rawArticle))
+      .pipe(map(() => null));
   }
 
   updateArticle(updatedArticle: UntypedArticle): Observable<void> {
-
     const persistedArticle: ArticleEntity = {
       issueId: updatedArticle.issueId,
       authors: updatedArticle.authors,
@@ -83,40 +71,24 @@ export class FirestoreArticleService {
       title: updatedArticle.title,
       articleTypeId: updatedArticle.articleTypeId
     };
-
-    return Observable.create((observer: Observer<void>) => {
-      const articleDocToBeUpdated: AngularFirestoreDocument<ArticleEntity> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${updatedArticle.id}`);
-      articleDocToBeUpdated.update(persistedArticle)
-        .then(() => {
-          observer.next(null);
-          observer.complete();
-        })
-        .catch(reason => observer.error(reason));
-    });
-
+    return from(this.getDocument(updatedArticle.id).update(persistedArticle));
   }
 
   deleteArticle(article: Article): Observable<void> {
-
-    return Observable.create((observer: Observer<void>) => {
-      const articleDocToBeDeleted: AngularFirestoreDocument<Article> = this.angularFirestore.doc(`${FirestoreArticleService.collectionName}/${article.id}`);
-      articleDocToBeDeleted.delete()
-        .then(() => {
-          observer.next(null);
-          observer.complete();
+    return from(this.getDocument(article.id).delete())
+      .pipe(
+        switchMap(() => {
+          return this.angularFireStorage.ref(article.pdf.storagePath).delete();
         })
-        .catch((reason) => observer.error(reason));
-    }).pipe(
-      switchMap(() => {
-        return this.angularFireStorage.ref(article.pdf.storagePath).delete();
-      })
-    );
+      );
+  }
 
+  protected getCollectionName(): string {
+    return 'articles';
   }
 
   private getArticleByQuery(queryFn: QueryFn): Observable<UntypedArticle> {
-    const articleCollection = this.angularFirestore.collection<ArticleEntity>(FirestoreArticleService.collectionName, queryFn);
-    return articleCollection.snapshotChanges()
+    return this.getCollection(queryFn).snapshotChanges()
                             .pipe(
                               map(actions => {
                                   if (!actions.length) {

@@ -12,10 +12,10 @@ import { FirestoreArticleService } from 'app/endpoints/firestore-endpoint/articl
 import { FirestoreArticleTypeService } from 'app/endpoints/firestore-endpoint/article-type/firestore.article.type.service';
 
 @Injectable()
-export class FirestoreArticleEndpoint extends ArticleEndpoint {
+export class FirestoreArticleEndpoint implements ArticleEndpoint {
 
   constructor(private articleService: FirestoreArticleService,
-              private articleTypeService: FirestoreArticleTypeService) { super(); }
+              private articleTypeService: FirestoreArticleTypeService) {}
 
   getIssueArticles(issueId: string): Observable<Article[]> {
     return this.articleService.getIssueArticles(issueId)

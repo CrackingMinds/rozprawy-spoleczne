@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Observable, Subject, ReplaySubject } from 'rxjs';
@@ -12,7 +12,7 @@ import { Article } from 'app/models/article';
 import { IssueStringPipe } from 'app/shared/pipes/issue.string.pipe';
 import { PageComponent } from 'app/client/pages/page.component';
 
-import { ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
+import { ARTICLE_ENDPOINT, ArticleEndpoint } from 'app/endpoints/endpoint/article/article.endpoint';
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
 import { Utils } from 'app/shared/utils';
 
@@ -35,7 +35,7 @@ export class IssueComponent extends PageComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private issueEndpoint: IssueEndpoint,
-              private articleEndpoint: ArticleEndpoint,
+              @Inject(ARTICLE_ENDPOINT) private articleEndpoint: ArticleEndpoint,
               private issueStringPipe: IssueStringPipe) { super(); }
 
   ngOnInit() {
