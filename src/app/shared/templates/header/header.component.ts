@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { firstFalse } from 'app/shared/custom.operators';
 
 import { IndexingInfo } from 'app/models/indexing';
 
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { AsyncComponent } from 'app/client/pages/async.component';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
@@ -23,7 +23,7 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private indexingInfoEndpoint: IndexingInfoEndpoint) {}
+  constructor(@Inject(INDEXING_INFO_ENDPOINT) private indexingInfoEndpoint: IndexingInfoEndpoint) {}
 
   ngOnInit() {
     this.indexingInfoEndpoint.getIndexingInfo()

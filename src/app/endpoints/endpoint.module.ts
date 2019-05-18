@@ -19,7 +19,7 @@ import { RestContactInfoEndpoint } from 'app/endpoints/rest-endpoint/contact-inf
 import { EditorialScientificBoardEndpoint } from 'app/endpoints/endpoint/editorial-and-scientific-board/editorial.scientific.board.endpoint';
 import { RestEditorialScientificBoardEndpoint } from 'app/endpoints/rest-endpoint/editorial-and-scientific-board/rest.editorial.scientific.board.endpoint';
 
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { INDEXING_INFO_ENDPOINT } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { FirestoreIndexingInfoEndpoint } from 'app/endpoints/firestore-endpoint/indexing-info/firestore.indexing.info.endpoint';
 
 import { IssueEndpoint } from 'app/endpoints/endpoint/issue/issue.endpoint';
@@ -67,7 +67,7 @@ const providers = [
     useClass: RestEditorialScientificBoardEndpoint
   },
   {
-    provide: IndexingInfoEndpoint,
+    provide: INDEXING_INFO_ENDPOINT,
     useClass: FirestoreIndexingInfoEndpoint
   },
   {

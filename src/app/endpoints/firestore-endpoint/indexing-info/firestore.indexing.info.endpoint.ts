@@ -3,18 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
+
+import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.endpoint';
 
 import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 
 import { IndexingInfo, IndexingInfoItemEntity, NewIndexingInfoItem, UpdatedIndexingInfoItem } from 'app/models/indexing';
 
 @Injectable()
-export class FirestoreIndexingInfoEndpoint extends IndexingInfoEndpoint {
+export class FirestoreIndexingInfoEndpoint extends FirestoreEndpoint<IndexingInfoItemEntity> implements IndexingInfoEndpoint {
 
-  private static collectionName: string = 'indexing';
-
-  constructor(private angularFirestore: AngularFirestore) { super(); }
+  constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getIndexingInfo(): Observable<IndexingInfo> {
     return this.getCollection().snapshotChanges()
@@ -48,12 +48,8 @@ export class FirestoreIndexingInfoEndpoint extends IndexingInfoEndpoint {
     return from(this.getDocument(indexingInfoItemId).delete());
   }
 
-  private getCollection(): AngularFirestoreCollection<IndexingInfoItemEntity> {
-    return this.angularFirestore.collection<IndexingInfoItemEntity>(FirestoreIndexingInfoEndpoint.collectionName);
-  }
-
-  private getDocument(id: string): AngularFirestoreDocument<IndexingInfoItemEntity> {
-    return this.angularFirestore.doc(`${FirestoreIndexingInfoEndpoint.collectionName}/${id}`);
+  protected getCollectionName(): string {
+    return "indexing";
   }
 
 }

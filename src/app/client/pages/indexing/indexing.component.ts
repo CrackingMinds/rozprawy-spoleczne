@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
 import { Observable, Subject, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { PageComponent } from 'app/client/pages/page.component';
 
 import { IndexingInfo, IndexingInfoItem } from 'app/models/indexing';
 
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
@@ -25,14 +25,14 @@ export class IndexingComponent extends PageComponent implements OnInit, OnDestro
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private readonly indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
+  constructor(@Inject(INDEXING_INFO_ENDPOINT) private readonly indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
 
   ngOnInit() {
 
     this.indexingInfoEndpoint.getIndexingInfo()
         .pipe(
           map((indexingInfo: IndexingInfo) => {
-            return indexingInfo.filter((item: IndexingInfoItem) => item.name !== 'ISSN')
+            return indexingInfo.filter((item: IndexingInfoItem) => item.name !== 'ISSN');
           }),
           map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
           takeUntil(this.unsubscribe$)

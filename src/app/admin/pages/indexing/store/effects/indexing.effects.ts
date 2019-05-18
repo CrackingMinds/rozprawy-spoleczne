@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { of } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import {
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 
 import { IndexingInfo } from 'app/models/indexing';
 
@@ -23,7 +23,7 @@ import { IndexingInfo } from 'app/models/indexing';
 export class IndexingEffects {
 
 	constructor(private readonly actions$: Actions,
-              private readonly indexingInfoEndpoint: IndexingInfoEndpoint,
+              @Inject(INDEXING_INFO_ENDPOINT) private readonly indexingInfoEndpoint: IndexingInfoEndpoint,
               private readonly endpointErrorHandler: EndpointErrorHandler) {}
 
   @Effect()
