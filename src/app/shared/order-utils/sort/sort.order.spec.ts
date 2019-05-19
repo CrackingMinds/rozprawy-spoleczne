@@ -1,11 +1,11 @@
-import { Ordered } from 'app/shared/order-utils/ordered';
+import { OrderedWithId } from 'app/shared/order-utils/ordered';
 import { OrderedItemsSorter } from 'app/shared/order-utils/sort/ordered.items.sorter';
 
 describe('sort by order -', () => {
 
   it('should accurately sort given values', () => {
 
-    const expectedValues: Array<Ordered> = [
+    const expectedValues: Array<OrderedWithId> = [
       { id: 'a', nextId: null },
       { id: 'b', nextId: 'a' },
       { id: 'c', nextId: 'b' },
@@ -13,7 +13,7 @@ describe('sort by order -', () => {
     ];
 
     // given
-    const initialValues: Array<Ordered> = [
+    const initialValues: Array<OrderedWithId> = [
       { id: 'd', nextId: 'c' },
       { id: 'c', nextId: 'b' },
       { id: 'a', nextId: null },
@@ -24,7 +24,7 @@ describe('sort by order -', () => {
     const sortedValues = OrderedItemsSorter.sort(initialValues);
 
     // then
-    sortedValues.forEach((value: Ordered, index: number) => {
+    sortedValues.forEach((value: OrderedWithId, index: number) => {
       const actualId = value.id;
       const expectedId = expectedValues[index].id;
       expect(actualId).toBe(expectedId);

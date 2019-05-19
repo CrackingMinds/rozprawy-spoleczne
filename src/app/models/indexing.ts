@@ -1,4 +1,4 @@
-import { Sortable } from 'app/models/sortable';
+import { Ordered } from 'app/shared/order-utils/ordered';
 
 export type IndexingInfo = Array<IndexingInfoItem>;
 
@@ -6,7 +6,7 @@ export type IndexingInfoItem = IndexingInfoItemBase & {
   id: string;
 };
 
-type IndexingInfoItemBase = RawIndexingInfoItem & Sortable;
+type IndexingInfoItemBase = RawIndexingInfoItem & Ordered;
 
 export type RawIndexingInfoItem = {
   name: string;

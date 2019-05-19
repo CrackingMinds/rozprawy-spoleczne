@@ -103,7 +103,7 @@ export class ListOfReviewersComponent implements OnInit, OnChanges, OnDestroy {
 
   onReviewerRemove(event: ListOfControlsValueRemove): void {
     this.reviewerEvent.emit(new ReviewerRemoveEvent({
-      reviewerId: this.getReviewerByIndex(event.controlIndex).id
+      reviewerId: this.getReviewerByIndex(event.indexOfControlToRemove).id
     }));
   }
 

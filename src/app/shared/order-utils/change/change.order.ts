@@ -1,7 +1,9 @@
-import { OrderChange, OrderChanges } from 'app/shared/order-utils/change/order.change';
-import { Ordered } from 'app/shared/order-utils/ordered';
+import { findItemInOrder, findItemsPrevious } from 'app/shared/order-utils/order.utils';
 
-export function calcOrderChange(items: Array<Ordered>, currentId: string, nextTargetId: string): OrderChanges {
+import { OrderChange, OrderChanges } from 'app/shared/order-utils/change/order.change';
+import { OrderedWithId } from 'app/shared/order-utils/ordered';
+
+export function calcOrderChange(items: Array<OrderedWithId>, currentId: string, nextTargetId: string): OrderChanges {
 
   if (!items)
     throw new Error('Initial order is not provided');
@@ -14,42 +16,33 @@ export function calcOrderChange(items: Array<Ordered>, currentId: string, nextTa
 
   const changes: Array<OrderChange> = [];
 
-  const currentItem = findItem(items, currentId);
+  const currentItem = findItemInOrder(items, currentId);
   if (!currentItem)
     throw new Error('Current item does not exist');
 
-  const targetItem = findItem(items, nextTargetId);
-  if (!targetItem)
-    throw new Error('Current item does not exist');
+  let targetItemId: string;
+  if (!nextTargetId) {
+    targetItemId = null;
+  } else {
+    const targetItem = findItemInOrder(items, nextTargetId);
+    if (!targetItem)
+      throw new Error('Current item does not exist');
 
-  const previousOfCurrent = findPrevious(items, currentItem.id);
+    targetItemId = targetItem.id;
+  }
+
+  const previousOfCurrent = findItemsPrevious(items, currentItem.id);
   if (previousOfCurrent) {
     changes.push({ itemId: previousOfCurrent.id, nextId: currentItem.nextId });
   }
 
-  const previousOfTarget = findPrevious(items, targetItem.id);
+  const previousOfTarget = findItemsPrevious(items, targetItemId);
   if (previousOfTarget) {
     changes.push({ itemId: previousOfTarget.id, nextId: currentItem.id });
   }
 
-  changes.push({ itemId: currentItem.id, nextId: targetItem.id });
+  changes.push({ itemId: currentItem.id, nextId: targetItemId });
 
   return new OrderChanges(changes);
 
-}
-
-function findPrevious(items: Array<Ordered>, currentId: string): Ordered {
-  const result = items.filter((item: Ordered) => item.nextId === currentId);
-  if (!result.length)
-    return null;
-
-  return result[0];
-}
-
-function findItem(items: Array<Ordered>, id: string): Ordered {
-  const result = items.filter((item: Ordered) => item.id === id);
-  if (!result.length)
-    return null;
-
-  return result[0];
 }

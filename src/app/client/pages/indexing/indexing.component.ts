@@ -11,7 +11,6 @@ import { IndexingInfo, IndexingInfoItem } from 'app/models/indexing';
 
 import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
-import { CustomSorting } from 'app/shared/custom.sorting';
 
 @Component({
   selector: 'rs-indexing',
@@ -34,7 +33,6 @@ export class IndexingComponent extends PageComponent implements OnInit, OnDestro
           map((indexingInfo: IndexingInfo) => {
             return indexingInfo.filter((item: IndexingInfoItem) => item.name !== 'ISSN');
           }),
-          map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
           takeUntil(this.unsubscribe$)
         )
         .subscribe((indexingInfo: IndexingInfo) => {

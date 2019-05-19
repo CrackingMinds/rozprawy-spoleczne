@@ -120,7 +120,7 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
 
   onEditorialBoardMemberRemove(event: ListOfControlsValueRemove): void {
 
-    const member = this.getMemberByIndex(event.controlIndex);
+    const member = this.getMemberByIndex(event.indexOfControlToRemove);
 
     this.store.dispatch(new RemoveEditorialBoardMember(member.id));
 

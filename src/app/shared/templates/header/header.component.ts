@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
 import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { firstFalse } from 'app/shared/custom.operators';
 
@@ -9,7 +9,6 @@ import { IndexingInfo } from 'app/models/indexing';
 
 import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { AsyncComponent } from 'app/client/pages/async.component';
-import { CustomSorting } from 'app/shared/custom.sorting';
 
 @Component({
   selector: 'rs-header',
@@ -27,10 +26,7 @@ export class HeaderComponent implements AsyncComponent, OnInit, OnDestroy {
 
   ngOnInit() {
     this.indexingInfoEndpoint.getIndexingInfo()
-        .pipe(
-          map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
-          takeUntil(this.unsubscribe$)
-        )
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe((indexingInfo: IndexingInfo) => {
           this.indexingInfo = indexingInfo;
           this.contentLoading$.next(false);

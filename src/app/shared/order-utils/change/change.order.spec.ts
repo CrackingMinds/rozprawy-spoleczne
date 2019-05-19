@@ -1,11 +1,12 @@
+import { generateInitialOrder } from 'app/shared/order-utils/order.test.helpers';
 import { calcOrderChange } from 'app/shared/order-utils/change/change.order';
 
-import { Ordered } from 'app/shared/order-utils/ordered';
+import { OrderedWithId } from 'app/shared/order-utils/ordered';
 import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 describe('change order -', () => {
 
-  let initialOrder: Array<Ordered>;
+  let initialOrder: Array<OrderedWithId>;
 
   beforeEach(() => {
     initialOrder = generateInitialOrder();
@@ -98,7 +99,7 @@ describe('change order -', () => {
     it('non existent target', () => {
 
       // given
-      const targetToFollow: Ordered = { id: 'non-existent', nextId: 'any' };
+      const targetToFollow: OrderedWithId = { id: 'non-existent', nextId: 'any' };
       const item = getA();
 
       // when & then
@@ -130,19 +131,19 @@ describe('change order -', () => {
 
   });
 
-  function getA(): Ordered {
+  function getA(): OrderedWithId {
     return initialOrder[0];
   }
 
-  function getB(): Ordered {
+  function getB(): OrderedWithId {
     return initialOrder[1];
   }
 
-  function getC(): Ordered {
+  function getC(): OrderedWithId {
     return initialOrder[2];
   }
 
-  function getD(): Ordered {
+  function getD(): OrderedWithId {
     return initialOrder[3];
   }
 
@@ -162,12 +163,3 @@ describe('change order -', () => {
   }
 
 });
-
-function generateInitialOrder(): Array<Ordered> {
-  return [
-    { id: 'a', nextId: null },
-    { id: 'b', nextId: 'a' },
-    { id: 'c', nextId: 'b' },
-    { id: 'd', nextId: 'c' }
-  ];
-}

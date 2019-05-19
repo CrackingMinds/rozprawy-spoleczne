@@ -13,10 +13,16 @@ import {
 } from '@angular/forms';
 
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
+
+import { OrderedWithId } from 'app/shared/order-utils/ordered';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
+import { calcOrderChange } from 'app/shared/order-utils/change/change.order';
+import { removeFromOrder } from 'app/shared/order-utils/remove/remove.from.order';
+import { getNextIdForNewItem } from 'app/shared/order-utils/add/add.to.order';
 
 import {
-  ListOfControlsControl,
+  ListOfControlsControl, ListOfControlsOrderChange,
   ListOfControlsValueCreate,
   ListOfControlsValueRemove,
   ListOfControlsValueUpdate
@@ -24,21 +30,10 @@ import {
 import { Utils } from 'app/shared/utils';
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
 import { ModalService } from 'app/admin/pages/library/modal/modal.service';
-import { Sortable } from 'app/models/sortable';
 
-type ControlValue = any;
+type ControlValue = OrderedWithId;
 
 type ListValue = Array<ControlValue>;
-
-type SortingOrderChange = {
-  controlIndex: number;
-  newIndex: number;
-};
-
-enum ChangeOrderDirection {
-  UP,
-  BOTTOM
-}
 
 @Component({
 	selector: 'rs-list-of-controls',
@@ -73,6 +68,9 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
 
   @Output('valueRemove')
   controlValueRemove$: EventEmitter<ListOfControlsValueRemove> = new EventEmitter<ListOfControlsValueRemove>();
+
+  @Output('orderChange')
+  controlOrderChange$: EventEmitter<ListOfControlsOrderChange> = new EventEmitter<ListOfControlsOrderChange>();
 
   listOfControls: FormGroup = this.formBuilder.group({
     controls: this.formBuilder.array([])
@@ -139,24 +137,24 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
       const dialogRef = this.modal.open(modalData);
       dialogRef.afterClosed()
         .pipe(
+          filter((actionSubmitted: boolean) => actionSubmitted),
           takeUntil(this.unsubscribe$)
         )
-        .subscribe((actionSubmitted: boolean) => {
-
-          if (!actionSubmitted) {
-            return;
-          }
-
-          this.controlValueRemove$.emit({
-            controlIndex: index
-          });
-
-        })
+        .subscribe(() => this.onControlValueRemoveSubmit(index));
 
     } else {
       this.removeControl(index);
     }
 
+  }
+
+  onControlValueRemoveSubmit(controlIndex: number): void {
+    const currentControlValue: ControlValue = this.getControlValue(controlIndex);
+    if (!currentControlValue) {
+      throw new Error(`No value exists for control with index: ${controlIndex}`);
+    }
+
+    this.emitControlValueRemoveEvent(controlIndex, currentControlValue);
   }
 
   registerOnChange(fn: any): void {
@@ -210,19 +208,21 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
     const initialValue = this.getInitialValueOfControl(controlIndex);
     const controlValue = this.getControlValue(controlIndex);
 
+    const payload = {
+      controlIndex: controlIndex,
+      controlValue: controlValue
+    };
+
     if (!initialValue) {
       this.controlValueCreate$.emit({
-        controlIndex: controlIndex,
-        controlValue: controlValue
+        ...payload,
+        nextId: getNextIdForNewItem(this.controls.value)
       });
 
       return;
     }
 
-    this.controlValueUpdate$.emit({
-      controlIndex: controlIndex,
-      controlValue: controlValue
-    });
+    this.controlValueUpdate$.emit(payload);
   }
 
   cancelControlValue(controlIndex: number): void {
@@ -237,11 +237,31 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
   }
 
   moveUp(controlIndex: number): void {
-    this.changeControlIndex(controlIndex, ChangeOrderDirection.UP);
+    const item = this.getControlValue(controlIndex);
+
+    const upperItem = this.getControlValue(controlIndex - 2);
+    let upperItemId: string;
+    if (!upperItem) {
+      upperItemId = null;
+    } else {
+      upperItemId = upperItem.id;
+    }
+
+    this.controlOrderChange$.emit(
+      this.calcOrderChange(item.id, upperItemId)
+    );
   }
 
   moveDown(controlIndex: number): void {
-    this.changeControlIndex(controlIndex, ChangeOrderDirection.BOTTOM);
+    const item = this.getControlValue(controlIndex);
+
+    const lowerItem = this.getLowerControlValue(controlIndex);
+    if (!lowerItem)
+      return;
+
+    this.controlOrderChange$.emit(
+      this.calcOrderChange(item.id, lowerItem.id)
+    );
   }
 
   checkMoveUpDisabled(controlIndex: number): boolean {
@@ -261,49 +281,8 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
     this.modifiedControls.splice(index, 1);
   }
 
-  private changeControlIndex(controlIndex: number, direction: ChangeOrderDirection): void {
-
-    let nextIndex: number;
-
-    switch (direction) {
-
-      case ChangeOrderDirection.UP: {
-        nextIndex = controlIndex - 1;
-        break;
-      }
-
-      case ChangeOrderDirection.BOTTOM: {
-        nextIndex = controlIndex + 1;
-        break;
-      }
-
-    }
-
-    this.reportIndexUpdate({
-      controlIndex: controlIndex,
-      newIndex: nextIndex
-    });
-
-    this.reportIndexUpdate({
-      controlIndex: nextIndex,
-      newIndex: controlIndex
-    });
-
-  }
-
-  private reportIndexUpdate(data: SortingOrderChange): void {
-
-    const controlValue = this.getControlValue(data.controlIndex);
-    const newControlValue: Sortable = {
-      ...controlValue,
-      index: data.newIndex
-    };
-
-    this.controlValueUpdate$.emit({
-      controlIndex: data.controlIndex,
-      controlValue: newControlValue
-    });
-
+  private calcOrderChange(id: string, nextId: string): OrderChanges {
+    return calcOrderChange(this.controls.value, id, nextId);
   }
 
   private createControlsForData(data: ListValue): void {
@@ -339,7 +318,11 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
   }
 
   private getControlValue(controlIndex: number): any {
-    return this.getControlByIndex(controlIndex).value;
+    const control = this.getControlByIndex(controlIndex);
+    if (!control)
+      return null;
+
+    return control.value;
   }
 
   private getControlByIndex(controlIndex: number): AbstractControl {
@@ -376,6 +359,17 @@ export class ListOfControlsComponent implements ControlValueAccessor, Validator,
 
     return newControl;
 
+  }
+
+  private getLowerControlValue(controlIndex: number): ControlValue {
+    return this.getControlValue(controlIndex + 1);
+  }
+
+  private emitControlValueRemoveEvent(controlIndex: number, controlValue: ControlValue): void {
+    this.controlValueRemove$.emit({
+      indexOfControlToRemove: controlIndex,
+      orderChanges: removeFromOrder(this.controls.value, controlValue.id)
+    });
   }
 
 }

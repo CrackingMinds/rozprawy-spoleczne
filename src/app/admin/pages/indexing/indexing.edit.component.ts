@@ -2,7 +2,7 @@ import { Component, OnInit, Type, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 import { Observable, of, Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
@@ -12,16 +12,16 @@ import * as indexingInfoSelectors from 'app/admin/pages/indexing/store/selectors
 import { IndexingState } from 'app/admin/pages/indexing/store/reducers/indexing.reducer';
 
 import {
-  AddIndexingInfoItemAction,
+  AddIndexingInfoItemAction, ChangeOrderAction,
   LoadIndexingInfoAction,
   RemoveIndexingInfoItemAction, ResetIndexingStateAction,
   UpdateIndexingInfoItemAction
 } from 'app/admin/pages/indexing/store/actions/indexing.actions';
 
-import { IndexingInfo, IndexingInfoItem, NewIndexingInfoItem, UpdatedIndexingInfoItem } from 'app/models/indexing';
+import { IndexingInfo, IndexingInfoItem, NewIndexingInfoItem, RawIndexingInfoItem, UpdatedIndexingInfoItem } from 'app/models/indexing';
 
 import {
-  ListOfControlsControl,
+  ListOfControlsControl, ListOfControlsOrderChange,
   ListOfControlsValueCreate,
   ListOfControlsValueRemove,
   ListOfControlsValueUpdate
@@ -31,7 +31,6 @@ import { IndexingInfoItemControlComponent } from 'app/shared/form-controls/index
 
 import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
-import { CustomSorting } from 'app/shared/custom.sorting';
 
 @Component({
 	selector: 'rs-indexing-edit',
@@ -68,10 +67,7 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
       .subscribe((loading: boolean) => this.contentLoading$.next(loading));
 
 	  this.store.select(indexingInfoSelectors.getIndexingInfo)
-      .pipe(
-        map((indexingInfo: IndexingInfo) => [...indexingInfo].sort(CustomSorting.byCustomOrder)),
-        takeUntil(this.destroy$)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((indexingInfo: IndexingInfo) => {
         this.indexingInfo = indexingInfo;
         this.setFormValue(this.indexingInfo);
@@ -95,10 +91,10 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
     return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
-	onItemCreate(event: ListOfControlsValueCreate<NewIndexingInfoItem>): void {
+	onItemCreate(event: ListOfControlsValueCreate<RawIndexingInfoItem>): void {
     const newIndexingInfoItem: NewIndexingInfoItem = {
       ...event.controlValue,
-      index: event.controlIndex
+      nextId: event.nextId
     };
 
     this.store.dispatch(new AddIndexingInfoItemAction({ newIndexingInfoItem: newIndexingInfoItem }));
@@ -117,8 +113,15 @@ export class IndexingEditComponent extends AdminPageComponent implements OnInit,
   }
 
   onItemRemove(event: ListOfControlsValueRemove): void {
-	  const item = this.getIndexingInfoItemByIndex(event.controlIndex);
-	  this.store.dispatch(new RemoveIndexingInfoItemAction({ indexingInfoItemId: item.id }));
+	  const item = this.getIndexingInfoItemByIndex(event.indexOfControlToRemove);
+	  this.store.dispatch(new RemoveIndexingInfoItemAction({
+      indexingInfoItemId: item.id,
+      orderChanges: event.orderChanges
+	  }));
+  }
+
+  onOrderChange(event: ListOfControlsOrderChange): void {
+	  this.store.dispatch(new ChangeOrderAction( { orderChanges: event }));
   }
 
   private setFormValue(value: IndexingInfo): void {

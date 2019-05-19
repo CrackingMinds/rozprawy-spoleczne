@@ -112,7 +112,7 @@ export class ScientificBoardEditComponent extends AdminPageComponent implements 
   }
 
   onMemberRemove(event: ListOfControlsValueRemove): void {
-	  const member = this.getMemberByIndex(event.controlIndex);
+	  const member = this.getMemberByIndex(event.indexOfControlToRemove);
 	  this.store.dispatch(new RemoveScientificBoardMember(member.id));
   }
 

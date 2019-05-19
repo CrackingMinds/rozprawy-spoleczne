@@ -1,6 +1,7 @@
 import { ControlValueAccessor, Validator } from '@angular/forms';
 
-import { RawEditorialBoardMember } from 'app/models/editorial-board-member';
+import { Ordered } from 'app/shared/order-utils/ordered';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 export type ListOfControlsControl = ControlValueAccessor & Validator;
 
@@ -12,8 +13,11 @@ export type ListOfControlsValueUpdate<T> = {
 export type ListOfControlsValueCreate<T> = {
   controlIndex: number;
   controlValue: T;
-}
+} & Ordered;
 
 export type ListOfControlsValueRemove = {
-  controlIndex: number;
+  indexOfControlToRemove: number;
+  orderChanges: OrderChanges;
 };
+
+export type ListOfControlsOrderChange = OrderChanges;

@@ -1,4 +1,7 @@
 export type Ordered = {
-  id: string;
   nextId: string;
 }
+
+export type OrderedWithId = Ordered & {
+  id: string;
+};

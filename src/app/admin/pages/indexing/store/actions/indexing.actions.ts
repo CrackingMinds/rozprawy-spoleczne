@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { ACTION_PREFIX } from 'app/admin/pages/indexing/store/actions/action.prefix';
 import { IndexingInfo, NewIndexingInfoItem, UpdatedIndexingInfoItem } from 'app/models/indexing';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 const createActionName = 'Add Indexing Info Item';
 export const ADD_INDEXING_INFO_ITEM = `${ACTION_PREFIX} ${createActionName}`;
@@ -19,6 +20,8 @@ export const UPDATE_INDEXING_INFO_ITEM_FAIL = `${ACTION_PREFIX} ${updateActionNa
 const deleteActionName = 'Remove Indexing Info Item';
 export const REMOVE_INDEXING_INFO_ITEM = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_INDEXING_INFO_ITEM_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const CHANGE_ORDER = `${ACTION_PREFIX} Change order`;
 
 export const RESET_INDEXING_STATE = `${ACTION_PREFIX} Reset state`;
 
@@ -60,12 +63,17 @@ export class UpdateIndexingInfoItemFailAction implements Action {
 
 export class RemoveIndexingInfoItemAction implements Action {
   readonly type: string = REMOVE_INDEXING_INFO_ITEM;
-  constructor(public readonly payload: { indexingInfoItemId: string }) {}
+  constructor(public readonly payload: { indexingInfoItemId: string, orderChanges: OrderChanges }) {}
 }
 
 export class RemoveIndexingInfoItemFailAction implements Action {
   readonly type: string = REMOVE_INDEXING_INFO_ITEM_FAIL;
   constructor(public readonly error: any) {}
+}
+
+export class ChangeOrderAction implements Action {
+  readonly type: string = CHANGE_ORDER;
+  constructor(public readonly payload: { orderChanges: OrderChanges }) {}
 }
 
 export class ResetIndexingStateAction implements Action {
@@ -90,6 +98,8 @@ export type IndexingInfoAction =
 
   RemoveIndexingInfoItemAction |
   RemoveIndexingInfoItemFailAction |
+
+  ChangeOrderAction |
 
   ResetIndexingStateAction |
 

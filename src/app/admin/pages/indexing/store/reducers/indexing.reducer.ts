@@ -10,7 +10,7 @@ import {
   LoadIndexingInfoSuccessAction, REMOVE_INDEXING_INFO_ITEM, REMOVE_INDEXING_INFO_ITEM_FAIL,
   UPDATE_INDEXING_INFO_ITEM,
   UPDATE_INDEXING_INFO_ITEM_FAIL,
-  ENDPOINT_CALL_FAIL, RESET_INDEXING_STATE
+  ENDPOINT_CALL_FAIL, RESET_INDEXING_STATE, CHANGE_ORDER
 } from 'app/admin/pages/indexing/store/actions/indexing.actions';
 
 import { IndexingInfo } from 'app/models/indexing';
@@ -99,6 +99,13 @@ export function reducer(state = initialState, action: IndexingInfoAction): Index
         ...state,
         loading: false,
         loaded: false
+      };
+    }
+
+    case CHANGE_ORDER: {
+      return {
+        ...state,
+        loading: true
       };
     }
 

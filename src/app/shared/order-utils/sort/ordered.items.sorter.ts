@@ -1,15 +1,18 @@
-import { Ordered } from 'app/shared/order-utils/ordered';
+import { OrderedWithId } from 'app/shared/order-utils/ordered';
 
 export class OrderedItemsSorter {
 
-  static sort(items: Array<Ordered>): Array<Ordered> {
+  static sort<T extends OrderedWithId>(items: Array<T>): Array<T> {
 
-    const result: Array<Ordered> = [];
+    if (!items.length)
+      return [];
 
-    const firstInOrder: Ordered = OrderedItemsSorter.findFirstItemInOrder(items);
+    const result: Array<T> = [];
+
+    const firstInOrder: T = OrderedItemsSorter.findFirstItemInOrder(items);
     result.push(firstInOrder);
 
-    let previousItem: Ordered = OrderedItemsSorter.findPreviousItemInOrder(firstInOrder.id, items);
+    let previousItem: T = OrderedItemsSorter.findPreviousItemInOrder(firstInOrder.id, items);
 
     while (previousItem) {
       result.push(previousItem);
@@ -19,16 +22,16 @@ export class OrderedItemsSorter {
     return result;
   }
 
-  private static findFirstItemInOrder(items: Array<Ordered>): Ordered {
-    const result = items.filter((item: Ordered) => item.nextId === null);
+  private static findFirstItemInOrder<T extends OrderedWithId>(items: Array<T>): T {
+    const result = items.filter((item: T) => item.nextId === null);
     if (!result.length)
       throw new Error('No first item in order');
 
     return result[0];
   }
 
-  private static findPreviousItemInOrder(itemId: string, items: Array<Ordered>): Ordered {
-    const result = items.filter((item: Ordered) => item.nextId === itemId);
+  private static findPreviousItemInOrder<T extends OrderedWithId>(itemId: string, items: Array<T>): T {
+    const result = items.filter((item: T) => item.nextId === itemId);
     if (!result.length)
       return null;
 
