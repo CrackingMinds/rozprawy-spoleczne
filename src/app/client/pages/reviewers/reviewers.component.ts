@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { first, map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 import { firstFalse, withMinDuration } from 'app/shared/custom.operators';
 
@@ -13,7 +13,6 @@ import { REVIEWERS_ENDPOINT, ReviewersEndpoint } from 'app/endpoints/endpoint/re
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 import { REVIEWER_YEARS_ENDPOINT, ReviewerYearsEndpoint } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { ReviewerYear, ReviewerYears, ReviewerYearType } from 'app/admin/pages/reviewers/list-of-years/reviewer.year';
-import { CustomSorting } from 'app/shared/custom.sorting';
 
 type YearData = {
   isLoading: boolean;
@@ -136,11 +135,7 @@ export class ReviewersComponent extends PageComponent implements OnInit, OnDestr
   }
 
   private fetchReviewers(): Observable<Reviewers> {
-    return this.reviewersEndpoint.getReviewers(this.getExpandedYearId())
-                           .pipe(
-                             first(),
-                             map((reviewers: Reviewers) => [...reviewers].sort(CustomSorting.byCustomOrder))
-                           );
+    return this.reviewersEndpoint.getReviewers(this.getExpandedYearId());
   }
 
   private setReviewerYearLoading(yearId: string, loading: boolean): void {

@@ -7,8 +7,8 @@ export abstract class FirestoreEndpoint<T> {
 
   protected constructor(protected readonly angularFirestore: AngularFirestore) {}
 
-  fetchData(): Observable<Array<T & { id: string }>> {
-    return this.getCollection().snapshotChanges()
+  fetchData(queryFn?: QueryFn): Observable<Array<T & { id: string }>> {
+    return this.getCollection(queryFn).snapshotChanges()
                .pipe(
                  map(actions => actions.map(a => {
                    const doc: QueryDocumentSnapshot<T> = a.payload.doc;

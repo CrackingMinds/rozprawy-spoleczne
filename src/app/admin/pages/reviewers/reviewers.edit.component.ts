@@ -18,6 +18,7 @@ import {
   ReviewerEvent,
   ReviewerEventType,
   ReviewerRemoveEvent,
+  ReviewersOrderChange,
   ReviewerUpdateEvent
 } from 'app/admin/pages/reviewers/list-of-reviewers/reviewer.event';
 import {
@@ -38,6 +39,7 @@ import {
 import { ReviewersRootState } from 'app/admin/pages/reviewers/store/reducers/reviewers.root.reducer';
 import {
   AddReviewerAction,
+  ChangeOrderAction,
   LoadReviewersAction,
   RemoveReviewerAction,
   ResetReviewersStateAction,
@@ -114,8 +116,14 @@ export class ReviewersEditComponent extends AdminPageComponent implements OnInit
       }
 
       case ReviewerEventType.REMOVE: {
-        const reviewerId = (event as ReviewerRemoveEvent).payload.reviewerId;
-        this.store.dispatch(new RemoveReviewerAction({ reviewerId: reviewerId, yearId: this.selectedYearId }));
+        const payload = (event as ReviewerRemoveEvent).payload;
+        this.store.dispatch(new RemoveReviewerAction({ reviewerId: payload.reviewerId, yearId: this.selectedYearId, orderChanges: payload.orderChanges }));
+        break;
+      }
+
+      case ReviewerEventType.ORDER_CHANGE: {
+        const orderChanges = (event as ReviewersOrderChange).payload.orderChanges;
+        this.store.dispatch(new ChangeOrderAction({ orderChanges: orderChanges, yearId: this.selectedYearId }));
         break;
       }
 

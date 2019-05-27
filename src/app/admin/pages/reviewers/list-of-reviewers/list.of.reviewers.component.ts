@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import {
   ListOfControlsControl,
+  ListOfControlsOrderChange,
   ListOfControlsValueCreate,
   ListOfControlsValueRemove,
   ListOfControlsValueUpdate
@@ -13,9 +14,14 @@ import {
 import { ReviewerControlComponent } from 'app/shared/form-controls/reviewer/reviewer.control.component';
 
 import { Reviewer, ReviewerControlData, Reviewers } from 'app/models/reviewer';
-import { ReviewerCreateEvent, ReviewerEvent, ReviewerRemoveEvent, ReviewerUpdateEvent } from 'app/admin/pages/reviewers/list-of-reviewers/reviewer.event';
+import {
+  ReviewerCreateEvent,
+  ReviewerEvent,
+  ReviewerRemoveEvent,
+  ReviewersOrderChange,
+  ReviewerUpdateEvent
+} from 'app/admin/pages/reviewers/list-of-reviewers/reviewer.event';
 import { ReviewerYearEvent, ReviewerYearRemoveEvent } from 'app/admin/pages/reviewers/list-of-years/reviewer.year.events';
-import { CustomSorting } from 'app/shared/custom.sorting';
 import { ModalService } from 'app/admin/pages/library/modal/modal.service';
 import { ModalData } from 'app/admin/pages/library/modal/modal.data';
 
@@ -31,17 +37,8 @@ export class ListOfReviewersComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   set reviewers(value: Reviewers) {
-
-    let reviewers: Reviewers;
-
-    if (value && value.length) {
-      reviewers = [...value].sort(CustomSorting.byCustomOrder);
-    } else {
-      reviewers = [];
-    }
-
-    this.reviewersList = reviewers;
-    this.setFormValue(reviewers);
+    this.reviewersList = value;
+    this.setFormValue(value);
   }
 
   @Output()
@@ -96,15 +93,20 @@ export class ListOfReviewersComponent implements OnInit, OnChanges, OnDestroy {
   onReviewerCreate(event: ListOfControlsValueCreate<ReviewerControlData>): void {
     this.reviewerEvent.emit(new ReviewerCreateEvent({
       ...event.controlValue,
-      index: event.controlIndex,
-      yearId: this.yearId
+      yearId: this.yearId,
+      nextId: event.nextId
     }));
   }
 
   onReviewerRemove(event: ListOfControlsValueRemove): void {
     this.reviewerEvent.emit(new ReviewerRemoveEvent({
-      reviewerId: this.getReviewerByIndex(event.indexOfControlToRemove).id
+      reviewerId: this.getReviewerByIndex(event.indexOfControlToRemove).id,
+      orderChanges: event.orderChanges
     }));
+  }
+
+  onOrderChange(event: ListOfControlsOrderChange): void {
+    this.reviewerEvent.emit(new ReviewersOrderChange({ orderChanges: event}));
   }
 
   removeYear(): void {

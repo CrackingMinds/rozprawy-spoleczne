@@ -1,4 +1,5 @@
 import { NewReviewer, UpdatedReviewer } from 'app/models/reviewer';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 export interface ReviewerEvent {
   type: ReviewerEventType;
@@ -8,7 +9,8 @@ export interface ReviewerEvent {
 export enum ReviewerEventType {
   CREATE,
   UPDATE,
-  REMOVE
+  REMOVE,
+  ORDER_CHANGE
 }
 
 export class ReviewerCreateEvent implements ReviewerEvent {
@@ -26,6 +28,12 @@ export class ReviewerRemoveEvent implements ReviewerEvent {
   constructor(public readonly payload: ReviewerRemoveEventPayload) {}
 }
 
+export class ReviewersOrderChange implements ReviewerEvent {
+  readonly type = ReviewerEventType.ORDER_CHANGE;
+  constructor(public readonly payload: { orderChanges: OrderChanges }) {}
+}
+
 export type ReviewerRemoveEventPayload = {
   reviewerId: string;
+  orderChanges: OrderChanges;
 };

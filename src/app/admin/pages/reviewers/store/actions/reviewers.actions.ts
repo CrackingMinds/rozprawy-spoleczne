@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { NewReviewer, Reviewers, UpdatedReviewer } from 'app/models/reviewer';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 export const ACTION_PREFIX: string = '[Reviewers]';
 
@@ -20,6 +21,8 @@ export const UPDATE_REVIEWER_FAIL = `${ACTION_PREFIX} ${updateActionName} Fail`;
 const deleteActionName = 'Remove Reviewer';
 export const REMOVE_REVIEWER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_REVIEWER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const CHANGE_ORDER = `${ACTION_PREFIX} Change order`;
 
 export const RESET_REVIEWERS_STATE = `${ACTION_PREFIX} Reset state`;
 
@@ -62,12 +65,21 @@ export class UpdateReviewerFailAction implements Action {
 
 export class RemoveReviewerAction implements Action {
   readonly type: string = REMOVE_REVIEWER;
-  constructor(public readonly payload: { reviewerId: string, yearId: string }) {}
+  constructor(public readonly payload: {
+    reviewerId: string,
+    yearId: string,
+    orderChanges: OrderChanges
+  }) {}
 }
 
 export class RemoveReviewerFailAction implements Action {
   readonly type: string = REMOVE_REVIEWER_FAIL;
   constructor(public readonly error: any) {}
+}
+
+export class ChangeOrderAction implements Action {
+  readonly type: string = CHANGE_ORDER;
+  constructor(public readonly payload: { orderChanges: OrderChanges, yearId: string }) {}
 }
 
 export class ResetReviewersStateAction implements Action {

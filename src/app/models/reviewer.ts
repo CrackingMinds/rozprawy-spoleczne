@@ -1,5 +1,5 @@
 import { Person } from 'app/models/person';
-import { Sortable } from 'app/models/sortable';
+import { Ordered } from 'app/shared/order-utils/ordered';
 
 export type ReviewerEntity = ReviewerBase;
 
@@ -21,4 +21,4 @@ export type ReviewerControlData = {
 
 type ReviewerBase = ReviewerControlData & {
   yearId: string;
-} & Sortable;
+} & Ordered;

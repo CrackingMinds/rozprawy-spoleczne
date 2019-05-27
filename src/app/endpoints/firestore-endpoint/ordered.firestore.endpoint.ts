@@ -1,7 +1,7 @@
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DocumentReference } from 'angularfire2/firestore';
+import { DocumentReference, QueryFn } from 'angularfire2/firestore';
 
 import { Ordered } from 'app/shared/order-utils/ordered';
 import { OrderedItemsSorter } from 'app/shared/order-utils/sort/ordered.items.sorter';
@@ -11,8 +11,8 @@ import { FirestoreEndpoint } from 'app/endpoints/firestore-endpoint/firestore.en
 
 export abstract class OrderedFirestoreEndpoint<T extends Ordered> extends FirestoreEndpoint<T> {
 
-  fetchData(): Observable<Array<T & { id: string }>> {
-    return super.fetchData()
+  fetchData(queryFn?: QueryFn): Observable<Array<T & { id: string }>> {
+    return super.fetchData(queryFn)
       .pipe(
         map(data => OrderedItemsSorter.sort(data))
       );

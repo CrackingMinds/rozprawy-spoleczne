@@ -11,7 +11,7 @@ import {
   LOAD_REVIEWERS, LoadReviewersAction,
   LoadReviewersFailAction,
   LoadReviewersSuccessAction, REMOVE_REVIEWER, RemoveReviewerAction, UPDATE_REVIEWER, UpdateReviewerAction,
-  ENDPOINT_CALL_FAIL, EndpointCallFailAction
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, CHANGE_ORDER, ChangeOrderAction
 } from 'app/admin/pages/reviewers/store/actions/reviewers.actions';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
@@ -55,7 +55,7 @@ export class ReviewersEffects {
   removeReviewer$ = this.actions$.ofType(REMOVE_REVIEWER)
     .pipe(
       switchMap((action: RemoveReviewerAction) => {
-        return this.reviewersEndpoint.deleteReviewer(action.payload.reviewerId)
+        return this.reviewersEndpoint.deleteReviewer(action.payload.reviewerId, action.payload.orderChanges)
           .pipe(
             map(() => new LoadReviewersAction({ reviewerYearId: action.payload.yearId })),
             catchError(error => of(new EndpointCallFailAction(error)))
@@ -74,6 +74,18 @@ export class ReviewersEffects {
           );
       })
     );
+
+	@Effect()
+  changeReviewersOrder$ = this.actions$.ofType(CHANGE_ORDER)
+                              .pipe(
+                                switchMap((action: ChangeOrderAction) => {
+                                  return this.reviewersEndpoint.changeOrder(action.payload.orderChanges)
+                                    .pipe(
+                                      map(() => new LoadReviewersAction({ reviewerYearId: action.payload.yearId })),
+                                      catchError(error => of(new EndpointCallFailAction(error)))
+                                    );
+                                })
+                              );
 
   @Effect({ dispatch: false })
   endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)

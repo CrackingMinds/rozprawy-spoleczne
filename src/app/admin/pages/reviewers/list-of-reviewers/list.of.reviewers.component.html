@@ -6,10 +6,11 @@
 </button>
 <ng-container [formGroup]="form">
   <rs-list-of-controls class="rs-list-of-controls"
-    formControlName="reviewersArray"
-    (valueUpdate)="onReviewerUpdate($event)"
-    (valueCreate)="onReviewerCreate($event)"
-    (valueRemove)="onReviewerRemove($event)"
-    [controlType]="control">
+                       formControlName="reviewersArray"
+                       (valueUpdate)="onReviewerUpdate($event)"
+                       (valueCreate)="onReviewerCreate($event)"
+                       (valueRemove)="onReviewerRemove($event)"
+                       (orderChange)="onOrderChange($event)"
+                       [controlType]="control">
   </rs-list-of-controls>
 </ng-container>
