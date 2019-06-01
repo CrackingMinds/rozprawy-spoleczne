@@ -22,8 +22,7 @@ export class FirestoreArticleEndpoint implements ArticleEndpoint {
       .pipe(
         switchMap((untypedArticles: UntypedArticle[]) => {
           return this.replaceTypeIdsWithTypes(untypedArticles);
-        }),
-        take(1)
+        })
       );
   }
 
@@ -35,8 +34,7 @@ export class FirestoreArticleEndpoint implements ArticleEndpoint {
             .pipe(
               map((articles: Article[]) => articles[0])
             )
-        }),
-        take(1)
+        })
       );
   }
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -20,8 +19,7 @@ export class FirestoreEditorialBoardEndpoint extends OrderedFirestoreEndpoint<Ed
   constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getEditorialBoard(): Observable<EditorialBoard> {
-    return this.fetchData()
-               .pipe(take(1));
+    return this.fetchData();
   }
 
   postEditorialBoardMember(rawMemberData: NewEditorialBoardMember): Observable<void> {

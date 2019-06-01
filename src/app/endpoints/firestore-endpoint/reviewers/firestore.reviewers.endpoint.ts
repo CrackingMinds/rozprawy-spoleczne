@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { AngularFirestore, QueryFn } from 'angularfire2/firestore';
 
@@ -20,8 +19,7 @@ export class FirestoreReviewersEndpoint extends OrderedFirestoreEndpoint<Reviewe
 
   getReviewers(reviewerYearId: string): Observable<Reviewers> {
     const queryFn: QueryFn = ref => ref.where('yearId', '==', reviewerYearId);
-    return this.fetchData(queryFn)
-      .pipe(take(1));
+    return this.fetchData(queryFn);
   }
 
   postReviewer(newReviewerData: NewReviewer): Observable<void> {

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -19,8 +18,7 @@ export class FirestoreIndexingInfoEndpoint extends OrderedFirestoreEndpoint<Inde
   constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getIndexingInfo(): Observable<IndexingInfo> {
-    return this.fetchData()
-      .pipe(take(1));
+    return this.fetchData();
   }
 
   postIndexingInfoItem(newIndexingInfoItem: NewIndexingInfoItem): Observable<void> {

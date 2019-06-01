@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { ArticleType } from 'app/models/article.type';
@@ -13,10 +12,7 @@ export class FirestoreArticleTypeEndpoint extends ArticleTypeEndpoint {
   constructor(private articleTypeService: FirestoreArticleTypeService) { super(); }
 
   getArticleTypes(): Observable<ArticleType[]> {
-    return this.articleTypeService.getArticleTypes()
-      .pipe(
-        take(1)
-      );
+    return this.articleTypeService.getArticleTypes();
   }
 
 }

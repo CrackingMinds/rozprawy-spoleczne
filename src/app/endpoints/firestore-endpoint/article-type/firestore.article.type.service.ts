@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -19,31 +18,15 @@ export class FirestoreArticleTypeService extends FirestoreEndpoint<IFirestoreArt
   constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getArticleType(id: string): Observable<ArticleType> {
-    return this.getCollection().doc(id).valueChanges()
-                                 .pipe(
-                                   map((articleType: IFirestoreArticleType) => {
-                                     return {
-                                       id: id,
-                                       ...articleType
-                                     };
-                                   })
-                                 );
+    return this.fetchOne(id);
   }
 
   getArticleTypes(): Observable<ArticleType[]> {
-    return this.getCollection().snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        let data = a.payload.doc.data() as IFirestoreArticleType;
-        return {
-          id: a.payload.doc.id,
-          ...data
-        };
-      }))
-    );
+    return this.fetchData();
   }
 
   protected getCollectionName(): string {
-    return "article-types";
+    return 'article-types';
   }
 
 }

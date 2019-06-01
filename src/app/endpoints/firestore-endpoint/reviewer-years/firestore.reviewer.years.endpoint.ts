@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, from } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -16,33 +15,21 @@ export class FirestoreReviewerYearsEndpoint extends FirestoreEndpoint<ReviewerYe
   constructor(angularFirestore: AngularFirestore) { super(angularFirestore); }
 
   getReviewerYears(): Observable<ReviewerYears> {
-    return this.getCollection().snapshotChanges()
-      .pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data() as ReviewerYearEntity;
-          return {
-            id: a.payload.doc.id,
-            ...data
-          };
-        })),
-        take(1)
-      );
+    return this.fetchData();
   }
 
   postReviewerYear(newReviewerYear: NewReviewerYear): Observable<void> {
-    return from(this.getCollection().add(newReviewerYear))
-      .pipe(map(() => null));
+    return this.addDocument(newReviewerYear);
   }
 
   deleteReviewerYear(reviewerYearId: string): Observable<void> {
-    return from(this.getDocument(reviewerYearId).delete());
+    return this.deleteDocument(reviewerYearId);
   }
 
   updateReviewerYear(updatedReviewerYear: UpdatedReviewerYear): Observable<void> {
-    const persistedReviewerYear: ReviewerYearEntity = {
+    return this.updateDocument(updatedReviewerYear.id, {
       value: updatedReviewerYear.value
-    };
-    return from(this.getDocument(updatedReviewerYear.id).update(persistedReviewerYear));
+    });
   }
 
   protected getCollectionName(): string {

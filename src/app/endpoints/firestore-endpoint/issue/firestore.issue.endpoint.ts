@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, zip, from } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { Observable, zip } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { AngularFirestore, QueryFn } from 'angularfire2/firestore';
 
@@ -20,79 +20,41 @@ export class FirestoreIssueEndpoint extends FirestoreEndpoint<IssueEntity> imple
               private firestoreArticleService: FirestoreArticleService) { super(angularFirestore); }
 
   getAllIssues(): Observable<Issue[]> {
-    const issues: Observable<IssueEntityWithId[]> = this.getCollection().snapshotChanges()
-                                                                  .pipe(
-                                                                    map(actions => actions.map(a => {
-                                                                      const data = a.payload.doc.data() as IssueEntity;
-                                                                      return {
-                                                                        id: a.payload.doc.id,
-                                                                        ...data
-                                                                      };
-                                                                    }))
-                                                                  );
-
-    return issues
-      .pipe(
-        switchMap((issues: IssueEntityWithId[]) => {
-          return zip(
-            ...issues.map((issue: IssueEntityWithId) => {
-              return this.addArticleInfo(issue);
-            })
-          );
-        }),
-        take(1)
-      );
+    return this.fetchData()
+               .pipe(
+                 switchMap((issues: IssueEntityWithId[]) => {
+                   return zip(
+                     ...issues.map((issue: IssueEntityWithId) => {
+                       return this.addArticleInfo(issue);
+                     })
+                   );
+                 })
+               );
   }
 
   getAllIssuesByYear(): Observable<IssuesByYear> {
-    const issuesWithoutArticleInfo$ = this.getCollection().snapshotChanges()
-                                                      .pipe(
-                                                        map(actions => actions.map(a => {
-                                                          const data = a.payload.doc.data() as IssueEntity;
-                                                          return {
-                                                            id: a.payload.doc.id,
-                                                            ...data
-                                                          };
-                                                        }))
-                                                      );
-    const issues$: Observable<Issue[]> = issuesWithoutArticleInfo$
-      .pipe(
-        switchMap((issues: IssueEntityWithId[]) => {
-          return zip(
-            ...issues.map((issue: IssueEntityWithId) => {
-              return this.addArticleInfo(issue);
-            })
-          );
-        }),
-        take(1)
-      );
-
-    return issues$
-      .pipe(
-        map((issues: Issue[]) => {
-          return this.mapIssuesByYear(issues);
-        })
-      );
+    return this.fetchData()
+               .pipe(
+                 switchMap((issues: IssueEntityWithId[]) => {
+                   return zip(
+                     ...issues.map((issue: IssueEntityWithId) => {
+                       return this.addArticleInfo(issue);
+                     })
+                   );
+                 }),
+                 map((issues: Issue[]) => {
+                   return this.mapIssuesByYear(issues);
+                 })
+               );
   }
 
   getIssue(id: string): Observable<Issue> {
-    const issueEntity$ = this.getDocument(id).snapshotChanges()
-                                      .pipe(
-                                        map(action => {
-                                          const data = action.payload.data() as IssueEntity;
-                                          return {
-                                            id: action.payload.id,
-                                            ...data
-                                          };
-                                        })
-                                      );
-    return issueEntity$
-      .pipe(
-        switchMap((entity) => {
-          return this.addArticleInfo(entity);
-        }),
-        take(1)
-      );
+    return this.fetchOne(id)
+               .pipe(
+                 switchMap((entity: IssueEntityWithId) => {
+                   return this.addArticleInfo(entity);
+                 })
+               );
   }
 
   getCurrentIssue(): Observable<Issue> {
@@ -101,22 +63,20 @@ export class FirestoreIssueEndpoint extends FirestoreEndpoint<IssueEntity> imple
   }
 
   postIssue(rawIssue: RawIssue): Observable<void> {
-    return from(this.getCollection().add(rawIssue))
-      .pipe(map(() => null));
+    return this.addDocument(rawIssue);
   }
 
   deleteIssue(issueId: string): Observable<void> {
-    return from(this.getDocument(issueId).delete());
+    return this.deleteDocument(issueId);
   }
 
   updateIssue(updatedIssue: Issue): Observable<void> {
-    const persistedIssue: IssueEntity = {
+    return this.updateDocument(updatedIssue.id, {
       year: updatedIssue.year,
       vol: updatedIssue.vol,
       number: updatedIssue.number,
       isCurrent: updatedIssue.isCurrent
-    };
-    return from(this.getDocument(updatedIssue.id).update(persistedIssue));
+    });
   }
 
   protected getCollectionName(): string {
@@ -124,23 +84,13 @@ export class FirestoreIssueEndpoint extends FirestoreEndpoint<IssueEntity> imple
   }
 
   private getIssueByQuery(queryFn: QueryFn): Observable<Issue> {
-    const issueEntity$ = this.getCollection(queryFn).snapshotChanges()
-                                         .pipe(
-                                           map(actions => {
-                                             const data = actions[0].payload.doc.data() as IssueEntity;
-                                             return {
-                                               id: actions[0].payload.doc.id,
-                                               ...data
-                                             };
-                                           })
-                                         );
-    return issueEntity$
-      .pipe(
-        switchMap((entity) => {
-          return this.addArticleInfo(entity);
-        }),
-        take(1)
-      );
+    return this.fetchData(queryFn)
+               .pipe(
+                 map(data => data[0]),
+                 switchMap((entity) => {
+                   return this.addArticleInfo(entity);
+                 })
+               );
   }
 
   private addArticleInfo(issue: IssueEntityWithId): Observable<Issue> {

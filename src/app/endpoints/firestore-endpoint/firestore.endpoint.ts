@@ -1,5 +1,5 @@
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { AngularFirestoreDocument, AngularFirestoreCollection, AngularFirestore, QueryFn, QueryDocumentSnapshot } from 'angularfire2/firestore';
 
@@ -8,12 +8,31 @@ export abstract class FirestoreEndpoint<T> {
   protected constructor(protected readonly angularFirestore: AngularFirestore) {}
 
   fetchData(queryFn?: QueryFn): Observable<Array<T & { id: string }>> {
-    return this.getCollection(queryFn).snapshotChanges()
+    return this.getCollection(queryFn)
+               .snapshotChanges()
                .pipe(
-                 map(actions => actions.map(a => {
-                   const doc: QueryDocumentSnapshot<T> = a.payload.doc;
-                   return Object.assign({ id: doc.id }, doc.data());
-                 }))
+                 map(actions => {
+                   if (!actions.length)
+                     return null;
+
+                   return actions.map(a => {
+                     const doc: QueryDocumentSnapshot<T> = a.payload.doc;
+                     return Object.assign({ id: doc.id }, doc.data());
+                   });
+                 }),
+                 take(1)
+               );
+  }
+
+  fetchOne(docId: string): Observable<T & { id: string }> {
+    return this.getDocument(docId)
+               .snapshotChanges()
+               .pipe(
+                 map(action => {
+                   const payload = action.payload;
+                   return Object.assign({ id: payload.id }, payload.data());
+                 }),
+                 take(1)
                );
   }
 
@@ -24,6 +43,10 @@ export abstract class FirestoreEndpoint<T> {
 
   updateDocument(docId: string, data: Partial<T>): Observable<void> {
     return from(this.getDocument(docId).update(data));
+  }
+
+  deleteDocument(docId: string): Observable<void> {
+    return from(this.getDocument(docId).delete());
   }
 
   getDocument(id: string): AngularFirestoreDocument<T> {
