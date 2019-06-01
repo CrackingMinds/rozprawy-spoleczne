@@ -10,34 +10,34 @@ import { sortableToOrdered } from 'app/shared/array.transformers';
 import { Ordered } from 'app/shared/order-utils/ordered';
 import { SortableWithId } from 'app/models/sortable';
 
-import { EditorialBoard } from 'app/models/editorial.board';
+import { ScientificBoard } from 'app/models/scientific.board';
 
-import { EDITORIAL_BOARD_ENDPOINT } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
-import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
+import { SCIENTIFIC_BOARD_ENDPOINT } from 'app/endpoints/endpoint/scientific-board/scientific.board.endpoint';
+import { FirestoreScientificBoardEndpoint } from 'app/endpoints/firestore-endpoint/scientific-board/firestore.scientific.board.endpoint';
 
 import { DatabaseUpgradeWorker } from 'app/shared/db-upgrade/db.upgrade.worker';
 
 @Injectable()
-export class FirestoreEditorialBoardUpgradeWorker implements DatabaseUpgradeWorker {
+export class FirestoreScientificBoardUpgradeWorker implements DatabaseUpgradeWorker {
 
 	constructor(private readonly angularFirestore: AngularFirestore,
-              @Inject(EDITORIAL_BOARD_ENDPOINT) private readonly editorialBoardEndpoint: FirestoreEditorialBoardEndpoint) {
+              @Inject(SCIENTIFIC_BOARD_ENDPOINT) private readonly scientificBoardEndpoint: FirestoreScientificBoardEndpoint) {
 	}
 
-  workerName: string = 'Editorial Board Worker';
+  workerName: string = 'Scientific Board Worker';
 
   run(): Observable<void> {
     return of(null);
 
-    return this.editorialBoardEndpoint.getEditorialBoard()
+    return this.scientificBoardEndpoint.getScientificBoard()
       .pipe(
-        switchMap((editorialBoard: EditorialBoard) => {
+        switchMap((scientificBoard: ScientificBoard) => {
           const batch = this.angularFirestore.firestore.batch();
 
-          const ordered = sortableToOrdered(editorialBoard as undefined as Array<SortableWithId>);
+          const ordered = sortableToOrdered(scientificBoard as undefined as Array<SortableWithId>);
           console.log(ordered);
           ordered.forEach((boardMember: SortableWithId & Ordered) => {
-            const docRef: DocumentReference = this.editorialBoardEndpoint.getDocument(boardMember.id).ref;
+            const docRef: DocumentReference = this.scientificBoardEndpoint.getDocument(boardMember.id).ref;
             batch.update(docRef, { nextId: boardMember.nextId });
           });
 
@@ -46,5 +46,6 @@ export class FirestoreEditorialBoardUpgradeWorker implements DatabaseUpgradeWork
         })
       );
   }
+
 
 }

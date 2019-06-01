@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Type } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 
 import { Subject, Observable, of } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
@@ -106,7 +106,6 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
       ...event.controlValue,
       nextId: event.nextId
     };
-
     this.store.dispatch(new AddEditorialBoardMember(newMemberData));
   }
 

@@ -10,7 +10,7 @@ import {
   LOAD_SCIENTIFIC_BOARD,
   LoadScientificBoardFail,
   LoadScientificBoardSuccess, REMOVE_SCIENTIFIC_BOARD_MEMBER, RemoveScientificBoardMember, UPDATE_SCIENTIFIC_BOARD_MEMBER, UpdateScientificBoardMember,
-  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadScientificBoard
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadScientificBoard, CHANGE_ORDER, ChangeOrderAction
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
@@ -55,7 +55,7 @@ export class ScientificBoardEffects {
   removeScientificBoardMember$ = this.actions$.ofType(REMOVE_SCIENTIFIC_BOARD_MEMBER)
     .pipe(
       switchMap((action: RemoveScientificBoardMember) => {
-        return this.scientificBoardEndpoint.deleteScientificBoardMember(action.memberId)
+        return this.scientificBoardEndpoint.deleteScientificBoardMember(action.payload.memberId, action.payload.orderChanges)
           .pipe(
             map(() => new LoadScientificBoard()),
             catchError(error => of(new EndpointCallFailAction(error)))
@@ -76,6 +76,18 @@ export class ScientificBoardEffects {
       })
 
     );
+
+  @Effect()
+  changeScientificBoardOrder$ = this.actions$.ofType(CHANGE_ORDER)
+                                    .pipe(
+                                      switchMap((action: ChangeOrderAction) => {
+                                        return this.scientificBoardEndpoint.changeOrder(action.payload.orderChanges)
+                                          .pipe(
+                                            map(() => new LoadScientificBoard()),
+                                            catchError(error => of(new EndpointCallFailAction(error)))
+                                          );
+                                      })
+                                    );
 
   @Effect({ dispatch: false })
   endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)

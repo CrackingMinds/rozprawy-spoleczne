@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
 import { Subject, Observable, of, ReplaySubject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { allFalsy } from 'app/shared/custom.observable.creators';
 import { firstTrue } from 'app/shared/custom.operators';
 
 import { PageComponent } from 'app/client/pages/page.component';
-import { CustomSorting } from 'app/shared/custom.sorting';
 
 import { EditorialBoard } from 'app/models/editorial.board';
 import { ScientificBoard } from 'app/models/scientific.board';
@@ -44,12 +43,7 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
         });
 
     this.scientificBoardEndpoint.getScientificBoard()
-      .pipe(
-        map((board: ScientificBoard) => {
-          return [...board].sort(CustomSorting.byCustomOrder);
-        }),
-        takeUntil(this.destroy$)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((data: ScientificBoard) => {
         this.scientificBoard = data;
         this.scientificBoardLoading$.next(false);

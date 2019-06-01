@@ -11,7 +11,7 @@ import {
   ScientificBoardAction,
   UPDATE_SCIENTIFIC_BOARD_MEMBER,
   UPDATE_SCIENTIFIC_BOARD_MEMBER_FAIL,
-  ENDPOINT_CALL_FAIL, RESET_SCIENTIFIC_BOARD
+  ENDPOINT_CALL_FAIL, RESET_SCIENTIFIC_BOARD, CHANGE_ORDER
 } from 'app/admin/pages/scientific-board/store/actions/scientific.board.actions';
 
 import { ScientificBoard } from 'app/models/scientific.board';
@@ -100,6 +100,13 @@ export function reducer(state = initialState, action: ScientificBoardAction): Sc
         ...state,
         loading: false,
         loaded: false
+      };
+    }
+
+    case CHANGE_ORDER: {
+      return {
+        ...state,
+        loading: true
       };
     }
 

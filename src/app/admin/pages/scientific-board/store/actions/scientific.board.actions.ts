@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
 
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
+
 import { ACTION_PREFIX } from 'app/admin/pages/scientific-board/store/actions/action.prefix';
 import { NewScientificBoardMember, UpdatedScientificBoardMember } from 'app/models/scientific-board-member';
 import { ScientificBoard } from 'app/models/scientific.board';
@@ -20,6 +22,8 @@ export const UPDATE_SCIENTIFIC_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${updateAct
 const deleteActionName = 'Remove Scientific Board Member';
 export const REMOVE_SCIENTIFIC_BOARD_MEMBER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_SCIENTIFIC_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const CHANGE_ORDER = `${ACTION_PREFIX} Change order`;
 
 export const RESET_SCIENTIFIC_BOARD = `${ACTION_PREFIX} Reset state`;
 
@@ -62,12 +66,20 @@ export class UpdateScientificBoardMemberFail implements Action {
 
 export class RemoveScientificBoardMember implements Action {
   readonly type: string = REMOVE_SCIENTIFIC_BOARD_MEMBER;
-  constructor(public readonly memberId: string) {}
+  constructor(public readonly payload: {
+    memberId: string,
+    orderChanges: OrderChanges
+  }) {}
 }
 
 export class RemoveScientificBoardMemberFail implements Action {
   readonly type: string = REMOVE_SCIENTIFIC_BOARD_MEMBER_FAIL;
   constructor(public readonly error: any) {}
+}
+
+export class ChangeOrderAction implements Action {
+  readonly type: string = CHANGE_ORDER;
+  constructor(public readonly payload: { orderChanges: OrderChanges }) {}
 }
 
 export class ResetScientificBoardAction implements Action {
@@ -92,6 +104,8 @@ export type ScientificBoardAction =
 
   RemoveScientificBoardMember |
   RemoveScientificBoardMemberFail |
+
+  ChangeOrderAction |
 
   ResetScientificBoardAction |
 

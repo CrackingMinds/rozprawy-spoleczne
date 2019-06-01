@@ -6,6 +6,7 @@ import { DATABASE_UPGRADE_WORKER } from 'app/shared/db-upgrade/db.upgrade.worker
 
 import { FirestoreEditorialBoardUpgradeWorker } from 'app/shared/db-upgrade/workers/firestore.editorial.board.upgrade.worker';
 import { FirestoreReviewersUpgradeWorker } from 'app/shared/db-upgrade/workers/firestore.reviewers.upgrade.worker';
+import { FirestoreScientificBoardUpgradeWorker } from 'app/shared/db-upgrade/workers/firestore.scientific.board.upgrade.worker';
 
 @NgModule({
 	providers: [
@@ -19,13 +20,18 @@ import { FirestoreReviewersUpgradeWorker } from 'app/shared/db-upgrade/workers/f
       provide: DATABASE_UPGRADE_WORKER,
       useClass: FirestoreReviewersUpgradeWorker,
       multi: true
+    },
+    {
+      provide: DATABASE_UPGRADE_WORKER,
+      useClass: FirestoreScientificBoardUpgradeWorker,
+      multi: true
     }
 	]
 })
 export class DatabaseUpgradeModule {
 
   constructor(dbUpgradeService: DatabaseUpgradeService) {
-    dbUpgradeService.runUpgrade();
+    // dbUpgradeService.runUpgrade();
   }
 
 }

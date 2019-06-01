@@ -1,5 +1,5 @@
 import { Person } from 'app/models/person';
-import { Sortable } from 'app/models/sortable';
+import { Ordered } from 'app/shared/order-utils/ordered';
 
 export type ScientificBoardMemberInstitute = {
   name: string;
@@ -21,4 +21,4 @@ export type NewScientificBoardMember = ScientificBoardMemberBase;
 
 export type UpdatedScientificBoardMember = ScientificBoardMember;
 
-type ScientificBoardMemberBase = RawScientificBoardMember & Sortable;
+type ScientificBoardMemberBase = RawScientificBoardMember & Ordered;
