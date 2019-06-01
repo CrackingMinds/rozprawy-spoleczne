@@ -12,14 +12,14 @@ import * as editorialBoardSelectors from 'app/admin/pages/editorial-board/store/
 import { EditorialBoardState } from 'app/admin/pages/editorial-board/store/reducers/editorial.board.reducer';
 
 import {
-  AddEditorialBoardMember,
+  AddEditorialBoardMember, ChangeOrderAction,
   LoadEditorialBoard,
   RemoveEditorialBoardMember, ResetEditorialBoardStateAction,
   UpdateEditorialBoardMember
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 
 import {
-  ListOfControlsControl,
+  ListOfControlsControl, ListOfControlsOrderChange,
   ListOfControlsValueCreate,
   ListOfControlsValueRemove,
   ListOfControlsValueUpdate
@@ -28,7 +28,6 @@ import { EditorialBoardMemberControlComponent } from 'app/shared/form-controls/e
 import { EditorialBoard } from 'app/models/editorial.board';
 import { EditorialBoardMember, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
 import { AdminPageComponent } from 'app/admin/pages/admin.page.component';
-import { CustomSorting } from 'app/shared/custom.sorting';
 import { AdminPagesResolver } from 'app/shared/routing-helpers/admin.pages.resolver';
 
 @Component({
@@ -55,21 +54,18 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
 
   private editorialBoard: EditorialBoard;
 
-  private unsubscribe$: Subject<void> = new Subject<void>();
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder,
               private store: Store<EditorialBoardState>) { super(); }
 
 	ngOnInit() {
     this.store.select(editorialBoardSelectors.getEditorialBoardLoading)
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(takeUntil(this.destroy$))
         .subscribe((loading: boolean) => this.contentLoading$.next(loading));
 
     this.store.select(editorialBoardSelectors.getEditorialBoard)
-        .pipe(
-          map((editorialBoard: EditorialBoard) => editorialBoard.sort(CustomSorting.byCustomOrder)),
-          takeUntil(this.unsubscribe$)
-        )
+        .pipe(takeUntil(this.destroy$))
         .subscribe((editorialBoard: EditorialBoard) => {
           this.editorialBoard = editorialBoard;
           this.setFormValue(this.editorialBoard);
@@ -79,8 +75,8 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
 	}
 
 	ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
 
     this.resetState();
   }
@@ -93,8 +89,7 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
     return this.contentLoading$.asObservable().pipe(firstFalse());
   }
 
-  onEditorialBoardMemberUpdate(event: ListOfControlsValueUpdate<UpdatedEditorialBoardMember>): void {
-
+  onMemberUpdate(event: ListOfControlsValueUpdate<UpdatedEditorialBoardMember>): void {
     const member = this.getMemberByIndex(event.controlIndex);
     const newMemberData = event.controlValue;
 
@@ -104,26 +99,24 @@ export class EditorialBoardEditComponent extends AdminPageComponent implements O
     };
 
     this.store.dispatch(new UpdateEditorialBoardMember(updatedMember));
-
   }
 
-  onEditorialBoardMemberCreate(event: ListOfControlsValueCreate<NewEditorialBoardMember>): void {
-
+  onMemberCreate(event: ListOfControlsValueCreate<NewEditorialBoardMember>): void {
     const newMemberData: NewEditorialBoardMember = {
       ...event.controlValue,
-      index: event.controlIndex
+      nextId: event.nextId
     };
 
     this.store.dispatch(new AddEditorialBoardMember(newMemberData));
-
   }
 
-  onEditorialBoardMemberRemove(event: ListOfControlsValueRemove): void {
-
+  onMemberRemove(event: ListOfControlsValueRemove): void {
     const member = this.getMemberByIndex(event.indexOfControlToRemove);
+    this.store.dispatch(new RemoveEditorialBoardMember({ memberId: member.id, orderChanges: event.orderChanges }));
+  }
 
-    this.store.dispatch(new RemoveEditorialBoardMember(member.id));
-
+  onOrderChange(event: ListOfControlsOrderChange): void {
+    this.store.dispatch(new ChangeOrderAction({ orderChanges: event }));
   }
 
   private setFormValue(value: EditorialBoard): void {

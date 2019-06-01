@@ -1,9 +1,9 @@
 import { Person } from 'app/models/person';
-import { Sortable } from 'app/models/sortable';
+import { Ordered } from 'app/shared/order-utils/ordered';
 
 export type EditorialBoardMemberPosition = string;
 
-type EditorialBoardMemberBase = RawEditorialBoardMember & Sortable;
+type EditorialBoardMemberBase = RawEditorialBoardMember & Ordered;
 
 export type RawEditorialBoardMember = {
   person: Person;

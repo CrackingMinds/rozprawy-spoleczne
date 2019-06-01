@@ -105,6 +105,8 @@ export type ReviewerAction =
   RemoveReviewerAction |
   RemoveReviewerFailAction |
 
+  ChangeOrderAction |
+
   ResetReviewersStateAction |
 
   EndpointCallFailAction;

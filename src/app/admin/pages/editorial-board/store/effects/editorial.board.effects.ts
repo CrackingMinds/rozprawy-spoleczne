@@ -14,7 +14,7 @@ import {
   LOAD_EDITORIAL_BOARD,
   LoadEditorialBoardFail,
   LoadEditorialBoardSuccess, REMOVE_EDITORIAL_BOARD_MEMBER, RemoveEditorialBoardMember, UPDATE_EDITORIAL_BOARD_MEMBER, UpdateEditorialBoardMember,
-  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadEditorialBoard
+  ENDPOINT_CALL_FAIL, EndpointCallFailAction, LoadEditorialBoard, CHANGE_ORDER, ChangeOrderAction
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 import { EditorialBoard } from 'app/models/editorial.board';
 
@@ -53,7 +53,7 @@ export class EditorialBoardEffects {
   removeEditorialBoardMember$ = this.actions$.ofType(REMOVE_EDITORIAL_BOARD_MEMBER)
     .pipe(
       switchMap((action: RemoveEditorialBoardMember) => {
-        return this.editorialBoardEndpoint.deleteEditorialBoardMember(action.memberId)
+        return this.editorialBoardEndpoint.deleteEditorialBoardMember(action.payload.memberId, action.payload.orderChanges)
           .pipe(
             map(() => new LoadEditorialBoard()),
             catchError(error => of(new EndpointCallFailAction(error)))
@@ -72,6 +72,18 @@ export class EditorialBoardEffects {
           );
       })
     );
+
+  @Effect()
+  changeEditorialBoardOrder$ = this.actions$.ofType(CHANGE_ORDER)
+                                   .pipe(
+                                     switchMap((action: ChangeOrderAction) => {
+                                       return this.editorialBoardEndpoint.changeOrder(action.payload.orderChanges)
+                                         .pipe(
+                                           map(() => new LoadEditorialBoard()),
+                                           catchError(error => of(new EndpointCallFailAction(error)))
+                                         );
+                                     })
+                                   );
 
   @Effect({ dispatch: false })
   endpointCallFail$ = this.actions$.ofType(ENDPOINT_CALL_FAIL)

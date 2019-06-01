@@ -12,7 +12,7 @@ import {
   REMOVE_EDITORIAL_BOARD_MEMBER_FAIL,
   UPDATE_EDITORIAL_BOARD_MEMBER,
   UPDATE_EDITORIAL_BOARD_MEMBER_FAIL,
-  ENDPOINT_CALL_FAIL, RESET_EDITORIAL_BOARD_STATE
+  ENDPOINT_CALL_FAIL, RESET_EDITORIAL_BOARD_STATE, CHANGE_ORDER
 } from 'app/admin/pages/editorial-board/store/actions/editorial.board.actions';
 
 import { EditorialBoard } from 'app/models/editorial.board';
@@ -104,6 +104,13 @@ export function reducer(state = initialState, action: EditorialBoardAction): Edi
       };
     }
 
+    case CHANGE_ORDER: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
+
     case RESET_EDITORIAL_BOARD_STATE: {
       return initialState;
     }
@@ -112,7 +119,7 @@ export function reducer(state = initialState, action: EditorialBoardAction): Edi
       return {
         ...state,
         loading: false
-      }
+      };
     }
 
   }

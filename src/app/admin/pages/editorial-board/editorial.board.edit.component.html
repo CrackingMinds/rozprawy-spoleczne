@@ -3,9 +3,10 @@
   <ng-container [formGroup]="form">
     <rs-list-of-controls
       formControlName="editorialBoardMembers"
-      (valueUpdate)="onEditorialBoardMemberUpdate($event)"
-      (valueCreate)="onEditorialBoardMemberCreate($event)"
-      (valueRemove)="onEditorialBoardMemberRemove($event)"
+      (valueUpdate)="onMemberUpdate($event)"
+      (valueCreate)="onMemberCreate($event)"
+      (valueRemove)="onMemberRemove($event)"
+      (orderChange)="onOrderChange($event)"
       [controlType]="control">
     </rs-list-of-controls>
   </ng-container>

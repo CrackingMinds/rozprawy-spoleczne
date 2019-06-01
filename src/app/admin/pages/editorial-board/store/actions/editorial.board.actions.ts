@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { ACTION_PREFIX } from 'app/admin/pages/editorial-board/store/actions/action.prefix';
 import { EditorialBoardMember, NewEditorialBoardMember, UpdatedEditorialBoardMember } from 'app/models/editorial-board-member';
+import { OrderChanges } from 'app/shared/order-utils/change/order.change';
 
 const createActionName = 'Add Editorial Board Member';
 export const ADD_EDITORIAL_BOARD_MEMBER = `${ACTION_PREFIX} ${createActionName}`;
@@ -19,6 +20,8 @@ export const UPDATE_EDITORIAL_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${updateActi
 const deleteActionName = 'Remove Editorial Board Member';
 export const REMOVE_EDITORIAL_BOARD_MEMBER = `${ACTION_PREFIX} ${deleteActionName}`;
 export const REMOVE_EDITORIAL_BOARD_MEMBER_FAIL = `${ACTION_PREFIX} ${deleteActionName} Fail`;
+
+export const CHANGE_ORDER = `${ACTION_PREFIX} Change order`;
 
 export const RESET_EDITORIAL_BOARD_STATE = `${ACTION_PREFIX} Reset state`;
 
@@ -61,12 +64,20 @@ export class UpdateEditorialBoardMemberFail implements Action {
 
 export class RemoveEditorialBoardMember implements Action {
   readonly type: string = REMOVE_EDITORIAL_BOARD_MEMBER;
-  constructor(public readonly memberId: string) {}
+  constructor(public readonly payload: {
+    memberId: string,
+    orderChanges: OrderChanges
+  }) {}
 }
 
 export class RemoveEditorialBoardMemberFail implements Action {
   readonly type: string = REMOVE_EDITORIAL_BOARD_MEMBER_FAIL;
   constructor(public readonly error: any) {}
+}
+
+export class ChangeOrderAction implements Action {
+  readonly type: string = CHANGE_ORDER;
+  constructor(public readonly payload: { orderChanges: OrderChanges }) {}
 }
 
 export class ResetEditorialBoardStateAction implements Action {
@@ -91,6 +102,8 @@ export type EditorialBoardAction =
 
   RemoveEditorialBoardMember |
   RemoveEditorialBoardMemberFail |
+
+  ChangeOrderAction |
 
   ResetEditorialBoardStateAction |
 

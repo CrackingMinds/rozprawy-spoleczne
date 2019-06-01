@@ -29,7 +29,7 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
   private readonly editorialBoardLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   private readonly scientificBoardLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
-  private readonly unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   constructor(@Inject(SCIENTIFIC_BOARD_ENDPOINT) private readonly scientificBoardEndpoint: ScientificBoardEndpoint,
               @Inject(EDITORIAL_BOARD_ENDPOINT) private readonly editorialBoardEndpoint: EditorialBoardEndpoint) { super(); }
@@ -37,12 +37,7 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
   ngOnInit() {
 
     this.editorialBoardEndpoint.getEditorialBoard()
-        .pipe(
-          map((board: EditorialBoard) => {
-            return [...board].sort(CustomSorting.byCustomOrder);
-          }),
-          takeUntil(this.unsubscribe$)
-        )
+        .pipe(takeUntil(this.destroy$))
         .subscribe((data: EditorialBoard) => {
           this.editorialBoard = data;
           this.editorialBoardLoading$.next(false);
@@ -53,7 +48,7 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
         map((board: ScientificBoard) => {
           return [...board].sort(CustomSorting.byCustomOrder);
         }),
-        takeUntil(this.unsubscribe$)
+        takeUntil(this.destroy$)
       )
       .subscribe((data: ScientificBoard) => {
         this.scientificBoard = data;
@@ -66,8 +61,8 @@ export class EditorialScientificBoardComponent extends PageComponent implements 
     this.editorialBoardLoading$.complete();
     this.scientificBoardLoading$.complete();
 
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   observePageLoaded(): Observable<void> {
