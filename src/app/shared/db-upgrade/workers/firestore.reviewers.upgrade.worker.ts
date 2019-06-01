@@ -26,27 +26,27 @@ export class FirestoreReviewersUpgradeWorker implements DatabaseUpgradeWorker {
   run(): Observable<void> {
     return of(null);
 
-    return this.reviewersEndpoint.getAllReviewers()
-      .pipe(
-        switchMap((reviewers: Reviewers) => {
-
-          const batch = this.angularFirestore.firestore.batch();
-
-          const byYears = this.groupReviewersByYears(reviewers);
-          Object.keys(byYears).forEach((yearId: string) => {
-            const ordered = sortableToOrdered(byYears[yearId]);
-            ordered.forEach((reviewer: Reviewer) => {
-              const docRef: DocumentReference = this.reviewersEndpoint.getDocument(reviewer.id).ref;
-              batch.update(docRef, { nextId: reviewer.nextId });
-            });
-            byYears[yearId] = ordered;
-          });
-
-          console.log(byYears);
-
-          // return from(batch.commit());
-        })
-      );
+    // return this.reviewersEndpoint.getAllReviewers()
+    //   .pipe(
+    //     switchMap((reviewers: Reviewers) => {
+    //
+    //       const batch = this.angularFirestore.firestore.batch();
+    //
+    //       const byYears = this.groupReviewersByYears(reviewers);
+    //       Object.keys(byYears).forEach((yearId: string) => {
+    //         const ordered = sortableToOrdered(byYears[yearId]);
+    //         ordered.forEach((reviewer: Reviewer) => {
+    //           const docRef: DocumentReference = this.reviewersEndpoint.getDocument(reviewer.id).ref;
+    //           batch.update(docRef, { nextId: reviewer.nextId });
+    //         });
+    //         byYears[yearId] = ordered;
+    //       });
+    //
+    //       console.log(byYears);
+    //
+    //       // return from(batch.commit());
+    //     })
+    //   );
   }
 
   private groupReviewersByYears(reviewers: Reviewers): { [yearId: string]: Reviewers } {

@@ -8,12 +8,14 @@ import { AngularFirestore, DocumentReference } from 'angularfire2/firestore';
 import { sortableToOrdered } from 'app/shared/array.transformers';
 
 import { EditorialBoard } from 'app/models/editorial.board';
-import { EditorialBoardMember } from 'app/models/editorial-board-member';
 
 import { EDITORIAL_BOARD_ENDPOINT } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
 
 import { DatabaseUpgradeWorker } from 'app/shared/db-upgrade/db.upgrade.worker';
+
+import { Ordered } from 'app/shared/order-utils/ordered';
+import { SortableWithId } from 'app/models/sortable';
 
 @Injectable()
 export class FirestoreEditorialBoardUpgradeWorker implements DatabaseUpgradeWorker {
@@ -32,13 +34,14 @@ export class FirestoreEditorialBoardUpgradeWorker implements DatabaseUpgradeWork
         switchMap((editorialBoard: EditorialBoard) => {
           const batch = this.angularFirestore.firestore.batch();
 
-          const ordered = sortableToOrdered(editorialBoard);
+          const ordered = sortableToOrdered(editorialBoard as undefined as SortableWithId[]);
           console.log(ordered);
-          ordered.forEach((boardMember: EditorialBoardMember) => {
+          ordered.forEach((boardMember: SortableWithId & Ordered) => {
             const docRef: DocumentReference = this.editorialBoardEndpoint.getDocument(boardMember.id).ref;
             batch.update(docRef, { nextId: boardMember.nextId });
           });
 
+          return of(null);
           // return from(batch.commit());
         })
       );

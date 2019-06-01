@@ -1,14 +1,14 @@
-import { Sortable } from 'app/models/sortable';
 import { CustomSorting } from 'app/shared/custom.sorting';
 
+import { SortableWithId } from 'app/models/sortable';
 import { Ordered } from 'app/shared/order-utils/ordered';
 
-export function sortableToOrdered(items: Array<Sortable>): Array<Sortable & Ordered> {
+export function sortableToOrdered(items: Array<SortableWithId>): Array<SortableWithId & Ordered> {
 
-  const result: Array<Sortable & Ordered> = [];
+  const result: Array<SortableWithId & Ordered> = [];
 
   const sortedItems = [...items].sort(CustomSorting.byCustomOrder);
-  sortedItems.forEach((item: Sortable, index: number, initialArray: Array<Sortable & { id: string }>) => {
+  sortedItems.forEach((item: SortableWithId, index: number, initialArray: Array<SortableWithId>) => {
 
     let nextId: string;
 
