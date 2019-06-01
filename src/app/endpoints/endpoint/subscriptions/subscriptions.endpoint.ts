@@ -1,9 +1,13 @@
+import { InjectionToken } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { ISubsriptionsInfo } from 'app/models/subscriptions';
+import { SubscriptionsInfo } from 'app/models/subscriptions';
 
-export abstract class SubscriptionsEndpoint {
+export const SUBSCRIPTIONS_ENDPOINT = new InjectionToken<SubscriptionsEndpoint>('SUBSCRIPTIONS_ENDPOINT');
 
-  abstract getSubscriptionsInfo(): Observable<ISubsriptionsInfo>;
+export interface SubscriptionsEndpoint {
+
+  getSubscriptionsInfo(): Observable<SubscriptionsInfo>;
 
 }

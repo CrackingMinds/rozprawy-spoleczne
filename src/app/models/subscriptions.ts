@@ -1,10 +1,11 @@
-export interface ISubscription {
-    name: string;
-    price: number;
-    currency: string;
-}
+export type SubscriptionInfo = SubscriptionInfoEntity & {
+  id: string;
+};
 
-export interface ISubsriptionsInfo {
-    subscriptions: ISubscription[];
-    contactEmail: string;
-}
+export type SubscriptionInfoEntity = {
+  name: string;
+  price: number;
+  currency: string;
+};
+
+export type SubscriptionsInfo = Array<SubscriptionInfo>;

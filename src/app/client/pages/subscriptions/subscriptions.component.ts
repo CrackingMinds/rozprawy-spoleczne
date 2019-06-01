@@ -1,15 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
-import { Subject, Observable, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { firstFalse } from 'app/shared/custom.operators';
+import { firstTrue } from 'app/shared/custom.operators';
+import { allFalsy } from 'app/shared/custom.observable.creators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 
-import { ISubsriptionsInfo } from 'app/models/subscriptions';
+import { SubscriptionsInfo } from 'app/models/subscriptions';
+import { IContactInfo } from 'app/models/contact-info';
 
-import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
+import { SUBSCRIPTIONS_ENDPOINT, SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
+import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
@@ -18,35 +22,46 @@ import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.
 })
 export class SubscriptionsComponent extends PageComponent implements OnInit, OnDestroy {
 
-  subscriptionsInfo: ISubsriptionsInfo;
+  subscriptionsInfo: SubscriptionsInfo;
+  contactInfo: IContactInfo;
 
-  private readonly subscriptionsInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly subscriptionsInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private readonly contactInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  private readonly unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private subscriptionsEndpoint: SubscriptionsEndpoint) {
-    super();
-  }
+  constructor(@Inject(SUBSCRIPTIONS_ENDPOINT) private readonly subscriptionsEndpoint: SubscriptionsEndpoint,
+              private readonly contactInfoEndpoint: ContactInfoEndpoint) { super(); }
 
   ngOnInit() {
-
     this.subscriptionsEndpoint.getSubscriptionsInfo()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: ISubsriptionsInfo) => {
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: SubscriptionsInfo) => {
           this.subscriptionsInfo = data;
           this.subscriptionsInfoLoading$.next(false);
+        });
+
+    this.contactInfoEndpoint.getContactInfo()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: IContactInfo) => {
+          this.contactInfo = data;
+          this.contactInfoLoading$.next(false);
         });
   }
 
   ngOnDestroy() {
     this.subscriptionsInfoLoading$.complete();
+    this.contactInfoLoading$.complete();
 
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   observePageLoaded(): Observable<void> {
-    return this.subscriptionsInfoLoading$.asObservable().pipe(firstFalse());
+    return allFalsy(
+      this.subscriptionsInfoLoading$.asObservable(),
+      this.contactInfoLoading$.asObservable()
+    ).pipe(firstTrue());
   }
 
   observePageName(): Observable<string> {

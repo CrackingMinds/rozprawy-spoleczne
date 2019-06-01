@@ -28,8 +28,8 @@ import { FirestoreReviewersEndpoint } from 'app/endpoints/firestore-endpoint/rev
 import { REVIEWER_YEARS_ENDPOINT } from 'app/endpoints/endpoint/reviewer-years/reviewer.years.endpoint';
 import { FirestoreReviewerYearsEndpoint } from 'app/endpoints/firestore-endpoint/reviewer-years/firestore.reviewer.years.endpoint';
 
-import { SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
-import { RestSubscriptionsEndpoint } from 'app/endpoints/rest-endpoint/subscriptions/rest.subscriptions.endpoint';
+import { SUBSCRIPTIONS_ENDPOINT } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
+import { FirestoreSubscriptionsEndpoint } from 'app/endpoints/firestore-endpoint/subscriptions/firestore.subscriptions.endpoint';
 
 import { EDITORIAL_BOARD_ENDPOINT } from 'app/endpoints/endpoint/editorial-board/editorial.board.endpoint';
 import { FirestoreEditorialBoardEndpoint } from 'app/endpoints/firestore-endpoint/editorial-board/firestore.editorial.board.endpoint';
@@ -72,8 +72,8 @@ const providers = [
     useClass: FirestoreReviewerYearsEndpoint
   },
   {
-    provide: SubscriptionsEndpoint,
-    useClass: RestSubscriptionsEndpoint
+    provide: SUBSCRIPTIONS_ENDPOINT,
+    useClass: FirestoreSubscriptionsEndpoint
   },
   {
     provide: EDITORIAL_BOARD_ENDPOINT,

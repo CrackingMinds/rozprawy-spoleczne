@@ -1,6 +1,6 @@
 <div *ngIf="subscriptionsInfo" class="subscriptions">
   <ul class="subscriptions-list">
-    <li *ngFor="let subscriptionItem of subscriptionsInfo.subscriptions" class="subscription">
+    <li *ngFor="let subscriptionItem of subscriptionsInfo" class="subscription">
       <div class="name">
         <p>
           {{ subscriptionItem.name }}
@@ -16,7 +16,8 @@
   </ul>
   <div class="additional-info">
     <p>
-      Aby uzyskać szczegóły  dotyczące zakupu poszczególnych numerów lub prenumeraty prosimy o kontakt mailowy: <a href="mailto:{{ subscriptionsInfo.contactEmail }}">{{ subscriptionsInfo.contactEmail }}</a>
+      Aby uzyskać szczegóły  dotyczące zakupu poszczególnych numerów lub prenumeraty prosimy o kontakt mailowy: <a href="mailto:{{ contactInfo?.email }}">{{
+      contactInfo?.email }}</a>
     </p>
   </div>
 </div>
