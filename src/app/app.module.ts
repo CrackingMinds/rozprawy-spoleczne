@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
+import { environment } from 'environments/environment';
+
 import { AuthModule } from 'app/auth/auth.module';
 import { RoutingModule } from 'app/routing.module';
 import { FirebaseConfigModule } from 'app/firebase.config.module';
@@ -16,6 +18,12 @@ import { AppComponent } from 'app/app.component';
 import { SignInRepository } from 'app/auth/signin/signin.repository';
 
 import { MessagesModule } from 'app/shared/messages/messages.module';
+
+import { DatabaseUpgradeModule } from 'app/shared/db-upgrade/db.upgrade.module';
+
+const devOnlyModules = [
+  DatabaseUpgradeModule
+];
 
 @NgModule({
   declarations: [
@@ -34,7 +42,9 @@ import { MessagesModule } from 'app/shared/messages/messages.module';
 
     ServicesModule.forRoot(),
 
-    MessagesModule.forRoot()
+    MessagesModule.forRoot(),
+
+    environment.production ? [] : [...devOnlyModules]
   ],
   providers: [
     SignInRepository
