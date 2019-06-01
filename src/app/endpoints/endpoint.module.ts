@@ -5,8 +5,6 @@ import { FirestorageArticleFileEndpointModule } from 'app/endpoints/firestorage-
 
 import { EndpointErrorHandler } from 'app/endpoints/endpoint.error.handler';
 
-import { ENDPOINT_URL } from 'app/endpoints/endpoint.tokens';
-
 import { ARTICLE_ENDPOINT } from 'app/endpoints/endpoint/article/article.endpoint';
 import { FirestoreArticleEndpoint } from 'app/endpoints/firestore-endpoint/article/firestore.article.endpoint';
 
@@ -39,10 +37,6 @@ import { FirestoreScientificBoardEndpoint } from 'app/endpoints/firestore-endpoi
 
 const providers = [
   EndpointErrorHandler,
-  {
-    provide: ENDPOINT_URL,
-    useValue: 'http://api.rozprawyspoleczne.edu.pl'
-  },
   {
     provide: ISSUE_ENDPOINT,
     useClass: FirestoreIssueEndpoint
