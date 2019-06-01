@@ -21,8 +21,8 @@
             <p>KONTAKT</p>
         </div>
         <div class="info">
-            <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>
-            <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
+            <a href="mailto:{{ contactInfo?.email }}">{{ contactInfo?.email }}</a>
+            <phone-num [phone_num]="contactInfo?.phoneNumber"></phone-num>
         </div>
     </div>
 </div>

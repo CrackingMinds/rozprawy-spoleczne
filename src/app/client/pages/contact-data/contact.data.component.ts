@@ -1,15 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 
-import { Observable, of, Subject, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
 
-import { firstFalse } from 'app/shared/custom.operators';
+import { firstTrue } from 'app/shared/custom.operators';
+import { allFalsy } from 'app/shared/custom.observable.creators';
 
 import { PageComponent } from 'app/client/pages/page.component';
 
-import { ContactInfo, IContactInfo } from 'app/models/contact-info';
+import { ContactInfo } from 'app/models/contact-info';
+import { IndexingInfo, IndexingInfoItem } from 'app/models/indexing';
 
-import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { CONTACT_INFO_ENDPOINT, ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { INDEXING_INFO_ENDPOINT, IndexingInfoEndpoint } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
+
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
 @Component({
@@ -19,32 +23,51 @@ import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.
 })
 export class ContactDataComponent extends PageComponent implements OnInit, OnDestroy {
 
-  contactInfo: IContactInfo = new ContactInfo();
+  contactInfo: ContactInfo;
+  issn: IndexingInfoItem;
 
-  private readonly contactInfoLoading$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  private readonly contactInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private readonly indexingInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  private readonly unsubscribe$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private contactInfoEndpoint: ContactInfoEndpoint) { super(); }
+  constructor(@Inject(CONTACT_INFO_ENDPOINT) private readonly contactInfoEndpoint: ContactInfoEndpoint,
+              @Inject(INDEXING_INFO_ENDPOINT) private readonly indexingInfoEndpoint: IndexingInfoEndpoint) { super(); }
 
   ngOnInit() {
     this.contactInfoEndpoint.getContactInfo()
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: IContactInfo) => {
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data: ContactInfo) => {
           this.contactInfo = data;
           this.contactInfoLoading$.next(false);
         });
+
+    this.indexingInfoEndpoint.getIndexingInfo()
+      .pipe(
+        map((indexingInfo: IndexingInfo) => {
+          return indexingInfo.filter((item: IndexingInfoItem) => item.name === 'ISSN')[0];
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((issn: IndexingInfoItem) => {
+        this.issn = issn;
+        this.indexingInfoLoading$.next(false);
+      });
   }
 
   ngOnDestroy() {
     this.contactInfoLoading$.complete();
+    this.indexingInfoLoading$.complete();
 
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   observePageLoaded(): Observable<void> {
-    return this.contactInfoLoading$.asObservable().pipe(firstFalse());
+    return allFalsy(
+      this.contactInfoLoading$.asObservable(),
+      this.indexingInfoLoading$.asObservable()
+    ).pipe(firstTrue());
   }
 
   observePageName(): Observable<string> {

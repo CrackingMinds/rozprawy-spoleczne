@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 
 import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { firstFalse } from 'app/shared/custom.operators';
 
-import { IContactInfo } from 'app/models/contact-info';
+import { ContactInfo } from 'app/models/contact-info';
 
 import { Menu, MenuItems } from 'app/shared/templates/menu/menu';
 import { RoutesResolver } from 'app/shared/routing-helpers/routes.resolver';
-import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { CONTACT_INFO_ENDPOINT, ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 
 import { AsyncComponent } from 'app/client/pages/async.component';
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
@@ -21,7 +21,7 @@ import { RoutesComposer } from 'app/shared/routing-helpers/routes.composer';
 })
 export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
 
-  contactInfo: IContactInfo;
+  contactInfo: ContactInfo;
   menuItems: MenuItems = new Menu()
     .withPage({ title: ClientPageNamesResolver.currentIssue(), url: RoutesResolver.currentIssue() })
     .withPage({ title: ClientPageNamesResolver.archive(), url: RoutesResolver.archive() })
@@ -40,12 +40,12 @@ export class MenuComponent implements AsyncComponent, OnInit, OnDestroy {
 
   private readonly unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private contactInfoEndpoint: ContactInfoEndpoint) {}
+  constructor(@Inject(CONTACT_INFO_ENDPOINT) private readonly contactInfoEndpoint: ContactInfoEndpoint) {}
 
   ngOnInit() {
     this.contactInfoEndpoint.getContactInfo()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data: IContactInfo) => {
+      .subscribe((data: ContactInfo) => {
         this.contactInfo = data;
         this.contentLoading$.next(false);
       });

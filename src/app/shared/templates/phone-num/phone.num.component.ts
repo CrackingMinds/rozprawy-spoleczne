@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IPhoneNum} from "../../../models/phone-num";
+import { PhoneNum } from 'app/models/phone-num';
 
 @Component({
   selector: 'phone-num',
@@ -7,7 +7,7 @@ import {IPhoneNum} from "../../../models/phone-num";
   styles: []
 })
 export class PhoneNumComponent implements OnInit {
-  @Input() phone_num: IPhoneNum;
+  @Input() phone_num: PhoneNum;
 
   constructor() { }
 

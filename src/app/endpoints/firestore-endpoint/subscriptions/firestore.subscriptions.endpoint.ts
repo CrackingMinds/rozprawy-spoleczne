@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { AngularFirestore } from 'angularfire2/firestore';
 
@@ -19,7 +19,6 @@ export class FirestoreSubscriptionsEndpoint extends FirestoreEndpoint<Subscripti
   getSubscriptionsInfo(): Observable<SubscriptionsInfo> {
     return this.fetchData()
       .pipe(
-        take(1),
         map((data: SubscriptionsInfo) => [...data].sort((a: SubscriptionInfo, b: SubscriptionInfo) => {
           const aPrice = a.price;
           const bPrice = b.price;

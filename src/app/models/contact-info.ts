@@ -1,17 +1,12 @@
-import {IPhoneNum, PhoneNum} from "./phone-num";
+import { PhoneNum } from "./phone-num";
 
-export interface IContactInfo {
-    headEditor: string;
-    issn: string;
-    publisher: string;
-    email: string;
-    phone_num: IPhoneNum;
-}
+export type ContactInfoEntity = {
+  headEditor: string;
+  publisher: string;
+  email: string;
+  phoneNumber: PhoneNum;
+};
 
-export class ContactInfo implements IContactInfo{
-    headEditor: string = '';
-    issn: string = '';
-    publisher: string = '';
-    email: string = '';
-    phone_num: IPhoneNum = new PhoneNum();
-}
+export type ContactInfo = ContactInfoEntity & {
+  id: string;
+};

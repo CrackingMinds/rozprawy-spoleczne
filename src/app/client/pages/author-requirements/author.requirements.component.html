@@ -22,7 +22,7 @@
   <br>
   <h4>Składanie prac i wymagania techniczne</h4>
   <p>
-    Artykuł należy przesłać do redakcji „Rozpraw Społecznych” drogą mailową na adres <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>.
+    Artykuł należy przesłać do redakcji „Rozpraw Społecznych” drogą mailową na adres <a href="mailto:{{ contactInfo?.email }}">{{ contactInfo?.email }}</a>.
   </p>
   <p class="bold-text">
     Przed rozpoczęciem procesu przygotowania pracy do publikacji autor/ autorzy przesłanych artykułów zobowiązani są do wniesienia bezzwrotnej opłaty w wysokości 150 zł. Przed wniesieniem opłaty należy skontaktować się z Redakcją w celu ustalenia właściwej formy wpłaty i szczegółów dotyczących faktury. Autor zobowiązany jest do przelania podanej kwoty na konto Państwowej Szkoły Wyższej im. Papieża Jana Pawła II w Białej Podlaskiej: Bank Zachodni WBK S.A., <br>płatność z Polski: 11 1500 1331 1213 3004 3528 0000; <br>płatność z innych krajów: 11 1500 1331 1213 3004 3528 0000, SWIFT: WBKPPLPP. <br>Obowiązkiem Autora jest również dostarczenie do Redakcji potwierdzenia dokonania wpłaty (np. w formie elektronicznej na adres mailowy).
@@ -175,9 +175,9 @@
     PSW im. Papieża Jana Pawła II w Białej Podlaskiej
     <br>ul. Sidorska 95/97, pok. 334
     <br>21–500 Biała Podlaska
-    <br>Tel. <phone-num [phone_num]="contactInfo.phone_num"></phone-num>
+    <br>Tel. <phone-num [phone_num]="contactInfo?.phoneNumber"></phone-num>
     <br>Kontakt: Paulina Rynkiewicz, Agnieszka Filipiuk
-    <br>E-mail: <a href="mailto:{{ contactInfo.email }}">{{ contactInfo.email }}</a>, <a href="mailto:a.filipiuk@pswbp.pl">a.filipiuk@pswbp.pl</a>
+    <br>E-mail: <a href="mailto:{{ contactInfo?.email }}">{{ contactInfo?.email }}</a>, <a href="mailto:a.filipiuk@pswbp.pl">a.filipiuk@pswbp.pl</a>
   </p>
   <h4>Pliki do pobrania:</h4>
   <ul class="additional-files">

@@ -13,8 +13,8 @@ import { FirestoreArticleEndpoint } from 'app/endpoints/firestore-endpoint/artic
 import { ArticleTypeEndpoint } from 'app/endpoints/endpoint/article-type/article.type.endpoint';
 import { FirestoreArticleTypeEndpoint } from 'app/endpoints/firestore-endpoint/article-type/firestore.article.type.endpoint';
 
-import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
-import { RestContactInfoEndpoint } from 'app/endpoints/rest-endpoint/contact-info/rest.contact.info.endpoint';
+import { CONTACT_INFO_ENDPOINT } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { FirestoreContactInfoEndpoint } from 'app/endpoints/firestore-endpoint/contact-info/firestore.contact.info.endpoint';
 
 import { INDEXING_INFO_ENDPOINT } from 'app/endpoints/endpoint/indexing-info/indexing.info.endpoint';
 import { FirestoreIndexingInfoEndpoint } from 'app/endpoints/firestore-endpoint/indexing-info/firestore.indexing.info.endpoint';
@@ -56,8 +56,8 @@ const providers = [
     useClass: FirestoreArticleTypeEndpoint
   },
   {
-    provide: ContactInfoEndpoint,
-    useClass: RestContactInfoEndpoint
+    provide: CONTACT_INFO_ENDPOINT,
+    useClass: FirestoreContactInfoEndpoint
   },
   {
     provide: INDEXING_INFO_ENDPOINT,

@@ -1,11 +1,5 @@
-export interface IPhoneNum {
+export type PhoneNum = {
     countryCode: string;
     number: string;
     ext: string;
-}
-
-export class PhoneNum implements IPhoneNum{
-    countryCode: string = '';
-    number: string = '';
-    ext: string = '';
-}
+};

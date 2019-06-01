@@ -9,10 +9,10 @@ import { allFalsy } from 'app/shared/custom.observable.creators';
 import { PageComponent } from 'app/client/pages/page.component';
 
 import { SubscriptionsInfo } from 'app/models/subscriptions';
-import { IContactInfo } from 'app/models/contact-info';
+import { ContactInfo } from 'app/models/contact-info';
 
 import { SUBSCRIPTIONS_ENDPOINT, SubscriptionsEndpoint } from 'app/endpoints/endpoint/subscriptions/subscriptions.endpoint';
-import { ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
+import { CONTACT_INFO_ENDPOINT, ContactInfoEndpoint } from 'app/endpoints/endpoint/contact-info/contact.info.endpoint';
 
 import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.names.resolver';
 
@@ -23,7 +23,7 @@ import { ClientPageNamesResolver } from 'app/shared/routing-helpers/client.page.
 export class SubscriptionsComponent extends PageComponent implements OnInit, OnDestroy {
 
   subscriptionsInfo: SubscriptionsInfo;
-  contactInfo: IContactInfo;
+  contactInfo: ContactInfo;
 
   private readonly subscriptionsInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private readonly contactInfoLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
@@ -31,7 +31,7 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
   private readonly destroy$: Subject<void> = new Subject<void>();
 
   constructor(@Inject(SUBSCRIPTIONS_ENDPOINT) private readonly subscriptionsEndpoint: SubscriptionsEndpoint,
-              private readonly contactInfoEndpoint: ContactInfoEndpoint) { super(); }
+              @Inject(CONTACT_INFO_ENDPOINT) private readonly contactInfoEndpoint: ContactInfoEndpoint) { super(); }
 
   ngOnInit() {
     this.subscriptionsEndpoint.getSubscriptionsInfo()
@@ -43,7 +43,7 @@ export class SubscriptionsComponent extends PageComponent implements OnInit, OnD
 
     this.contactInfoEndpoint.getContactInfo()
         .pipe(takeUntil(this.destroy$))
-        .subscribe((data: IContactInfo) => {
+        .subscribe((data: ContactInfo) => {
           this.contactInfo = data;
           this.contactInfoLoading$.next(false);
         });

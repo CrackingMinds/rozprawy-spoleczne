@@ -1,9 +1,13 @@
-import { IContactInfo } from 'app/models/contact-info';
+import { InjectionToken } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-export abstract class ContactInfoEndpoint {
+import { ContactInfo } from 'app/models/contact-info';
 
-  abstract getContactInfo(): Observable<IContactInfo>;
+export const CONTACT_INFO_ENDPOINT = new InjectionToken<ContactInfoEndpoint>('CONTACT_INFO_ENDPOINT');
+
+export interface ContactInfoEndpoint {
+
+  getContactInfo(): Observable<ContactInfo>;
 
 }
