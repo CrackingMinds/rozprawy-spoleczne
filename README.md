@@ -1,16 +1,12 @@
-This project is available online on (http://rs.guselnykov.com).
+This project is available online under (http://rozprawyspoleczne.edu.pl).
 
-# Client
+In case of any temporary technical problems feel free to visit: https://rozprawy-spoleczne-ea7db.firebaseapp.com for exact same copy of the running application.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+To visit admin section of the application refer to "http://BASE_URL/admin". Anonymous access is available (under "Login" button).
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
@@ -19,10 +15,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Further help
 
