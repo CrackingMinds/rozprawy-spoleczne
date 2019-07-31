@@ -1,8 +1,6 @@
-This project is available online under (http://rozprawyspoleczne.edu.pl).
+This project is available online under (https://rs.guselnykov.com).
 
-In case of any temporary technical problems feel free to visit: https://rs.guselnykov.com for exact same copy of the running application.
-
-To visit admin section of the application refer to "http://BASE_URL/admin" (e.g. http://rozprawyspoleczne.edu.pl/admin or https://rs.guselnykov.com/admin). Anonymous access is available (under "Login" button).
+To visit admin section of the application refer to: https://rs.guselnykov.com/admin. Anonymous access is available (under "Login" button).
 
 ## Development server
 
